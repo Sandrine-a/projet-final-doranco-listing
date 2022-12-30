@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 
 export default function HeaderSvg() {
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Svg
         width="390"
         height="207"

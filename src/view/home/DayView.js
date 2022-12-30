@@ -1,50 +1,56 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { BLUE, CARDS, PINK, RADIUS, SIZES } from "../../../theme";
-import { Octicons } from "@expo/vector-icons";
-import DotItem from "../../component/DotItem";
-import CardDay from "../../component/CardDay";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function DayView() {
+import { useTheme } from "@react-navigation/native";
+import { FONTS, SIZES } from "../../../theme";
+import HeaderSvg from "../../component/HeaderSvg";
+import BottomTab from "../../component/BottomTab";
+import HeaderText from "./component/HeaderText";
+import FilterButton from "./component/FilterButton";
+import DayBoard from "./component/DayBoard";
+
+export default function DayView({ navigation }) {
+  const { colors } = useTheme();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <HeaderSvg />
+      <HeaderText />
 
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      <CardDay title={"To do"} color={PINK} />
-      
-      {/* <View
+      <View
         style={{
-          borderWidth: 2,
-          borderRadius: RADIUS.rectangle,
-          borderColor: CARDS,
-          padding: SIZES.small
+          marginVertical: SIZES.large,
+          paddingHorizontal: SIZES.small,
+          flexDirection: "row",
+          // justifyContent: "space-between",
+          justifyContent: "space-evenly"
         }}
       >
-        <View style={styles.dotContainer}>
-          <DotItem size={"s"} />
-          <DotItem size={"s"} />
+        <FilterButton label={"Jour"} />
+        <FilterButton label={"Mois"} onPress={()=> navigation.navigate('MonthView')}/>
+      </View>
 
-
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.cardsContainer}>
+          <DayBoard />
         </View>
-      </View> */}
-    </View>
+      </ScrollView>
+
+      {/* <ScrollView stickyHeaderIndices={[0]} bounces={false}>
+        <HeaderSvg />
+        <DayView />
+      </ScrollView> */}
+
+      <BottomTab />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: SIZES.base
-  }
+    flex: 1,
+  },
+  cardsContainer: {
+    paddingBottom: 80,
+  },
 });

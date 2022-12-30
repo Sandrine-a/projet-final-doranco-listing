@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   text: {
     fontFamily: FONTS.oswald.bold,

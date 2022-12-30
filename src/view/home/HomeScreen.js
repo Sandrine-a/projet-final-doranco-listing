@@ -8,18 +8,29 @@ import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import DayView from "./DayView";
 import HeaderText from "./component/HeaderText";
+import FilterButton from "./component/FilterButton";
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const { colors } = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />
       <HeaderText />
 
-      <ScrollView
-        style={{ marginTop: 210 }}
-        showsVerticalScrollIndicator={false}
+      <View
+        style={{
+          marginVertical: SIZES.large,
+          paddingHorizontal: SIZES.small,
+          flexDirection: "row",
+          // justifyContent: "space-between",
+          justifyContent: "space-evenly"
+        }}
       >
+        <FilterButton label={"Jour"} onPress={()=> navigation.navigate('')}/>
+        <FilterButton label={"Mois"} onPress={()=> navigation.navigate('MonthView')}/>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
           <DayView />
         </View>
