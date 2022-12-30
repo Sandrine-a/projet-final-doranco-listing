@@ -5,12 +5,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../view/home/HomeScreen";
 
 export default function RootNavigation() {
-  const Stack = createNativeStackNavigator();
+  const RootStack = createNativeStackNavigator();
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
+    <RootStack.Navigator>
+      <RootStack.Group screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="Home" component={HomeScreen} />
+      </RootStack.Group>
+    </RootStack.Navigator>
   );
 }
 

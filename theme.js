@@ -1,8 +1,22 @@
-export const PRIMARY_COLOR = "#ffe3a1"; //light yellow
-export const PRIMARY_COLOR_DARK = "#FFD46E"; //dark yellow
-export const SECONDARY_COLOR = "#52805F"; //Green
-export const TERTIARY_COLOR = "DC7726"; // Orange #E08942
-export const TERTIARY_COLOR_LIGHT = "#E08942"; //Yellow light
+/**
+ * @description
+ * PRIMARY_: yellow, SECONDARY_: greens, TERTIARY: oranges
+ *
+ */
+export const COLORS = {
+  PRIMARY: "#ffe3a1",
+  PRIMARY_DARK: "#FFD46E",
+  PRIMARY_LIGHT: "#FFE3A1",
+  SECONDARY: "#66937B",
+  SECONDARY_DARK: "#52805F",
+  TERTIARY: "#DC7726",
+};
+// export const PRIMARY_COLOR = "#ffe3a1"; //light yellow
+// export const PRIMARY_COLOR_DARK = "#FFD46E"; //dark yellow
+// export const SECONDARY_COLOR = "#52805F"; //Green
+// export const SECONDARY_COLOR_LIGHT = "#66937B";
+// export const TERTIARY_COLOR = "DC7726"; // Orange #E08942
+// export const TERTIARY_COLOR_LIGHT = "#E08942"; //Yellow light
 
 export const GREEN = "#94C973"; //Green Palette Light #66937B #94B49F
 export const PINK = "#BA4F6A";
@@ -15,9 +29,28 @@ export const PURPLE = "603F8B";
 
 export const CREAM = "#F4EBD0";
 
-export const PRIMARY_TEXT_COLOR = "#36454f"; //Gris foncé
-export const SECONDARY_TEXT_COLOR = "#C3CED6"; //Gris clair
-export const PLACEHOLDER_COLOR = "#bbbaba";
+/**
+ *
+ * @description
+ *  CARDS = The background color borders, tab bars etc.
+ *
+ */
+export const CARDS = "#D9D9D9";
+
+/**
+ *
+ * @description
+ *  PRIMARY = Charocal,  SECONDARY = Lighter  grey
+ *
+ */
+export const TEXT_COLOR = {
+  PRIMARY: "#36454f",
+  SECONDARY: "#C3CED6",
+};
+
+// export const PRIMARY_TEXT_COLOR = "#36454f";
+// export const SECONDARY_TEXT_COLOR = "#C3CED6";
+// export const PLACEHOLDER_COLOR = "#bbbaba";
 
 export const FONTS = {
   oswald: {
@@ -33,16 +66,26 @@ export const FONTS = {
     bold: "Mukta_700Bold",
     extraBold: "Mukta_800ExtraBold",
   },
+  londrinaSolid: {
+    regular: "LondrinaSolid_400Regular",
+    black: "LondrinaSolid_900Black",
+  },
 };
 
 export const INPUT_COLOR = "#F3F2F2";
 
-export const SPACING = {
-  small: 5,
-  base: 10,
-  large: 15,
+/**
+ * @description
+ *  base 25
+ */
+export const ICON_SIZES = {
+  base: 25,
 };
 
+/**
+ * @description
+ *  base 16, small: 10, large: 20
+ */
 export const SIZES = {
   xs: 5,
   small: 10,

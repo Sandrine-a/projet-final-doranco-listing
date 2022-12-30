@@ -11,7 +11,6 @@ import {
   Oswald_600SemiBold,
   Oswald_700Bold,
 } from "@expo-google-fonts/oswald";
-
 import {
   useFonts as useMukta,
   Mukta_400Regular,
@@ -20,7 +19,16 @@ import {
   Mukta_700Bold,
   Mukta_800ExtraBold,
 } from "@expo-google-fonts/mukta";
-import { PRIMARY_COLOR, PRIMARY_COLOR_DARK, PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from "./theme.js";
+
+import {
+  useFonts as useLondrinaSolid,
+  LondrinaSolid_100Thin,
+  LondrinaSolid_300Light,
+  LondrinaSolid_400Regular,
+  LondrinaSolid_900Black,
+} from '@expo-google-fonts/londrina-solid';
+
+import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./theme.js";
 
 const BaseTheme = {
   ...DefaultTheme,
@@ -29,9 +37,9 @@ const BaseTheme = {
     ...DefaultTheme.colors,
     primary: PRIMARY_COLOR_DARK,
     background: "white",
-    card: 'rgb(255, 255, 255)',
-    text: PRIMARY_TEXT_COLOR,
-    border: SECONDARY_TEXT_COLOR,
+    card: "white",
+    text: TEXT_COLOR.PRIMARY,
+    border: CARDS,
     notification: 'rgb(255, 69, 58)',
   },
 };
@@ -53,7 +61,12 @@ export default function App() {
     Mukta_800ExtraBold,
   });
 
-  if (!isOswaldReady || !isMuktaReady) {
+  const [isLondrinaSolidReady] = useLondrinaSolid({
+    LondrinaSolid_400Regular,
+    LondrinaSolid_900Black,
+  });
+
+  if (!isOswaldReady || !isMuktaReady || !isLondrinaSolidReady) {
     return;
   }
 
@@ -61,7 +74,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer theme={BaseTheme}>
         <RootNavigation />
-        <StatusBar style="auto" backgroundColor={PRIMARY_COLOR_DARK} />
+        <StatusBar style="auto" backgroundColor={COLORS.PRIMARY_DARK} />
       </NavigationContainer>
     </SafeAreaProvider>
   );
