@@ -21,12 +21,6 @@ export default function RootNavigation() {
     },
   };
 
-  const forFade = ({ current }) => ({
-    cardStyle: {
-      opacity: current.progress,
-    },
-  });
-
   return (
     <RootStack.Navigator>
       <RootStack.Group screenOptions={{ headerShown: false }}>

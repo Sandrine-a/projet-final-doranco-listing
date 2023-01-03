@@ -1,17 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { CARDS, FONTS, RADIUS, SIZES } from "../../theme";
+import { boxShadow, CARDS, FONTS, RADIUS, SIZES } from "../../theme";
 import DotItem from "./DotItem";
 
 export default function CardDay({title, color}) {
   return (
     <View
-      style={{
+      style={[{
         borderWidth: 2,
         borderRadius: RADIUS.rectangle,
         borderColor: CARDS,
         padding: SIZES.small,
-      }}
+        backgroundColor: "white"
+      }, boxShadow]}
     >
       <View style={styles.dotContainer}>
         <DotItem size={"s"} />

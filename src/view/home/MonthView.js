@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,38 +15,57 @@ import BottomTab from "../../component/BottomTab";
 import DayView from "./DayView";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
+import Calendar from "./component/CalendarItem";
 
 export default function MonthView({ navigation }) {
+  const { width, height } = useWindowDimensions();
   return (
     <SafeAreaView style={styles.container}>
-    <HeaderSvg />
+      <HeaderSvg />
 
-    <View
-      style={{
-        marginVertical: SIZES.large,
-        paddingHorizontal: SIZES.small,
-        flexDirection: "row",
-        // justifyContent: "space-between",
-        justifyContent: "space-evenly"
-      }}
-    >
-      <FilterButton label={"Jour"} onPress={()=> navigation.navigate('DayView')}/>
-      <FilterButton label={"Mois"} />
-    </View>
+      {/* <Calendar
+        style={{
+          backgroundColor: "transparent",
+          position: "absolute",
+          top: 0,
+          zIndex: 1,
+          borderWidth: 1,
+          borderColor: 'gray',
+          height: 400
+        }}
+        theme={{
+          backgroundColor: "transparent",
+          calendarBackground: "transparent",
+        }}
+      /> */}
 
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.cardsContainer}>
+      <View style={[styles.calendarContainer, { width: width }]}>
+        <Calendar />
         
       </View>
-    </ScrollView>
 
-    {/* <ScrollView stickyHeaderIndices={[0]} bounces={false}>
-      <HeaderSvg />
-      <DayView />
-    </ScrollView> */}
+      <View
+        style={{
+          marginTop: 95,
+          marginBottom: SIZES.large,
+          paddingHorizontal: SIZES.small,
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <FilterButton
+          label={"Jour"}
+          onPress={() => navigation.navigate("DayView")}
+        />
+        <FilterButton label={"Mois"} active={true} />
+      </View>
 
-    <BottomTab />
-  </SafeAreaView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.cardsContainer}></View>
+      </ScrollView>
+
+      <BottomTab />
+    </SafeAreaView>
   );
 }
 
@@ -50,5 +75,10 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     paddingBottom: 80,
+  },
+  calendarContainer: {
+    position: "absolute",
+    zIndex: 1,
+    paddingTop: SIZES.small,
   },
 });

@@ -11,7 +11,6 @@ import FilterButton from "./component/FilterButton";
 import DayBoard from "./component/DayBoard";
 
 export default function DayView({ navigation }) {
-  const { colors } = useTheme();
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />
@@ -19,14 +18,15 @@ export default function DayView({ navigation }) {
 
       <View
         style={{
-          marginVertical: SIZES.large,
+          marginTop: 95,
+          marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",
           // justifyContent: "space-between",
           justifyContent: "space-evenly"
         }}
       >
-        <FilterButton label={"Jour"} />
+        <FilterButton label={"Jour"} active={true} />
         <FilterButton label={"Mois"} onPress={()=> navigation.navigate('MonthView')}/>
       </View>
 

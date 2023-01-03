@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { CARDS, FONTS, RADIUS, SIZES } from '../../../../theme'
+import { boxShadow, CARDS, COLORS, FONTS, RADIUS, SIZES } from '../../../../theme'
 
-export default function FilterButton({ label, onPress }) {
+export default function FilterButton({ label, onPress, active = false }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={[styles.container, {  backgroundColor: active ? COLORS.TERTIARY : CARDS }, active ? boxShadow : null ]} onPress={onPress}>
       <Text style={styles.label}>{ label }</Text>
     </TouchableOpacity>
   )
@@ -13,7 +13,6 @@ export default function FilterButton({ label, onPress }) {
 const styles = StyleSheet.create({
   container: {
     height: 45,
-    backgroundColor: CARDS,
     borderRadius: RADIUS.rectangle,
     justifyContent: "center",
     alignItems: "center",
