@@ -18,6 +18,41 @@ export const COLORS = {
 // export const TERTIARY_COLOR = "DC7726"; // Orange #E08942
 // export const TERTIARY_COLOR_LIGHT = "#E08942"; //Yellow light
 
+export const CARD_THEME = [
+  {
+    color: "GREEN",
+    value: "#94C973",
+  },
+  {
+    color: "PINK",
+    value: "#BA4F6A"
+  },
+  {
+    color: "BLUE",
+    value: "#629DA3"
+  },
+  {
+    color: "NUDE",
+    value: "#C98345"
+  },
+  {
+    color: "BROWN",
+    value: "#8B440E"
+  },
+  {
+    color: "YELLOW",
+    value: "#D5AF10"
+  },
+  {
+    color: "RED",
+    value: "#BC3110"
+  },
+  {
+    color: "PURPLE",
+    value: "#603F8B"
+  },
+];
+
 export const GREEN = "#94C973"; //Green Palette Light #66937B #94B49F
 export const PINK = "#BA4F6A";
 export const BLUE = "#629DA3";
@@ -25,7 +60,7 @@ export const NUDE = "#C98345";
 export const BROWN = "#8B440E";
 export const YELLOW = "#D5AF10";
 export const RED = "#BC3110";
-export const PURPLE = "603F8B";
+export const PURPLE = "#603F8B";
 
 export const CREAM = "#F4EBD0";
 
@@ -98,13 +133,37 @@ export const RADIUS = {
   rectangle: 15,
 };
 
+// export const boxShadow = {
+//   shadowColor: "#333",
+//   shadowOffset: {
+//     width: 0,
+//     height: 4,
+//   },
+//   shadowOpacity: 0.32,
+//   shadowRadius: 5.46,
+//   elevation: 9,
+// };
+
 export const boxShadow = {
   shadowColor: "#333",
   shadowOffset: {
-    width: 0,
-    height: 4,
+    width: 1,
+    height: 0,
   },
-  shadowOpacity: 0.32,
-  shadowRadius: 5.46,
-  elevation: 9,
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+  elevation: 2,
+};
+
+export const dotContainer = {
+  flexDirection: "row",
+  justifyContent: "space-between",
+};
+
+export const cardContainer = {
+  borderWidth: 2,
+  borderRadius: RADIUS.rectangle,
+  borderColor: CARDS,
+  padding: SIZES.small,
+  backgroundColor: "white",
 };
