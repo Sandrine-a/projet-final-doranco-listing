@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../view/home/HomeScreen";
 import MonthView from "../view/home/MonthView";
 import DayView from "../view/home/DayView";
+import TasksView from "../view/tasks/TasksView";
+import { FONTS } from "../../theme";
 
 export default function RootNavigation() {
   const RootStack = createNativeStackNavigator();
@@ -27,12 +29,26 @@ export default function RootNavigation() {
         <RootStack.Screen
           name="DayView"
           component={DayView}
-          options={{ animation: "fade" }} 
+          options={{ animation: "fade" }}
         />
         <RootStack.Screen
           name="MonthView"
           component={MonthView}
           options={{ animation: "fade" }}
+        />
+      </RootStack.Group>
+      <RootStack.Group>
+        <RootStack.Screen
+          name="TasksView"
+          component={TasksView}
+          options={{
+            title: "Créer un rdv",
+            headerTitleStyle: {
+              fontFamily: FONTS.oswald.bold
+            },
+            headerShadowVisible: false,
+            animation: "slide_from_bottom"
+          }}
         />
       </RootStack.Group>
     </RootStack.Navigator>

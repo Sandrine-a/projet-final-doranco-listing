@@ -16,30 +16,37 @@ import {
   SIZES,
   TEXT_COLOR,
 } from "../../theme";
+import { useNavigation } from "@react-navigation/native";
 
-export default function BottomTab() {
+export default function BottomTab({ onlyCloseButton = false }) {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
+  const navigation = useNavigation();
+
   return (
-    <View style={[styles.container, { width: width }]}>
-      <View
-        style={[
-          styles.tabSection,
-          {
-            width: width * 0.4,
-            backgroundColor: CARDS,
-            borderTopRightRadius: RADIUS.rond,
-          },
-        ]}
-      >
-        <TouchableOpacity>
-          <FontAwesome
-            name="calendar"
-            size={ICON_SIZES.base}
-            color={TEXT_COLOR.PRIMARY}
-          />
-        </TouchableOpacity>
-      </View>
+    <View
+      style={[styles.container, { width: width, justifyContent: "center" }]}
+    >
+      {!onlyCloseButton ? (
+        <View
+          style={[
+            styles.tabSection,
+            {
+              width: width * 0.4,
+              backgroundColor: CARDS,
+              borderTopRightRadius: RADIUS.rond,
+            },
+          ]}
+        >
+          <TouchableOpacity>
+            <FontAwesome
+              name="calendar"
+              size={ICON_SIZES.base}
+              color={TEXT_COLOR.PRIMARY}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
 
       <View
         style={{
@@ -49,35 +56,49 @@ export default function BottomTab() {
         }}
       >
         <TouchableOpacity
-          style={styles.middleButton}
-          onPress={() => console.log("middle pressed")}
+          style={[
+            styles.middleButton,
+            {
+              borderColor: onlyCloseButton ? CARDS : TEXT_COLOR.PRIMARY,
+              backgroundColor: onlyCloseButton
+                ? COLORS.PRIMARY_LIGHT
+                : COLORS.SECONDARY,
+            },
+          ]}
+          onPress={() =>
+            onlyCloseButton
+              ? navigation.goBack()
+              : navigation.navigate("TasksView")
+          }
         >
           <FontAwesome
-            name="plus"
+            name={onlyCloseButton ? "close" : "plus"}
             size={ICON_SIZES.base}
             color={TEXT_COLOR.PRIMARY}
           />
         </TouchableOpacity>
       </View>
 
-      <View
-        style={[
-          styles.tabSection,
-          {
-            width: width * 0.4,
-            backgroundColor: CARDS,
-            borderTopLeftRadius: RADIUS.rond,
-          },
-        ]}
-      >
-        <TouchableOpacity>
-          <FontAwesome5
-            name="user"
-            size={ICON_SIZES.base}
-            color={TEXT_COLOR.PRIMARY}
-          />
-        </TouchableOpacity>
-      </View>
+      {!onlyCloseButton ? (
+        <View
+          style={[
+            styles.tabSection,
+            {
+              width: width * 0.4,
+              backgroundColor: CARDS,
+              borderTopLeftRadius: RADIUS.rond,
+            },
+          ]}
+        >
+          <TouchableOpacity>
+            <FontAwesome5
+              name="user"
+              size={ICON_SIZES.base}
+              color={TEXT_COLOR.PRIMARY}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       {/* <Text>Bottom</Text> */}
     </View>
   );
@@ -98,10 +119,10 @@ const styles = StyleSheet.create({
   middleButton: {
     borderRadius: RADIUS.rond,
     borderWidth: 3,
-    borderColor: TEXT_COLOR.PRIMARY,
+
     width: 50,
     height: 50,
-    backgroundColor: COLORS.SECONDARY,
+
     justifyContent: "center",
     alignItems: "center",
   },
