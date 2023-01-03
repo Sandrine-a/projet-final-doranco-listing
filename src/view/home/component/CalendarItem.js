@@ -51,7 +51,7 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function CalendarItem() {
+export default function CalendarItem({ onDayPress }) {
   return (
     <Calendar
       firstDay={1}
@@ -79,6 +79,11 @@ export default function CalendarItem() {
             color: COLORS.SECONDARY_DARK,
           },
         },
+      }}
+
+      onDayPress={day => {
+        // console.log('selected day', day);
+        onDayPress(day)
       }}
 
       // dayComponent={({date, state}) => {

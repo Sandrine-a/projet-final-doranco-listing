@@ -17,10 +17,13 @@ import {
   TEXT_COLOR,
 } from "../../../theme";
 import ColorPreview from "./component/ColorPreview";
+import CalendarItem from "../home/component/CalendarItem";
 
 export default function TasksView() {
   const [title, onChangeTitle] = useState("");
   const [text, onChangeText] = useState("");
+  const [day, setDay] = useState();
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{ paddingHorizontal: SIZES.base }}>
@@ -64,8 +67,7 @@ export default function TasksView() {
             />
           </View>
 
-          <View style={styles.section}
-          >
+          <View style={styles.section}>
             <Text style={styles.label}>Couleur:</Text>
             <View style={styles.colorRow}>
               {CARD_THEME.map((el) => (
@@ -74,9 +76,12 @@ export default function TasksView() {
             </View>
           </View>
 
-          <View style={styles.section}
-          >
-            
+          <View style={styles.section}>
+            <CalendarItem
+              onDayPress={(day) => {
+                console.log("Day ==", day), setDay(day);
+              }}
+            />
           </View>
         </View>
       </ScrollView>
