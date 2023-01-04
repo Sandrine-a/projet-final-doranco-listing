@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Calendar,
   CalendarList,
@@ -7,6 +7,7 @@ import {
   LocaleConfig,
 } from "react-native-calendars";
 import { FONTS, TEXT_COLOR, COLORS } from "../../../../theme";
+import moment from "moment";
 
 LocaleConfig.locales["fr"] = {
   monthNames: [
@@ -51,7 +52,53 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function CalendarItem({ onDayPress }) {
+export default function CalendarItem({ onDayPress,  day }) {
+  // const today = Date.now();
+
+  // const [date, setDate] = useState(new Date());
+
+  const today = new Date();
+
+  // const today = new Date(Date.now());
+
+  // const today = new Date(Date.now()).toISOString();
+
+  // const today = new Date(Date.now()).toUTCString();
+
+  // const today = new Date().toLocaleDateString()
+
+  // const today = new Date().toDateString()
+
+  // const today = new Date().toJSON().slice(0, 10);
+
+  // const dayFormat = today.toLocaleDateString('fr-FR', {
+  //   weekday: "long",
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  // });
+
+  // console.log(today.toLocaleDateString('fr-FR', {day: "numeric"}));
+
+  // console.log(today);
+
+  // console.log(date);
+
+  // console.log(dayFormat);
+
+  useEffect(() => {
+    // date = new Date()
+    // console.log(date);
+
+    // day = new Date()
+
+    console.log("day dans calendarItem == ", day);
+  
+    return () => {
+    }
+  }, [])
+  
+
   return (
     <Calendar
       firstDay={1}
@@ -80,11 +127,14 @@ export default function CalendarItem({ onDayPress }) {
           },
         },
       }}
-
-      onDayPress={day => {
+      onDayPress={(day) => {
         // console.log('selected day', day);
-        onDayPress(day)
+        onDayPress(day);
+        // console.log(month);
       }}
+      
+
+      // initialDate={Date.now()}
 
       // dayComponent={({date, state}) => {
       //   return (

@@ -1,6 +1,17 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
+
+import moment from "moment";
+import "moment/locale/fr";
+// import "moment/min/locales";
 
 import BottomTab from "../../component/BottomTab";
 import DotItem from "../../component/DotItem";
@@ -9,6 +20,7 @@ import {
   cardContainer,
   CARDS,
   CARD_THEME,
+  COLORS,
   dotContainer,
   FONTS,
   GREEN,
@@ -22,7 +34,29 @@ import CalendarItem from "../home/component/CalendarItem";
 export default function TasksView() {
   const [title, onChangeTitle] = useState("");
   const [text, onChangeText] = useState("");
-  const [day, setDay] = useState();
+  const [day, setDay] = useState(new Date());
+  const [visible, setVisible] = useState(false);
+  // const [day, setDay] = useState("");
+
+  const showCalendar = () => {
+    setVisible(true);
+  };
+
+  useEffect(() => {
+    console.log("TaskView day is== ", day);
+    // moment.locale("fr");
+
+    // const words = today.toLocaleString("fr");
+
+    // console.log(words);
+
+    // setDay(words);
+
+    // let newDay = today.split('T')[0]
+
+    // console.log(today.split('T')[0]);
+    return () => {};
+  }, [day]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,11 +111,30 @@ export default function TasksView() {
           </View>
 
           <View style={styles.section}>
-            <CalendarItem
-              onDayPress={(day) => {
-                console.log("Day ==", day), setDay(day);
-              }}
-            />
+            <TouchableOpacity onPress={showCalendar}>
+              {/* <Text>{day.getDate()}/{day.getMonth() + 1}/{day.getFullYear()}</Text> */}
+
+              {/* <Text>{moment(day).format("DD MMMM HH:mm")}</Text> */}
+
+              <Text
+                style={{
+                  fontFamily: FONTS.mukta.bold,
+                  color: COLORS.SECONDARY_DARK,
+                  fontSize: SIZES.base,
+                }}
+              >
+                {moment(day).format("LL")}
+              </Text>
+            </TouchableOpacity>
+
+            {visible ? (
+              <CalendarItem
+                onDayPress={(day) => {
+                  setDay(day);
+                }}
+                day={day}
+              />
+            ) : null}
           </View>
         </View>
       </ScrollView>
