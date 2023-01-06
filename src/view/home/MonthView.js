@@ -7,6 +7,10 @@ import {
 } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 import { useTheme } from "@react-navigation/native";
 import { FONTS, SIZES } from "../../../theme";
@@ -19,6 +23,8 @@ import Calendar from "./component/CalendarItem";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />
@@ -39,14 +45,25 @@ export default function MonthView({ navigation }) {
         }}
       /> */}
 
-      <View style={[styles.calendarContainer, { width: width }]}>
+      <View
+        style={[
+          styles.calendarContainer,
+          {
+            width: width, 
+            // Paddings to handle safe area
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
         <Calendar />
-        
       </View>
 
       <View
         style={{
-          marginTop: 95,
+          marginTop: 98,
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",

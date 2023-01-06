@@ -47,7 +47,8 @@ export default function RootNavigation() {
               fontFamily: FONTS.oswald.bold
             },
             headerShadowVisible: false,
-            animation: "slide_from_bottom"
+            animation: "slide_from_bottom",
+            headerBackTitleVisible: false
           }}
         />
       </RootStack.Group>

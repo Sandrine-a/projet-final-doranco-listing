@@ -74,7 +74,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer theme={BaseTheme}>
         <RootNavigation />
-        <StatusBar style="auto" backgroundColor={COLORS.PRIMARY_DARK} />
+        <StatusBar backgroundColor={COLORS.PRIMARY_DARK} />
       </NavigationContainer>
     </SafeAreaProvider>
   );

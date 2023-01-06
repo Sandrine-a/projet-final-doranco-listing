@@ -52,7 +52,7 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function CalendarItem({ onDayPress,  day }) {
+export default function CalendarItem({ onDayPress, day, coloredBackground, setVisible }) {
   // const today = Date.now();
 
   // const [date, setDate] = useState(new Date());
@@ -93,31 +93,36 @@ export default function CalendarItem({ onDayPress,  day }) {
     // day = new Date()
 
     console.log("day dans calendarItem == ", day);
-  
-    return () => {
-    }
-  }, [])
-  
+
+    return () => {};
+  }, []);
 
   return (
     <Calendar
       firstDay={1}
       // showWeekNumbers={true}
+      // Specify style for calendar container element.
       style={{
-        backgroundColor: "transparent",
-        borderWidth: 1,
-        borderColor: "gray",
+        backgroundColor: coloredBackground ? COLORS.PRIMARY : "transparent",
         // height: 300,
       }}
+      // Specify theme properties to override specific styles for calendar parts.
       theme={{
-        backgroundColor: "transparent",
+        // backgroundColor: "transparent",
         calendarBackground: "transparent",
-        textSectionTitleColor: TEXT_COLOR.PRIMARY,
-        arrowColor: COLORS.TERTIARY,
-        textMonthFontFamily: FONTS.oswald.regular,
+        textSectionTitleColor: TEXT_COLOR.PRIMARY, //dayText color
+
+        selectedDayBackgroundColor: COLORS.TERTIARY,
+        selectedDayTextColor: "white",
+
+        todayTextColor: "violet",
+
+        arrowColor: TEXT_COLOR.PRIMARY,
+        textMonthFontFamily: FONTS.oswald.bold,
         textDayHeaderFontFamily: FONTS.oswald.regular,
-        dotColor: "#00adf5",
+        dotColor: "red",
         weekVerticalMargin: 2,
+        
         "stylesheet.calendar.header": {
           dayTextAtIndex5: {
             color: COLORS.SECONDARY_DARK,
@@ -131,8 +136,9 @@ export default function CalendarItem({ onDayPress,  day }) {
         // console.log('selected day', day);
         onDayPress(day);
         // console.log(month);
+        setVisible(false)
       }}
-      
+      minDate={"2013-01-01"}
 
       // initialDate={Date.now()}
 

@@ -12,6 +12,7 @@ import { TextInput } from "react-native-paper";
 import moment from "moment";
 import "moment/locale/fr";
 // import "moment/min/locales";
+import { Ionicons } from "@expo/vector-icons";
 
 import BottomTab from "../../component/BottomTab";
 import DotItem from "../../component/DotItem";
@@ -39,7 +40,7 @@ export default function TasksView() {
   // const [day, setDay] = useState("");
 
   const showCalendar = () => {
-    setVisible(true);
+    !visible ? setVisible(true) : setVisible(false);
   };
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function TasksView() {
 
     // console.log(today.split('T')[0]);
     return () => {};
-  }, [day]);
+  }, [day, visible]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,6 +77,7 @@ export default function TasksView() {
                 fontFamily: FONTS.londrinaSolid.regular,
                 color: TEXT_COLOR.PRIMARY,
                 borderWidth: 0,
+                paddingLeft: 0
               }}
               // underlineColor="transparent"
               mode="outlined"
@@ -111,28 +113,45 @@ export default function TasksView() {
           </View>
 
           <View style={styles.section}>
-            <TouchableOpacity onPress={showCalendar}>
+            <TouchableOpacity
+              onPress={showCalendar}
+              style={{ flexDirection: "row" }}
+            >
               {/* <Text>{day.getDate()}/{day.getMonth() + 1}/{day.getFullYear()}</Text> */}
 
               {/* <Text>{moment(day).format("DD MMMM HH:mm")}</Text> */}
 
-              <Text
+              <Ionicons
+                name="calendar"
+                size={24}
                 style={{
-                  fontFamily: FONTS.mukta.bold,
-                  color: COLORS.SECONDARY_DARK,
-                  fontSize: SIZES.base,
+                  color: visible ? COLORS.PRIMARY_DARK : COLORS.SECONDARY_DARK,
                 }}
-              >
-                {moment(day).format("LL")}
-              </Text>
+              />
+              {!visible ? (
+                <Text
+                  style={{
+                    fontFamily: FONTS.mukta.bold,
+                    color: visible
+                      ? COLORS.PRIMARY_DARK
+                      : COLORS.SECONDARY_DARK,
+                    fontSize: SIZES.base,
+                  }}
+                >
+                  {moment(day).format("LL")}
+                </Text>
+              ) : null}
             </TouchableOpacity>
 
             {visible ? (
               <CalendarItem
                 onDayPress={(day) => {
-                  setDay(day);
+                  console.log(day.dateString);
+                  setDay(day.dateString)
                 }}
                 day={day}
+                coloredBackground={true}
+                setVisible={setVisible}
               />
             ) : null}
           </View>
@@ -160,7 +179,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.oswald.bold,
     color: TEXT_COLOR.PRIMARY,
     fontSize: SIZES.base,
-    // marginBottom: SIZES.small
+    marginBottom: SIZES.small
   },
   section: {
     marginBottom: SIZES.base,
