@@ -9,8 +9,14 @@ import BottomTab from "../../component/BottomTab";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import DayBoard from "./component/DayBoard";
+import { useStore } from "@nanostores/react";
+import { calendarStore } from "../../../store/calendarStore";
 
 export default function DayView({ navigation }) {
+
+  const { tasksList } = useStore(calendarStore)
+
+  console.log(tasksList);
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />

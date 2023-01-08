@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
+import { useStore } from "@nanostores/react";
 
 import moment from "moment";
 import "moment/locale/fr";
@@ -32,15 +33,28 @@ import {
 import ColorPreview from "./component/ColorPreview";
 import CalendarItem from "../home/component/CalendarItem";
 import Button from "../../component/Button.js";
+import {
+  addNewTask,
+  calendarStore,
+  setContent,
+  setDate,
+  setTaskColor,
+  setTitle,
+} from "../../../store/calendarStore";
 
 export default function TasksView() {
-  const [title, onChangeTitle] = useState("");
+  // const [title, onChangeTitle] = useState("");
   const [text, onChangeText] = useState("");
   const [day, setDay] = useState(new Date());
   const [visible, setVisible] = useState(false);
   const [color, setColor] = useState("");
-  const [activeColor, setActiveColor ] = useState(null)
+  const [activeColor, setActiveColor] = useState(null);
   // const [day, setDay] = useState("");
+
+  // Pour récupérer tout l'etat du calendard
+  const { title, content, taskColor, date } = useStore(calendarStore);
+
+  console.log(taskColor);
 
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
@@ -56,9 +70,7 @@ export default function TasksView() {
 
     // setDay(words);
 
-    // let newDay = today.split('T')[0]
-
-    // console.log(today.split('T')[0]);
+    // setDate(new Date())
     return () => {};
   }, [day, visible]);
 
@@ -73,7 +85,8 @@ export default function TasksView() {
 
           <View>
             <TextInput
-              onChangeText={onChangeTitle}
+              // onChangeText={onChangeTitle}
+              onChangeText={setTitle}
               value={title}
               placeholder="Titre"
               contentStyle={{
@@ -91,8 +104,8 @@ export default function TasksView() {
 
           <View>
             <TextInput
-              onChangeText={onChangeText}
-              value={text}
+              onChangeText={setContent}
+              value={content}
               multiline={true}
               placeholder="Ajouter une tâche"
               contentStyle={{
@@ -115,11 +128,12 @@ export default function TasksView() {
                   color={el.value}
                   key={el.value}
                   onPressColor={() => {
-                    setColor(el.value)
-                    setActiveColor(el.color)
+                    setColor(el.value);
+                    setActiveColor(el.color);
+
+                    setTaskColor(el);
                   }}
                   active={el.color == activeColor ? true : false}
-                  
                 />
               ))}
             </View>
@@ -172,7 +186,7 @@ export default function TasksView() {
             {visible ? (
               <CalendarItem
                 onDayPress={(day) => {
-                  console.log(day.dateString);
+                  console.log(day);
                   setDay(day.dateString);
                 }}
                 day={day}
@@ -186,7 +200,10 @@ export default function TasksView() {
           <View style={[styles.section, { alignSelf: "flex-end" }]}>
             <Button
               label={"Enregistrer"}
-              onPress={() => console.log("test")}
+              onPress={() => {
+                console.log("test");
+                addNewTask()
+              }}
               containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
             />
           </View>

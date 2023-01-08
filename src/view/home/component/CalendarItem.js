@@ -63,7 +63,7 @@ export default function CalendarItem({ onDayPress, setDay, coloredBackground, se
   // const getSelectDay  = async (day) => {}
 
   useEffect(() => {
-    console.log("The day", selectedDay);
+    // console.log("The day", selectedDay);
     return () => {};
   }, [selectedDay]);
 
