@@ -9,6 +9,7 @@ import React from "react";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 import {
+  boxShadow,
   CARDS,
   COLORS,
   ICON_SIZES,
@@ -58,6 +59,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
         <TouchableOpacity
           style={[
             styles.middleButton,
+            boxShadow,
             {
               borderColor: onlyCloseButton ? CARDS : TEXT_COLOR.PRIMARY,
               backgroundColor: onlyCloseButton

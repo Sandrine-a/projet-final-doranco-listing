@@ -31,12 +31,15 @@ import {
 } from "../../../theme";
 import ColorPreview from "./component/ColorPreview";
 import CalendarItem from "../home/component/CalendarItem";
+import Button from "../../component/Button.js";
 
 export default function TasksView() {
   const [title, onChangeTitle] = useState("");
   const [text, onChangeText] = useState("");
   const [day, setDay] = useState(new Date());
   const [visible, setVisible] = useState(false);
+  const [color, setColor] = useState("");
+  const [activeColor, setActiveColor ] = useState(null)
   // const [day, setDay] = useState("");
 
   const showCalendar = () => {
@@ -75,9 +78,10 @@ export default function TasksView() {
               placeholder="Titre"
               contentStyle={{
                 fontFamily: FONTS.londrinaSolid.regular,
-                color: TEXT_COLOR.PRIMARY,
+                fontSize: SIZES.large,
+                color: color ? color : TEXT_COLOR.PRIMARY,
                 borderWidth: 0,
-                paddingLeft: 0
+                paddingLeft: 0,
               }}
               // underlineColor="transparent"
               mode="outlined"
@@ -107,7 +111,16 @@ export default function TasksView() {
             <Text style={styles.label}>Couleur:</Text>
             <View style={styles.colorRow}>
               {CARD_THEME.map((el) => (
-                <ColorPreview color={el.value} key={el.value} />
+                <ColorPreview
+                  color={el.value}
+                  key={el.value}
+                  onPressColor={() => {
+                    setColor(el.value)
+                    setActiveColor(el.color)
+                  }}
+                  active={el.color == activeColor ? true : false}
+                  
+                />
               ))}
             </View>
           </View>
@@ -128,7 +141,7 @@ export default function TasksView() {
                   color: visible ? COLORS.PRIMARY_DARK : COLORS.SECONDARY_DARK,
                 }}
               />
-              {!visible ? (
+              {
                 <Text
                   style={{
                     fontFamily: FONTS.mukta.bold,
@@ -140,20 +153,42 @@ export default function TasksView() {
                 >
                   {moment(day).format("LL")}
                 </Text>
-              ) : null}
+              }
+              {/* {!visible ? (
+                <Text
+                  style={{
+                    fontFamily: FONTS.mukta.bold,
+                    color: visible
+                      ? COLORS.PRIMARY_DARK
+                      : COLORS.SECONDARY_DARK,
+                    fontSize: SIZES.base,
+                  }}
+                >
+                  {moment(day).format("LL")}
+                </Text>
+              ) : null} */}
             </TouchableOpacity>
 
             {visible ? (
               <CalendarItem
                 onDayPress={(day) => {
                   console.log(day.dateString);
-                  setDay(day.dateString)
+                  setDay(day.dateString);
                 }}
                 day={day}
+                setDay={setDay}
                 coloredBackground={true}
                 setVisible={setVisible}
               />
             ) : null}
+          </View>
+
+          <View style={[styles.section, { alignSelf: "flex-end" }]}>
+            <Button
+              label={"Enregistrer"}
+              onPress={() => console.log("test")}
+              containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
+            />
           </View>
         </View>
       </ScrollView>
@@ -179,7 +214,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.oswald.bold,
     color: TEXT_COLOR.PRIMARY,
     fontSize: SIZES.base,
-    marginBottom: SIZES.small
+    marginBottom: SIZES.small,
   },
   section: {
     marginBottom: SIZES.base,

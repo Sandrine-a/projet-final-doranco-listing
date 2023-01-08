@@ -52,60 +52,32 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function CalendarItem({ onDayPress, day, coloredBackground, setVisible }) {
-  // const today = Date.now();
+export default function CalendarItem({ onDayPress, setDay, coloredBackground, setVisible }) {
 
-  // const [date, setDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState({});
+
+  // const [markedDates, setMarkedDates] = useState({})
 
   const today = new Date();
 
-  // const today = new Date(Date.now());
-
-  // const today = new Date(Date.now()).toISOString();
-
-  // const today = new Date(Date.now()).toUTCString();
-
-  // const today = new Date().toLocaleDateString()
-
-  // const today = new Date().toDateString()
-
-  // const today = new Date().toJSON().slice(0, 10);
-
-  // const dayFormat = today.toLocaleDateString('fr-FR', {
-  //   weekday: "long",
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  // });
-
-  // console.log(today.toLocaleDateString('fr-FR', {day: "numeric"}));
-
-  // console.log(today);
-
-  // console.log(date);
-
-  // console.log(dayFormat);
+  // const getSelectDay  = async (day) => {}
 
   useEffect(() => {
-    // date = new Date()
-    // console.log(date);
-
-    // day = new Date()
-
-    console.log("day dans calendarItem == ", day);
-
+    console.log("The day", selectedDay);
     return () => {};
-  }, []);
+  }, [selectedDay]);
 
   return (
     <Calendar
       firstDay={1}
       // showWeekNumbers={true}
+
       // Specify style for calendar container element.
       style={{
         backgroundColor: coloredBackground ? COLORS.PRIMARY : "transparent",
         // height: 300,
       }}
+
       // Specify theme properties to override specific styles for calendar parts.
       theme={{
         // backgroundColor: "transparent",
@@ -115,7 +87,7 @@ export default function CalendarItem({ onDayPress, day, coloredBackground, setVi
         selectedDayBackgroundColor: COLORS.TERTIARY,
         selectedDayTextColor: "white",
 
-        todayTextColor: "violet",
+        todayTextColor: COLORS.TERTIARY,
 
         arrowColor: TEXT_COLOR.PRIMARY,
         textMonthFontFamily: FONTS.oswald.bold,
@@ -133,16 +105,38 @@ export default function CalendarItem({ onDayPress, day, coloredBackground, setVi
         },
       }}
       onDayPress={(day) => {
-        // console.log('selected day', day);
-        onDayPress(day);
-        // console.log(month);
-        setVisible(false)
-      }}
-      minDate={"2013-01-01"}
+        console.log('selected day', day);
 
-      // initialDate={Date.now()}
+        let markedDay = {}
+        markedDay[day.dateString] = {/* marked: true, */ selected: true, customStyles: {
+          container: {
+            borderRadius: 7,
+          },
+          // text: {
+          //   color: 'black',
+          //   fontWeight: 'bold'
+          // }
+        }}
+        setSelectedDay(markedDay)
+        setDay(day.dateString)
+      
+
+        // onDayPress(day);
+        // setVisible(false)
+      }}
+      minDate={"2020-01-01"}
+
+      markingType={'custom'}
+      markedDates={
+        selectedDay
+        
+        // '2023-01-31': {marked: true, selected: true},
+      }
+
 
       // dayComponent={({date, state}) => {
+        // console.log("DATE === ", date);
+        // console.log("STATE ===", state);
       //   return (
       //     <View>
       //       <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : "red"}}>{date.day}</Text>

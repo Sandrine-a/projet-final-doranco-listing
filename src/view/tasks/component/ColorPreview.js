@@ -1,11 +1,16 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { RADIUS } from "../../../../theme";
+import { CARDS, RADIUS, TEXT_COLOR } from "../../../../theme";
 
-export default function ColorPreview({ color }) {
+export default function ColorPreview({ color, onPressColor, active }) {
   return (
     <TouchableOpacity
-      style={[styles.container, { backgroundColor: color }]}
+      style={[
+        styles.container,
+        { backgroundColor: color },
+        active ? { borderWidth: 3, borderColor: TEXT_COLOR.PRIMARY } : null,
+      ]}
+      onPress={onPressColor}
     ></TouchableOpacity>
   );
 }
