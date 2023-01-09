@@ -3,18 +3,20 @@ import React from "react";
 import { boxShadow, CARDS, FONTS, RADIUS, SIZES } from "../../theme";
 import DotItem from "./DotItem";
 
-export default function CardDay({title, content, color}) {
+export default function CardDay({ title, content, date, time, color }) {
   return (
     <View
-      style={[{
-        borderWidth: 2,
-        borderRadius: RADIUS.rectangle,
-        borderColor: CARDS,
-        padding: SIZES.small,
-        backgroundColor: "white",
-        marginBottom: SIZES.base
-
-      }, boxShadow]}
+      style={[
+        {
+          borderWidth: 2,
+          borderRadius: RADIUS.rectangle,
+          borderColor: CARDS,
+          padding: SIZES.small,
+          backgroundColor: "white",
+          marginBottom: SIZES.base,
+        },
+        boxShadow,
+      ]}
     >
       <View style={styles.dotContainer}>
         <DotItem size={"s"} />
@@ -22,10 +24,16 @@ export default function CardDay({title, content, color}) {
       </View>
 
       {/* Titre */}
-      <Text style={[styles.title, {color: color}]}> { title } </Text>
+      <Text style={[styles.title, { color: color }]} numberOfLines={1}>
+        {" "}
+        {title}{" "}
+      </Text>
 
-      <View>
-        <Text style={{ fontFamily: FONTS.mukta.regular}}>{ content }</Text>
+      {/* Corps */}
+      <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+        <Text style={{ fontFamily: FONTS.mukta.regular }}>{content}</Text>
+
+        {time ? <Text style={{ fontFamily: FONTS.mukta.regular, alignContent: "flex-end" }}>{ time.hours } : {time.minutes}</Text> : null}
       </View>
     </View>
   );
@@ -38,7 +46,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: FONTS.londrinaSolid.regular,
-    textTransform:"uppercase",
+    textTransform: "uppercase",
     fontSize: SIZES.large,
-  }
+  },
 });

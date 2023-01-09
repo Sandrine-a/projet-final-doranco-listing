@@ -14,6 +14,8 @@ import { calendarStore } from "../../../store/calendarStore";
 
 export default function DayView({ navigation }) {
 
+  const { tasksList} = useStore(calendarStore);
+
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />
@@ -35,7 +37,20 @@ export default function DayView({ navigation }) {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
-          <DayBoard />
+
+        {tasksList.map((item, index) => {
+          console.log(item.day)
+          if(item.day == "2023-01-12") {
+            // console.log("yes");
+            return  <DayBoard item={item}/>
+          }
+        })
+          // <DayBoard />
+        }
+
+        
+
+        {/* <DayBoard /> */}
         </View>
       </ScrollView>
 

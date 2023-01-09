@@ -5,7 +5,8 @@ export const calendarStore = map({
   title: "",
   content: "",
   taskColor: {},
-  date: new Date(),
+  day: "",
+  time: "",
   tasksList: [],
 });
 
@@ -52,12 +53,24 @@ export const setTaskColor = action(
 /**
  * Action permettant de changer la date
  */
-export const setDate = action(
+export const setDay = action(
   calendarStore,
-  "setDate",
-  (store, date) => {
-    console.log("la date ==", date);
-    store.setKey("date", date);
+  "setDay",
+  (store, day) => {
+    console.log("la date ==", day);
+    store.setKey("day", day);
+  }
+);
+
+/**
+ * Action permettant de changer l'heure'
+ */
+export const setTime= action(
+  calendarStore,
+  "setTime",
+  (store, time) => {
+    console.log("L'HEURE ==", time);
+    store.setKey("time", time);
   }
 );
 
@@ -66,7 +79,7 @@ export const setDate = action(
  */
 export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   //Recuperation des tasks
-  const { title, content, taskColor, date, tasksList } = store.get();
+  const { title, content, taskColor, day, time, tasksList } = store.get();
   // console.log(title, content, taskColor);
 
   //Creation du new task
@@ -75,7 +88,8 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
     title: title,
     content: content,
     taskColor: taskColor,
-    date: date,
+    day: day,
+    time: time
   };
   //Creation du nouveau tableau contenant la nouvelle task
   const newTask = [task, ...tasksList];
@@ -87,5 +101,6 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   store.setKey("title", "");
   store.setKey("content", "");
   store.setKey("taskColor", "");
-  store.setKey("date", "");
+  store.setKey("day", "");
+  store.setKey("time", "");
 });

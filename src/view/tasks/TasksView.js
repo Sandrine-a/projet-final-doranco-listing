@@ -5,11 +5,12 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { TextInput } from "react-native-paper";
+// import { TextInput } from "react-native-paper";
 import { useStore } from "@nanostores/react";
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider } from "react-native-paper";
 
 import "intl";
 import "intl/locale-data/jsonp/fr-FR";
@@ -43,24 +44,25 @@ import {
   addNewTask,
   calendarStore,
   setContent,
-  setDate,
+  setDay,
   setTaskColor,
+  setTime,
   setTitle,
 } from "../../../store/calendarStore";
 
-export default function TasksView() {
+export default function TasksView({ navigation }) {
   // const [title, onChangeTitle] = useState("");
   const [text, onChangeText] = useState("");
-  const [day, setDay] = useState(new Date());
+  // const [day, setDay] = useState(new Date());
   const [visible, setVisible] = useState(false);
   const [color, setColor] = useState("");
   const [activeColor, setActiveColor] = useState(null);
   // const [day, setDay] = useState("");
   const [timeModalVisible, setTimeModalVisible] = useState(false);
-  const [time, setTime] = useState()
+  // const [time, setTime] = useState()
 
   // Pour récupérer tout l'etat du calendard
-  const { title, content, taskColor, date } = useStore(calendarStore);
+  const { title, content, taskColor, day, time } = useStore(calendarStore);
 
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
@@ -73,25 +75,21 @@ export default function TasksView() {
   const onTimeConfirm = React.useCallback(
     ({ hours, minutes }) => {
       setTimeModalVisible(false);
-      console.log({ hours, minutes });
-      setTime({hours, minutes})
+      // console.log({ hours, minutes });
+      setTime({ hours, minutes });
     },
     [setTimeModalVisible]
   );
 
   useEffect(() => {
     console.log("TaskView day is== ", day);
-    // moment.locale("fr");
 
-    // const words = today.toLocaleString("fr");
+    // Initialisation de la date du jour par defaut
+    // console.log("moment ", moment(new Date()).format('YYYY-MM-DD'));
+    setDay(moment(new Date()).format('YYYY-MM-DD'));
 
-    // console.log(words);
-
-    // setDay(words);
-
-    // setDate(new Date())
     return () => {};
-  }, [day, visible]);
+  }, [visible]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,7 +100,41 @@ export default function TasksView() {
             <DotItem size={"m"} />
           </View>
 
-          <View>
+          <View style={[styles.section, { marginTop: SIZES.small }]}>
+            <TextInput
+              multiline={true}
+              onChangeText={setTitle}
+              value={title}
+              placeholder="Titre"
+              placeholderTextColor={TEXT_COLOR.PRIMARY}
+              style={{
+                fontWeight: "normal",
+                fontFamily: FONTS.londrinaSolid.regular,
+                fontSize: SIZES.base + 1,
+                color: color ? color : TEXT_COLOR.PRIMARY,
+              }}
+            />
+          </View>
+
+          <View style={styles.section}>
+            <TextInput
+              onChangeText={setContent}
+              value={content}
+              multiline={true}
+              placeholder="Ajouter une tâche..."
+              placeholderTextColor={TEXT_COLOR.PRIMARY}
+              style={{
+                fontFamily: FONTS.mukta.regular,
+                fontSize: SIZES.base,
+                color: TEXT_COLOR.PRIMARY,
+                borderWidth: 0,
+                paddingHorizontal: 0,
+                marginVertical: 0,
+              }}
+            />
+          </View>
+
+          {/* <View>
             <TextInput
               // onChangeText={onChangeTitle}
               onChangeText={setTitle}
@@ -132,12 +164,13 @@ export default function TasksView() {
                 color: TEXT_COLOR.PRIMARY,
                 borderWidth: 0,
                 paddingHorizontal: 0,
+                marginVertical: 0,
               }}
               //   underlineColor="transparent"
               mode="outlined"
-              outlineStyle={{ borderWidth: 0, backgroundColor: "white" }}
+              outlineStyle={{ borderWidth: 0, backgroundColor: "white",}}
             />
-          </View>
+          </View> */}
 
           <View style={styles.section}>
             <Text style={styles.label}>Couleur:</Text>
@@ -218,8 +251,33 @@ export default function TasksView() {
 
           <View style={styles.section}>
             <TouchableOpacity onPress={() => setTimeModalVisible(true)}>
-              <Text>Heure : </Text>
-              {time ? <Text>{ time.hours } : { time.minutes}</Text> : null}
+              {!time ? (
+                <Text style={styles.text}>+ Ajouter une heure ? </Text>
+              ) : null}
+              {/* {(time && (time.hours >= 0 && time.hours < 10 && time.minutes >= 0 && time.minutes < 10)) ? (
+                <Text>
+                  0{time.hours} : 0{time.minutes}
+                </Text>
+              ) : (time && time.hours >= 10 || time.minutes >= 10) ? (
+                <Text>
+                  {time.hours} : {time.minutes}
+                </Text>
+              ) : null } */}
+
+              {time ? (
+                <View style={{ flexDirection: "row" }}>
+                  {time.hours >= 0 && time.hours < 10 ? (
+                    <Text style={styles.text}>0{time.hours}</Text>
+                  ) : (
+                    <Text style={styles.text}>{time.hours}</Text>
+                  )}
+                  {time.minutes >= 0 && time.minutes < 10 ? (
+                    <Text style={styles.text}> : 0{time.minutes}</Text>
+                  ) : (
+                    <Text style={styles.text}> : {time.minutes}</Text>
+                  )}
+                </View>
+              ) : null}
             </TouchableOpacity>
 
             {timeModalVisible ? (
@@ -242,8 +300,9 @@ export default function TasksView() {
             <Button
               label={"Enregistrer"}
               onPress={() => {
-                console.log("test");
+                console.log("Test enregistrer");
                 addNewTask();
+                navigation.goBack();
               }}
               containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
             />
@@ -280,5 +339,10 @@ const styles = StyleSheet.create({
   colorRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  text: {
+    fontFamily: FONTS.mukta.regular,
+    fontSize: SIZES.base,
+    color: TEXT_COLOR.PRIMARY,
   },
 });
