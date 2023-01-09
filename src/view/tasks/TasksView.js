@@ -9,6 +9,12 @@ import {
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import { useStore } from "@nanostores/react";
+import { Provider as PaperProvider } from 'react-native-paper';
+
+import "intl";
+import "intl/locale-data/jsonp/fr-FR";
+
+import { TimePickerModal } from "react-native-paper-dates";
 
 import moment from "moment";
 import "moment/locale/fr";
@@ -50,15 +56,28 @@ export default function TasksView() {
   const [color, setColor] = useState("");
   const [activeColor, setActiveColor] = useState(null);
   // const [day, setDay] = useState("");
+  const [timeModalVisible, setTimeModalVisible] = useState(false);
+  const [time, setTime] = useState()
 
   // Pour récupérer tout l'etat du calendard
   const { title, content, taskColor, date } = useStore(calendarStore);
 
-  console.log(taskColor);
-
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
   };
+
+  const onTimeDismiss = React.useCallback(() => {
+    setTimeModalVisible(false);
+  }, [setTimeModalVisible]);
+
+  const onTimeConfirm = React.useCallback(
+    ({ hours, minutes }) => {
+      setTimeModalVisible(false);
+      console.log({ hours, minutes });
+      setTime({hours, minutes})
+    },
+    [setTimeModalVisible]
+  );
 
   useEffect(() => {
     console.log("TaskView day is== ", day);
@@ -197,12 +216,34 @@ export default function TasksView() {
             ) : null}
           </View>
 
+          <View style={styles.section}>
+            <TouchableOpacity onPress={() => setTimeModalVisible(true)}>
+              <Text>Heure : </Text>
+              {time ? <Text>{ time.hours } : { time.minutes}</Text> : null}
+            </TouchableOpacity>
+
+            {timeModalVisible ? (
+              <TimePickerModal
+                visible={true}
+                onDismiss={onTimeDismiss}
+                onConfirm={onTimeConfirm}
+                // hours={12}
+                // minutes={14}
+                // is24Hour={true}
+                locale="fr-FR"
+                label="Choisir une heure"
+                cancelLabel="Annuler"
+                animationType="fade"
+              />
+            ) : null}
+          </View>
+
           <View style={[styles.section, { alignSelf: "flex-end" }]}>
             <Button
               label={"Enregistrer"}
               onPress={() => {
                 console.log("test");
-                addNewTask()
+                addNewTask();
               }}
               containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
             />

@@ -3,7 +3,7 @@ import React from "react";
 import { boxShadow, CARDS, FONTS, RADIUS, SIZES } from "../../theme";
 import DotItem from "./DotItem";
 
-export default function CardDay({title, color}) {
+export default function CardDay({title, content, color}) {
   return (
     <View
       style={[{
@@ -11,7 +11,9 @@ export default function CardDay({title, color}) {
         borderRadius: RADIUS.rectangle,
         borderColor: CARDS,
         padding: SIZES.small,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        marginBottom: SIZES.base
+
       }, boxShadow]}
     >
       <View style={styles.dotContainer}>
@@ -19,8 +21,12 @@ export default function CardDay({title, color}) {
         <DotItem size={"s"} />
       </View>
 
-      {/* Titire */}
+      {/* Titre */}
       <Text style={[styles.title, {color: color}]}> { title } </Text>
+
+      <View>
+        <Text style={{ fontFamily: FONTS.mukta.regular}}>{ content }</Text>
+      </View>
     </View>
   );
 }

@@ -14,9 +14,6 @@ import { calendarStore } from "../../../store/calendarStore";
 
 export default function DayView({ navigation }) {
 
-  const { tasksList } = useStore(calendarStore)
-
-  console.log(tasksList);
   return (
     <SafeAreaView style={styles.container}>
       <HeaderSvg />

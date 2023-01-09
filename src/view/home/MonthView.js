@@ -20,6 +20,7 @@ import DayView from "./DayView";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import Calendar from "./component/CalendarItem";
+import AgendaItem from "./component/AgendaItem";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
@@ -58,7 +59,9 @@ export default function MonthView({ navigation }) {
           },
         ]}
       >
-        <Calendar />
+        {/* <Calendar /> */}
+
+        <AgendaItem />
       </View>
 
       <View
