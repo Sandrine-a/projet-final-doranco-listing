@@ -80,7 +80,8 @@ export const CARDS = "#D9D9D9";
  */
 export const TEXT_COLOR = {
   PRIMARY: "#36454f",
-  SECONDARY: "#C3CED6",
+  SECONDARY: "#999",
+  // SECONDARY: "#C3CED6",
 };
 
 // export const PRIMARY_TEXT_COLOR = "#36454f";

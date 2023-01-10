@@ -56,8 +56,6 @@ export default function CalendarItem({ onDayPress, setDay, coloredBackground, se
 
   const [selectedDay, setSelectedDay] = useState({});
 
-  // const [markedDates, setMarkedDates] = useState({})
-
   const today = new Date();
 
   // const getSelectDay  = async (day) => {}
@@ -105,8 +103,6 @@ export default function CalendarItem({ onDayPress, setDay, coloredBackground, se
         },
       }}
       onDayPress={(day) => {
-        console.log('selected day', day);
-
         let markedDay = {}
         markedDay[day.dateString] = {/* marked: true, */ selected: true, customStyles: {
           container: {

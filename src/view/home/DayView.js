@@ -1,20 +1,28 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { FontAwesome } from "@expo/vector-icons";
+import moment from "moment";
+import "moment/locale/fr";
+import { useStore } from "@nanostores/react";
 
-import { useTheme } from "@react-navigation/native";
-import { FONTS, SIZES } from "../../../theme";
+import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../../theme";
 import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import DayBoard from "./component/DayBoard";
-import { useStore } from "@nanostores/react";
-import { calendarStore } from "../../../store/calendarStore";
+
+import { calendarStore, setDay } from "../../../store/calendarStore";
 
 export default function DayView({ navigation }) {
-
-  const { tasksList} = useStore(calendarStore);
+  const { tasksList, day } = useStore(calendarStore);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,38 +35,46 @@ export default function DayView({ navigation }) {
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",
-          // justifyContent: "space-between",
-          justifyContent: "space-evenly"
+          justifyContent: "space-evenly",
         }}
       >
         <FilterButton label={"Jour"} active={true} />
-        <FilterButton label={"Mois"} onPress={()=> navigation.navigate('MonthView')}/>
+        <FilterButton
+          label={"Mois"}
+          onPress={() => navigation.navigate("MonthView")}
+        />
+      </View>
+
+      <View style={styles.daySection}>
+        <TouchableOpacity
+          onPress={() => {
+            /* Retire un jour de la date dans le store */
+            setDay(moment(day).subtract(1, "days").format("YYYY-MM-DD"));
+          }}
+        >
+          <FontAwesome name="chevron-left" size={24} color={TEXT_COLOR.SECONDARY} />
+        </TouchableOpacity>
+        <Text style={styles.day}>{moment(day).format("dddd LL")}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            /* Ajoute 1 jour dans la date du store */
+            setDay(moment(day).add(1, "days").format("YYYY-MM-DD"));
+          }}
+        >
+          <FontAwesome name="chevron-right" size={24} color={TEXT_COLOR.SECONDARY} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
-
-        {tasksList.map((item, index) => {
-          console.log(item.day)
-          if(item.day == "2023-01-12") {
-            // console.log("yes");
-            return  <DayBoard item={item}/>
-          }
-        })
-          // <DayBoard />
-        }
-
-        
-
-        {/* <DayBoard /> */}
+          {tasksList.map((item, index) => {
+            /* Permet de filtrer l'affichage de la liste selon la date du store des qu'elle est changee */
+            if (item.day == day) {
+              return <DayBoard item={item} key={`${item.day}_${index}`} />;
+            }
+          })}
         </View>
       </ScrollView>
-
-      {/* <ScrollView stickyHeaderIndices={[0]} bounces={false}>
-        <HeaderSvg />
-        <DayView />
-      </ScrollView> */}
-
       <BottomTab />
     </SafeAreaView>
   );
@@ -70,5 +86,18 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     paddingBottom: 80,
+  },
+  daySection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: SIZES.large,
+    marginBottom: SIZES.large,
+  },
+  day: {
+    fontFamily: FONTS.mukta.bold,
+    fontSize: SIZES.base + 2,
+    color: COLORS.TERTIARY,
+    textTransform: "capitalize",
   },
 });

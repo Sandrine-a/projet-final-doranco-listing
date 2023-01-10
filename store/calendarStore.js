@@ -1,13 +1,16 @@
 import { action, map } from "nanostores";
+import moment from "moment";
+import "moment/locale/fr";
 
 export const calendarStore = map({
   taskId: "",
   title: "",
   content: "",
   taskColor: {},
-  day: "",
+  day: moment(new Date()).format('YYYY-MM-DD'),
   time: "",
   tasksList: [],
+  dayFilteredList: [] // SI NON UTILISE A SUPPRIMER //
 });
 
 // Nous pouvons récupérer le contenu du store :
@@ -57,7 +60,6 @@ export const setDay = action(
   calendarStore,
   "setDay",
   (store, day) => {
-    console.log("la date ==", day);
     store.setKey("day", day);
   }
 );
@@ -80,11 +82,10 @@ export const setTime= action(
 export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   //Recuperation des tasks
   const { title, content, taskColor, day, time, tasksList } = store.get();
-  // console.log(title, content, taskColor);
 
   //Creation du new task
   const task = {
-    taskId: "1",
+    taskId: "1", // A CHANGER AVEC BACK //
     title: title,
     content: content,
     taskColor: taskColor,
@@ -96,11 +97,21 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   //MAJ de la lsite des taches
   store.setKey("tasksList", newTask);
 
-  //Vidage des champs du store
+  // Remise a l'état initial des valeurs du store
   // store.setKey("tasksList", '')
   store.setKey("title", "");
   store.setKey("content", "");
   store.setKey("taskColor", "");
-  store.setKey("day", "");
+  store.setKey("day", moment(new Date()).format('YYYY-MM-DD'));
   store.setKey("time", "");
 });
+
+/**
+ * Action permettant de creer un nouveau tableau qui filtre by day
+ */
+export const setDayFilteredList = action(calendarStore, "setDayFilteredList", async(store) => {
+  //Recuperation des tasks
+  const { tasksList } = store.get();
+
+  const filteredList = tasksList.filter(task => console.log(task))
+})

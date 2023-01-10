@@ -8,18 +8,14 @@ import {
   TextInput,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-// import { TextInput } from "react-native-paper";
 import { useStore } from "@nanostores/react";
-import { Provider as PaperProvider } from "react-native-paper";
-
 import "intl";
 import "intl/locale-data/jsonp/fr-FR";
-
 import { TimePickerModal } from "react-native-paper-dates";
 
 import moment from "moment";
 import "moment/locale/fr";
-// import "moment/min/locales";
+
 import { Ionicons } from "@expo/vector-icons";
 
 import BottomTab from "../../component/BottomTab";
@@ -27,13 +23,10 @@ import DotItem from "../../component/DotItem";
 import {
   boxShadow,
   cardContainer,
-  CARDS,
   CARD_THEME,
   COLORS,
   dotContainer,
   FONTS,
-  GREEN,
-  RADIUS,
   SIZES,
   TEXT_COLOR,
 } from "../../../theme";
@@ -51,18 +44,13 @@ import {
 } from "../../../store/calendarStore";
 
 export default function TasksView({ navigation }) {
-  // const [title, onChangeTitle] = useState("");
-  const [text, onChangeText] = useState("");
-  // const [day, setDay] = useState(new Date());
   const [visible, setVisible] = useState(false);
   const [color, setColor] = useState("");
   const [activeColor, setActiveColor] = useState(null);
-  // const [day, setDay] = useState("");
   const [timeModalVisible, setTimeModalVisible] = useState(false);
-  // const [time, setTime] = useState()
 
   // Pour récupérer tout l'etat du calendard
-  const { title, content, taskColor, day, time } = useStore(calendarStore);
+  const { title, content, day, time } = useStore(calendarStore);
 
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
@@ -75,7 +63,6 @@ export default function TasksView({ navigation }) {
   const onTimeConfirm = React.useCallback(
     ({ hours, minutes }) => {
       setTimeModalVisible(false);
-      // console.log({ hours, minutes });
       setTime({ hours, minutes });
     },
     [setTimeModalVisible]
@@ -86,7 +73,7 @@ export default function TasksView({ navigation }) {
 
     // Initialisation de la date du jour par defaut
     // console.log("moment ", moment(new Date()).format('YYYY-MM-DD'));
-    setDay(moment(new Date()).format('YYYY-MM-DD'));
+    // setDay(moment(new Date()).format('YYYY-MM-DD'));
 
     return () => {};
   }, [visible]);
@@ -300,7 +287,6 @@ export default function TasksView({ navigation }) {
             <Button
               label={"Enregistrer"}
               onPress={() => {
-                console.log("Test enregistrer");
                 addNewTask();
                 navigation.goBack();
               }}
