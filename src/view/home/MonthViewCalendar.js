@@ -6,12 +6,13 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import moment from "moment";
 
 import { useTheme } from "@react-navigation/native";
 import { FONTS, SIZES } from "../../../theme";
@@ -24,10 +25,15 @@ import Calendar from "./component/CalendarItem";
 import AgendaItem from "./component/AgendaItem";
 import { calendarStore, setDay } from "../../../store/calendarStore";
 import { useStore } from "@nanostores/react";
+import DayBoard from "./component/DayBoard";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
-  const insets = useSafeAreaInsets();
+  const { tasksList, day, month } = useStore(calendarStore);
+
+  useEffect(() => {
+    return () => {};
+  }, [tasksList, month]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,8 +73,11 @@ export default function MonthView({ navigation }) {
             },
           ]}
         >
-          <Calendar setDay={setDay} withDot={true} coloredBackground={false}/>
-
+          <Calendar
+            setDay={setDay}
+            withDot={true}
+            coloredBackground={false} /* setMonth={setMonth} */
+          />
         </View>
       </ImageBackground>
 
@@ -89,7 +98,14 @@ export default function MonthView({ navigation }) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.cardsContainer}></View>
+        <View style={styles.cardsContainer}>
+          {tasksList.map((item, index) => {
+            /* Permet de filtrer l'affichage de la liste selon le mois du store des qu'elle est changee */
+            if (moment(item.day).format("MM") === month) {
+              return <DayBoard item={item} key={`${item.day}_${index}`} />;
+            }
+          })}
+        </View>
       </ScrollView>
 
       <BottomTab />

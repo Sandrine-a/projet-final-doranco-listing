@@ -75,7 +75,7 @@ export default function TasksView({ navigation }) {
     // setDay(moment(new Date()).format('YYYY-MM-DD'));
 
     return () => {};
-  }, [visible]);
+  }, [visible, day]);
 
   return (
     <SafeAreaView style={styles.container}>

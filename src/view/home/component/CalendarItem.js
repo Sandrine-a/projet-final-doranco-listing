@@ -9,7 +9,7 @@ import {
 import { FONTS, TEXT_COLOR, COLORS } from "../../../../theme";
 import moment from "moment";
 import { useStore } from "@nanostores/react";
-import { calendarStore } from "../../../../store/calendarStore";
+import { calendarStore, setMonth } from "../../../../store/calendarStore";
 
 LocaleConfig.locales["fr"] = {
   monthNames: [
@@ -60,10 +60,14 @@ export default function CalendarItem({
   coloredBackground,
   setVisible,
   withDot,
+  // month,
+  // setMonth
 }) {
   const [selectedDay, setSelectedDay] = useState({});
 
-  const { tasksList /* day */ } = useStore(calendarStore);
+  // const [month, setMonth] = useState()
+
+  const { tasksList, day, month } = useStore(calendarStore);
 
   const today = new Date();
 
@@ -84,11 +88,23 @@ export default function CalendarItem({
         };
       });
       setSelectedDay(markedDay);
+    } else {
+      setSelectedDay({
+        [day]: {
+          selected: true,
+          customStyles: {
+            container: {
+              borderRadius: 7,
+            },
+          },
+        },
+      });
     }
 
     return () => {};
   }, [
     tasksList,
+    // month,
     /* selectedDay */
   ]);
 
@@ -175,6 +191,7 @@ export default function CalendarItem({
         textMonthFontFamily: FONTS.oswald.bold,
         textDayHeaderFontFamily: FONTS.oswald.regular,
         dotColor: COLORS.SECONDARY,
+        dotStyle: { width: 5, height: 5 },
 
         "stylesheet.day.basic": {
           base: {
@@ -238,7 +255,6 @@ export default function CalendarItem({
         if (!withDot) {
           onDaySelect(day);
         }
-
         // let markedDay = {};
         // markedDay[day.dateString] = {
         //   /* marked: true, */
@@ -251,8 +267,6 @@ export default function CalendarItem({
         // };
         // setSelectedDay(markedDay);
         setDay(day.dateString);
-
-        console.log(day.dateString);
       }}
       minDate={"2020-01-01"}
       markingType={"custom"}
@@ -267,16 +281,16 @@ export default function CalendarItem({
         //   "2023-02-01": { marked: true },
         // }
       }
+      onMonthChange={(date) => {
+        // console.log("onMonthChange", date);
+        // console.log(moment(date.dateString).format("MM"));
 
-      // dayComponent={({date, state}) => {
-      // console.log("DATE === ", date);
-      // console.log("STATE ===", state);
-      //   return (
-      //     <View>
-      //       <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : "red"}}>{date.day}</Text>
-      //     </View>
-      //   );
-      // }}
+        setMonth(moment(date.dateString).format("MM"));
+        // setMonth(moment(date.dateString).format("MM"))
+        // console.log(moment(date.dateString).month());
+        // console.log(moment(date.timestamp).month(1).format("YYYY-MM-DD"));
+        // console.log("Avoir le mois correct + 1", moment(date.timestamp).month() + 1);
+      }}
     />
   );
 }

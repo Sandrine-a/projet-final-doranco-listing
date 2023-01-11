@@ -7,10 +7,11 @@ export const calendarStore = map({
   title: "",
   content: "",
   taskColor: {},
-  day: moment(new Date()).format('YYYY-MM-DD'),
+  day: moment(new Date()).format("YYYY-MM-DD"),
   time: "",
   tasksList: [],
-  dayFilteredList: [] // SI NON UTILISE A SUPPRIMER //
+  dayFilteredList: [], // SI NON UTILISE A SUPPRIMER //
+  month: moment(new Date()).format("MM"),
 });
 
 // Nous pouvons récupérer le contenu du store :
@@ -56,25 +57,17 @@ export const setTaskColor = action(
 /**
  * Action permettant de changer la date
  */
-export const setDay = action(
-  calendarStore,
-  "setDay",
-  (store, day) => {
-    store.setKey("day", day);
-  }
-);
+export const setDay = action(calendarStore, "setDay", (store, day) => {
+  store.setKey("day", day);
+});
 
 /**
  * Action permettant de changer l'heure'
  */
-export const setTime= action(
-  calendarStore,
-  "setTime",
-  (store, time) => {
-    console.log("L'HEURE ==", time);
-    store.setKey("time", time);
-  }
-);
+export const setTime = action(calendarStore, "setTime", (store, time) => {
+  // console.log("L'HEURE ==", time);
+  store.setKey("time", time);
+});
 
 /**
  * Action permettant d'ajouter à la liste
@@ -90,7 +83,7 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
     content: content,
     taskColor: taskColor,
     day: day,
-    time: time
+    time: time,
   };
   //Creation du nouveau tableau contenant la nouvelle task
   const newTask = [task, ...tasksList];
@@ -102,16 +95,28 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   store.setKey("title", "");
   store.setKey("content", "");
   store.setKey("taskColor", "");
-  store.setKey("day", moment(new Date()).format('YYYY-MM-DD'));
+  store.setKey("day", moment(new Date()).format("YYYY-MM-DD"));
   store.setKey("time", "");
+  store.setKey("month", moment(new Date()).format("MM"));
 });
 
 /**
  * Action permettant de creer un nouveau tableau qui filtre by day
  */
-export const setDayFilteredList = action(calendarStore, "setDayFilteredList", async(store) => {
-  //Recuperation des tasks
-  const { tasksList } = store.get();
+// export const setDayFilteredList = action(
+//   calendarStore,
+//   "setDayFilteredList",
+//   async (store) => {
+//     //Recuperation des tasks
+//     const { tasksList } = store.get();
 
-  const filteredList = tasksList.filter(task => console.log(task))
-})
+//     const filteredList = tasksList.filter((task) => console.log(task));
+//   }
+// );
+
+/**
+ * Action permettant de changer le mois
+ */
+export const setMonth = action(calendarStore, "setMonth", (store, month) => {
+  store.setKey("month", month);
+});
