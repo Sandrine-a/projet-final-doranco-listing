@@ -8,6 +8,8 @@ import {
 } from "react-native-calendars";
 import { FONTS, TEXT_COLOR, COLORS } from "../../../../theme";
 import moment from "moment";
+import { useStore } from "@nanostores/react";
+import { calendarStore } from "../../../../store/calendarStore";
 
 LocaleConfig.locales["fr"] = {
   monthNames: [
@@ -52,9 +54,16 @@ LocaleConfig.locales["fr"] = {
 };
 LocaleConfig.defaultLocale = "fr";
 
-export default function CalendarItem({ onDayPress, setDay, coloredBackground, setVisible }) {
-
+export default function CalendarItem({
+  onDayPress,
+  setDay,
+  coloredBackground,
+  setVisible,
+  withDot,
+}) {
   const [selectedDay, setSelectedDay] = useState({});
+
+  const { tasksList /* day */ } = useStore(calendarStore);
 
   const today = new Date();
 
@@ -62,20 +71,95 @@ export default function CalendarItem({ onDayPress, setDay, coloredBackground, se
 
   useEffect(() => {
     // console.log("The day", selectedDay);
+
+    /*  Si on met les dot on ne peu pas selectionner un jour */
+    if (withDot) {
+      let markedDay = {};
+      tasksList.map((item) => {
+        markedDay[item.day] = {
+          // selected: true,
+          // selectedColor: "black",
+
+          marked: true,
+        };
+      });
+      setSelectedDay(markedDay);
+    }
+
     return () => {};
-  }, [selectedDay]);
+  }, [
+    tasksList,
+    /* selectedDay */
+  ]);
+
+  // let markedDay = {};
+  // tasksList.map((item) => {
+  //   markedDay[item.day] = {
+  //     // selected: true,
+  //     // selectedColor: "black",
+
+  //     marked: true,
+  //   };
+  // });
+
+  /* Marquage dynamique si selection */
+  const onDaySelect = (day) => {
+    let markedDay = {};
+    markedDay[day.dateString] = {
+      /* marked: true, */
+      selected: true,
+      customStyles: {
+        container: {
+          borderRadius: 7,
+        },
+      },
+    };
+    setSelectedDay(markedDay);
+  };
+
+  // let markedDay = tasksList.reduce(function (acc, obj) {
+  //   let key = obj.day;
+  //   if (!acc[key]) {
+  //     acc[key] = [];
+  //   }
+  //   acc[key].push(obj);
+  //   return acc;
+  // }, {});
+  // console.log(markedDay);
+
+  // tasksList.map((el) => {
+  //   console.log(el.taskColor.value);
+  //   markedDay[el.day] = {
+  //     dots: [
+  //       {
+  //         // key: "x",
+  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //       },
+  //       {
+  //         // key: "x",
+  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //       },
+  //       {
+  //         // key: "x",
+  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
+  //       }
+  //     ],
+  //     marked: true,
+  //   };
+  // });
 
   return (
     <Calendar
       firstDay={1}
       // showWeekNumbers={true}
-
       // Specify style for calendar container element.
       style={{
         backgroundColor: coloredBackground ? COLORS.PRIMARY : "transparent",
         // height: 300,
       }}
-
       // Specify theme properties to override specific styles for calendar parts.
       theme={{
         // backgroundColor: "transparent",
@@ -90,49 +174,103 @@ export default function CalendarItem({ onDayPress, setDay, coloredBackground, se
         arrowColor: TEXT_COLOR.PRIMARY,
         textMonthFontFamily: FONTS.oswald.bold,
         textDayHeaderFontFamily: FONTS.oswald.regular,
-        dotColor: "red",
-        weekVerticalMargin: 2,
-        
+        dotColor: COLORS.SECONDARY,
+
+        "stylesheet.day.basic": {
+          base: {
+            width: 27,
+            height: 27,
+            // marginBottom: 3,
+            color: TEXT_COLOR.PRIMARY,
+            // backgroundColor: "grey",
+            justifyContent: "center",
+            alignItems: "center",
+          },
+        },
+
+        "stylesheet.calendar.main": {
+          week: {
+            marginTop: 0,
+            marginBottom: 0,
+            paddingBottom: 4,
+            flexDirection: "row",
+            justifyContent: "space-around",
+            // backgroundColor: "red",
+            // alignItems: "center",
+            // justifyContent: "center",
+
+            // flexDirection: 'column',
+          },
+        },
+
         "stylesheet.calendar.header": {
+          header: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingLeft: 10,
+            paddingRight: 10,
+            alignItems: "center",
+          },
+          headerContainer: {
+            flexDirection: "row",
+          },
+          arrow: {
+            padding: 10,
+            marginBottom: 0,
+          },
+          monthText: {
+            fontFamily: FONTS.oswald.bold,
+            fontSize: 16,
+          },
           dayTextAtIndex5: {
             color: COLORS.SECONDARY_DARK,
           },
           dayTextAtIndex6: {
             color: COLORS.SECONDARY_DARK,
           },
+          dayHeader: {
+            marginTop: 0,
+            marginBottom: 2,
+          },
         },
       }}
       onDayPress={(day) => {
-        let markedDay = {}
-        markedDay[day.dateString] = {/* marked: true, */ selected: true, customStyles: {
-          container: {
-            borderRadius: 7,
-          },
-          // text: {
-          //   color: 'black',
-          //   fontWeight: 'bold'
-          // }
-        }}
-        setSelectedDay(markedDay)
-        setDay(day.dateString)
-      
+        if (!withDot) {
+          onDaySelect(day);
+        }
 
-        // onDayPress(day);
-        // setVisible(false)
+        // let markedDay = {};
+        // markedDay[day.dateString] = {
+        //   /* marked: true, */
+        //   selected: true,
+        //   customStyles: {
+        //     container: {
+        //       borderRadius: 7,
+        //     },
+        //   },
+        // };
+        // setSelectedDay(markedDay);
+        setDay(day.dateString);
+
+        console.log(day.dateString);
       }}
       minDate={"2020-01-01"}
-
-      markingType={'custom'}
+      markingType={"custom"}
+      // markingType={"multi-dot"}
       markedDates={
         selectedDay
-        
-        // '2023-01-31': {marked: true, selected: true},
+        // markedDay
+
+        // {
+        //   "2023-01-23": { marked: true },
+        //   "2023-01-31": { marked: true },
+        //   "2023-02-01": { marked: true },
+        // }
       }
 
-
       // dayComponent={({date, state}) => {
-        // console.log("DATE === ", date);
-        // console.log("STATE ===", state);
+      // console.log("DATE === ", date);
+      // console.log("STATE ===", state);
       //   return (
       //     <View>
       //       <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : "red"}}>{date.day}</Text>

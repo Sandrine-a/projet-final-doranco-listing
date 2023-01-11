@@ -3,7 +3,8 @@ import React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../view/home/HomeScreen";
-import MonthView from "../view/home/MonthView";
+// import MonthView from "../view/home/MonthView";
+import MonthView from "../view/home/MonthViewCalendar";
 import DayView from "../view/home/DayView";
 import TasksView from "../view/tasks/TasksView";
 import { FONTS } from "../../theme";

@@ -70,7 +70,6 @@ export default function TasksView({ navigation }) {
 
   useEffect(() => {
     console.log("TaskView day is== ", day);
-
     // Initialisation de la date du jour par defaut
     // console.log("moment ", moment(new Date()).format('YYYY-MM-DD'));
     // setDay(moment(new Date()).format('YYYY-MM-DD'));
@@ -183,10 +182,6 @@ export default function TasksView({ navigation }) {
               onPress={showCalendar}
               style={{ flexDirection: "row" }}
             >
-              {/* <Text>{day.getDate()}/{day.getMonth() + 1}/{day.getFullYear()}</Text> */}
-
-              {/* <Text>{moment(day).format("DD MMMM HH:mm")}</Text> */}
-
               <Ionicons
                 name="calendar"
                 size={24}
@@ -232,6 +227,7 @@ export default function TasksView({ navigation }) {
                 setDay={setDay}
                 coloredBackground={true}
                 setVisible={setVisible}
+                withDot={false}
               />
             ) : null}
           </View>

@@ -22,6 +22,8 @@ import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import Calendar from "./component/CalendarItem";
 import AgendaItem from "./component/AgendaItem";
+import { calendarStore, setDay } from "../../../store/calendarStore";
+import { useStore } from "@nanostores/react";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
@@ -32,7 +34,7 @@ export default function MonthView({ navigation }) {
       <ImageBackground
         source={require("../../../assets/img/header.png")}
         resizeMode="cover"
-        style={{ height: 600 }}
+        style={{ height: 210 }}
       >
         {/* <Calendar
         style={{
@@ -65,15 +67,14 @@ export default function MonthView({ navigation }) {
             },
           ]}
         >
-          {/* <Calendar /> */}
+          <Calendar setDay={setDay} withDot={true} coloredBackground={false}/>
 
-          <AgendaItem />
         </View>
       </ImageBackground>
 
-      {/* <View
+      <View
         style={{
-          // marginTop: 98,
+          marginTop: 38,
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",
@@ -85,11 +86,11 @@ export default function MonthView({ navigation }) {
           onPress={() => navigation.navigate("DayView")}
         />
         <FilterButton label={"Mois"} active={true} />
-      </View> */}
+      </View>
 
-      {/* <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}></View>
-      </ScrollView> */}
+      </ScrollView>
 
       <BottomTab />
     </SafeAreaView>

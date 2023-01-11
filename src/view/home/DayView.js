@@ -1,4 +1,5 @@
 import {
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,12 +27,18 @@ export default function DayView({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HeaderSvg />
-      <HeaderText />
+      <ImageBackground
+        source={require("../../../assets/img/header.png")}
+        resizeMode="cover"
+        style={{ height: 210 }}
+      >
+        <HeaderText />
+      </ImageBackground>
 
       <View
         style={{
-          marginTop: 98,
+          // marginTop: 98,
+          marginTop: 38,
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",
@@ -52,7 +59,11 @@ export default function DayView({ navigation }) {
             setDay(moment(day).subtract(1, "days").format("YYYY-MM-DD"));
           }}
         >
-          <FontAwesome name="chevron-left" size={24} color={TEXT_COLOR.SECONDARY} />
+          <FontAwesome
+            name="chevron-left"
+            size={24}
+            color={TEXT_COLOR.SECONDARY}
+          />
         </TouchableOpacity>
         <Text style={styles.day}>{moment(day).format("dddd LL")}</Text>
         <TouchableOpacity
@@ -61,7 +72,11 @@ export default function DayView({ navigation }) {
             setDay(moment(day).add(1, "days").format("YYYY-MM-DD"));
           }}
         >
-          <FontAwesome name="chevron-right" size={24} color={TEXT_COLOR.SECONDARY} />
+          <FontAwesome
+            name="chevron-right"
+            size={24}
+            color={TEXT_COLOR.SECONDARY}
+          />
         </TouchableOpacity>
       </View>
 
