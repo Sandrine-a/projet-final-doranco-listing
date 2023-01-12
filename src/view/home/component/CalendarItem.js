@@ -108,16 +108,6 @@ export default function CalendarItem({
     /* selectedDay */
   ]);
 
-  // let markedDay = {};
-  // tasksList.map((item) => {
-  //   markedDay[item.day] = {
-  //     // selected: true,
-  //     // selectedColor: "black",
-
-  //     marked: true,
-  //   };
-  // });
-
   /* Marquage dynamique si selection */
   const onDaySelect = (day) => {
     let markedDay = {};
@@ -133,39 +123,7 @@ export default function CalendarItem({
     setSelectedDay(markedDay);
   };
 
-  // let markedDay = tasksList.reduce(function (acc, obj) {
-  //   let key = obj.day;
-  //   if (!acc[key]) {
-  //     acc[key] = [];
-  //   }
-  //   acc[key].push(obj);
-  //   return acc;
-  // }, {});
-  // console.log(markedDay);
 
-  // tasksList.map((el) => {
-  //   console.log(el.taskColor.value);
-  //   markedDay[el.day] = {
-  //     dots: [
-  //       {
-  //         // key: "x",
-  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //       },
-  //       {
-  //         // key: "x",
-  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //       },
-  //       {
-  //         // key: "x",
-  //         // selectedColor: el.taskColor ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //         color: el.taskColor.value ? el.taskColor.value : TEXT_COLOR.PRIMARY,
-  //       }
-  //     ],
-  //     marked: true,
-  //   };
-  // });
 
   return (
     <Calendar
@@ -178,7 +136,6 @@ export default function CalendarItem({
       }}
       // Specify theme properties to override specific styles for calendar parts.
       theme={{
-        // backgroundColor: "transparent",
         calendarBackground: "transparent",
         textSectionTitleColor: TEXT_COLOR.PRIMARY, //dayText color
 

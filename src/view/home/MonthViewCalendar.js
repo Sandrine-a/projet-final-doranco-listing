@@ -1,4 +1,5 @@
 import {
+  FlatList,
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -15,7 +16,7 @@ import {
 import moment from "moment";
 
 import { useTheme } from "@react-navigation/native";
-import { FONTS, SIZES } from "../../../theme";
+import { COLORS, FONTS, SIZES } from "../../../theme";
 import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import DayView from "./DayView";
@@ -34,6 +35,19 @@ export default function MonthView({ navigation }) {
   useEffect(() => {
     return () => {};
   }, [tasksList, month]);
+
+  let markedDay = tasksList
+    .sort((a, b) => a.day - b.day)
+    .reduce(function (acc, obj) {
+      let key = obj.day;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(obj);
+      return acc;
+    }, {});
+
+  // console.log("MarkedDay ==", markedDay);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,13 +77,7 @@ export default function MonthView({ navigation }) {
             styles.calendarContainer,
             {
               width: width,
-              // height: 00
               flex: 1,
-
-              // position: "absolute",
-              // zIndex: 1,
-              // paddingTop: SIZES.small,
-              // backgroundColor: "red"
             },
           ]}
         >
@@ -99,15 +107,34 @@ export default function MonthView({ navigation }) {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
-          {tasksList.map((item, index) => {
-            /* Permet de filtrer l'affichage de la liste selon le mois du store des qu'elle est changee */
-            if (moment(item.day).format("MM") === month) {
-              return <DayBoard item={item} key={`${item.day}_${index}`} />;
-            }
-          })}
+          {/* {Object.keys(markedDay).map((key, index) => {
+            console.log(markedDay[key]);
+          })} */}
+
+          {Object.keys(markedDay)
+            .sort((a, b) => new Date(a) - new Date(b))
+            .map((key, index) => {
+              if (moment(key).format("MM") === month) {
+                return (
+                  <View key={index}>
+                    <Text style={styles.day}>
+                      {moment(key).format("dddd D MMMM")}
+                    </Text>
+                    {markedDay[key].map((item, index) => {
+                      return (
+                        <DayBoard
+                          item={item}
+                          key={`${item.day}_${index}`}
+                          log
+                        />
+                      );
+                    })}
+                  </View>
+                );
+              }
+            })}
         </View>
       </ScrollView>
-
       <BottomTab />
     </SafeAreaView>
   );
@@ -120,9 +147,11 @@ const styles = StyleSheet.create({
   cardsContainer: {
     paddingBottom: 80,
   },
-  calendarContainer: {
-    // position: "absolute",
-    // zIndex: 1,
-    // paddingTop: SIZES.small,
+  day: {
+    fontFamily: FONTS.mukta.bold,
+    fontSize: SIZES.base + 2,
+    color: COLORS.TERTIARY,
+    textTransform: "capitalize",
+    paddingLeft: SIZES.small,
   },
 });
