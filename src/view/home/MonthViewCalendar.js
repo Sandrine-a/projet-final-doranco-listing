@@ -117,9 +117,15 @@ export default function MonthView({ navigation }) {
               if (moment(key).format("MM") === month) {
                 return (
                   <View key={index}>
-                    <Text style={styles.day}>
+
+                    <Text style={[styles.day, {color: key == day ? COLORS.TERTIARY : COLORS.SECONDARY_DARK ,}]}>
                       {moment(key).format("dddd D MMMM")}
                     </Text>
+
+                    {/* <Text style={[styles.day, {color: key == moment(new Date()).format("YYYY-MM-DD") ? COLORS.TERTIARY : COLORS.SECONDARY_DARK ,}]}>
+                      {moment(key).format("dddd D MMMM")}
+                    </Text> */}
+
                     {markedDay[key].map((item, index) => {
                       return (
                         <DayBoard
@@ -150,7 +156,6 @@ const styles = StyleSheet.create({
   day: {
     fontFamily: FONTS.mukta.bold,
     fontSize: SIZES.base + 2,
-    color: COLORS.TERTIARY,
     textTransform: "capitalize",
     paddingLeft: SIZES.small,
   },
