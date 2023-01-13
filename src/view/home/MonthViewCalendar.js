@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   SafeAreaProvider,
@@ -32,9 +32,44 @@ export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
   const { tasksList, day, month } = useStore(calendarStore);
 
+  const [offset, setOffset] = useState(0);
+  const scrollViewRef = useRef();
+  
+
   useEffect(() => {
+    slowlyScrollDown()
     return () => {};
   }, [tasksList, month]);
+  
+
+  // useEffect(() => {
+  //   if (day) {
+  //     // find position of the element to scroll to
+  //     let y = 0;
+  //     for (const key in markedDay) {
+  //       if (key === day) {
+  //         break;
+  //       }
+  //       y += /* height of each element */
+  //     }
+  //     scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+  //   }
+  //   return () => {};
+  // }, [day, markedDay]);
+
+//   const slowlyScrollDown = () => {
+//     console.log("go");
+//     const y = offset + 200;
+//     scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+//     setOffset(y);
+// }
+
+  const slowlyScrollDown = () => {
+    console.log("go");
+    const y = offset + 200;
+    scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+    setOffset(y);
+}
 
   let markedDay = tasksList
     .sort((a, b) => a.day - b.day)
@@ -105,7 +140,7 @@ export default function MonthView({ navigation }) {
         <FilterButton label={"Mois"} active={true} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}  ref={scrollViewRef} >
         <View style={styles.cardsContainer}>
           {/* {Object.keys(markedDay).map((key, index) => {
             console.log(markedDay[key]);
@@ -117,8 +152,19 @@ export default function MonthView({ navigation }) {
               if (moment(key).format("MM") === month) {
                 return (
                   <View key={index}>
+                    <Text
+                      style={[
+                        styles.day,
+                        {
+                          color:
+                            key == day
+                              ? COLORS.TERTIARY
+                              : COLORS.SECONDARY_DARK,
+                        },
+                      ]}
 
-                    <Text style={[styles.day, {color: key == day ? COLORS.TERTIARY : COLORS.SECONDARY_DARK ,}]}>
+                      // ref={key == day ? scrollViewRef : null}
+                    >
                       {moment(key).format("dddd D MMMM")}
                     </Text>
 
