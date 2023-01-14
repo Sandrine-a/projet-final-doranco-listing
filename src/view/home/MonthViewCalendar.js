@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   SafeAreaProvider,
@@ -32,44 +32,49 @@ export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
   const { tasksList, day, month } = useStore(calendarStore);
 
+  const viewRef = useRef(null);
   const [offset, setOffset] = useState(0);
-  const scrollViewRef = useRef();
-  
+  const scrollViewRef = useRef(null);
+
+  const [isMeasured, setIsMeasured] = useState(false);
 
   useEffect(() => {
-    slowlyScrollDown()
+    // slowlyScrollDown();
+    // console.log("** DAY ==", day);
     return () => {};
   }, [tasksList, month]);
-  
 
-  // useEffect(() => {
-  //   if (day) {
-  //     // find position of the element to scroll to
-  //     let y = 0;
-  //     for (const key in markedDay) {
-  //       if (key === day) {
-  //         break;
-  //       }
-  //       y += /* height of each element */
-  //     }
-  //     scrollViewRef.current.scrollTo({x: 0, y, animated: true});
-  //   }
-  //   return () => {};
-  // }, [day, markedDay]);
+  useEffect(() => {
+    if (viewRef.current && scrollViewRef.current) {
 
-//   const slowlyScrollDown = () => {
-//     console.log("go");
-//     const y = offset + 200;
-//     scrollViewRef.current.scrollTo({x: 0, y, animated: true});
-//     setOffset(y);
-// }
+      // /* Mesure et ramene au top de la View du jour viewRef */
+      // viewRef.current.measure((x, y, width, height, pageX, pageY) => {
+      //   console.log(
+      //     `View dimensions: x: ${x}, y: ${y}, width: ${width}, height: ${height}, pageX: ${pageX}, pageY: ${pageY}`
+      //   );
+      //   setIsMeasured(true);
+      //   slowlyScrollDown(y);
+      // });
 
-  const slowlyScrollDown = () => {
-    console.log("go");
-    const y = offset + 200;
-    scrollViewRef.current.scrollTo({x: 0, y, animated: true});
+      /* Mesure et ramene au top de la View du jour viewRef par rapport à la scrollView*/
+      viewRef.current.measureLayout(
+        scrollViewRef.current,
+        (left, top, width, height) => {
+          setIsMeasured(true);
+          // console.log(left, top, width, height);
+          slowlyScrollDown(top)
+        }
+      );
+    }
+    return () => {};
+  }, [isMeasured]);
+
+  const slowlyScrollDown = (height) => {
+    console.log("go to", height);
+    const y = height;
+    scrollViewRef.current.scrollTo({ x: 0, y, animated: true });
     setOffset(y);
-}
+  };
 
   let markedDay = tasksList
     .sort((a, b) => a.day - b.day)
@@ -81,8 +86,6 @@ export default function MonthView({ navigation }) {
       acc[key].push(obj);
       return acc;
     }, {});
-
-  // console.log("MarkedDay ==", markedDay);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -140,18 +143,17 @@ export default function MonthView({ navigation }) {
         <FilterButton label={"Mois"} active={true} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}  ref={scrollViewRef} >
+      <ScrollView showsVerticalScrollIndicator={false} ref={scrollViewRef}>
         <View style={styles.cardsContainer}>
-          {/* {Object.keys(markedDay).map((key, index) => {
-            console.log(markedDay[key]);
-          })} */}
-
           {Object.keys(markedDay)
             .sort((a, b) => new Date(a) - new Date(b))
             .map((key, index) => {
               if (moment(key).format("MM") === month) {
                 return (
-                  <View key={index}>
+                  <View
+                    key={index}
+                    ref={key == day || key < day ? viewRef : null}
+                  >
                     <Text
                       style={[
                         styles.day,
@@ -162,16 +164,9 @@ export default function MonthView({ navigation }) {
                               : COLORS.SECONDARY_DARK,
                         },
                       ]}
-
-                      // ref={key == day ? scrollViewRef : null}
                     >
                       {moment(key).format("dddd D MMMM")}
                     </Text>
-
-                    {/* <Text style={[styles.day, {color: key == moment(new Date()).format("YYYY-MM-DD") ? COLORS.TERTIARY : COLORS.SECONDARY_DARK ,}]}>
-                      {moment(key).format("dddd D MMMM")}
-                    </Text> */}
-
                     {markedDay[key].map((item, index) => {
                       return (
                         <DayBoard

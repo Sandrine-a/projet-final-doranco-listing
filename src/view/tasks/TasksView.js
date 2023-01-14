@@ -69,7 +69,8 @@ export default function TasksView({ navigation }) {
   );
 
   useEffect(() => {
-    console.log("TaskView day is== ", day);
+    // console.log("TaskView day is== ", day);
+
     // Initialisation de la date du jour par defaut
     // console.log("moment ", moment(new Date()).format('YYYY-MM-DD'));
     // setDay(moment(new Date()).format('YYYY-MM-DD'));
