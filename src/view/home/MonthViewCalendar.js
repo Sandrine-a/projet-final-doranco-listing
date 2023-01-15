@@ -170,9 +170,8 @@ export default function MonthView({ navigation }) {
                     {markedDay[key].map((item, index) => {
                       return (
                         <DayBoard
-                          item={item}
+                          task={item}
                           key={`${item.day}_${index}`}
-                          log
                         />
                       );
                     })}

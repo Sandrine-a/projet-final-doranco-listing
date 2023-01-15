@@ -36,6 +36,7 @@ import Button from "../../component/Button.js";
 import {
   addNewTask,
   calendarStore,
+  resetValues,
   setContent,
   setDay,
   setTaskColor,
@@ -43,14 +44,14 @@ import {
   setTitle,
 } from "../../../store/calendarStore";
 
-export default function TasksView({ navigation }) {
+export default function TasksView({ route, navigation }) {
   const [visible, setVisible] = useState(false);
-  const [color, setColor] = useState("");
   const [activeColor, setActiveColor] = useState(null);
   const [timeModalVisible, setTimeModalVisible] = useState(false);
+  // const [currentTask, setCurrentTask] = useState(null);
 
   // Pour récupérer tout l'etat du calendard
-  const { title, content, day, time } = useStore(calendarStore);
+  const { title, content, day, time, taskColor } = useStore(calendarStore);
 
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
@@ -69,14 +70,22 @@ export default function TasksView({ navigation }) {
   );
 
   useEffect(() => {
-    // console.log("TaskView day is== ", day);
+    if (route?.params?.task) {
+      // console.log("yes", route?.params.task.taskColor.value);
+      // setCurrentTask(route?.params.task);
 
-    // Initialisation de la date du jour par defaut
-    // console.log("moment ", moment(new Date()).format('YYYY-MM-DD'));
-    // setDay(moment(new Date()).format('YYYY-MM-DD'));
+      setTitle(route?.params.task.title);
+      setContent(route?.params.task.content);
+      setTaskColor(route?.params.task.taskColor);
+      setDay(route?.params.task.day);
+      setTime(route?.params.task.time);
+    } 
+    // console.log(day);
+    return () => {
+      resetValues();
+    };
+  }, [visible, day, route?.params?.task]);
 
-    return () => {};
-  }, [visible, day]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,14 +100,15 @@ export default function TasksView({ navigation }) {
             <TextInput
               multiline={true}
               onChangeText={setTitle}
+              // value={title}
               value={title}
               placeholder="Titre"
-              placeholderTextColor={TEXT_COLOR.PRIMARY}
+              placeholderTextColor={taskColor ? taskColor.value : TEXT_COLOR.PRIMARY}
               style={{
                 fontWeight: "normal",
                 fontFamily: FONTS.londrinaSolid.regular,
                 fontSize: SIZES.base + 1,
-                color: color ? color : TEXT_COLOR.PRIMARY,
+                color: taskColor ? taskColor.value : TEXT_COLOR.PRIMARY,
               }}
             />
           </View>
@@ -167,9 +177,9 @@ export default function TasksView({ navigation }) {
                   color={el.value}
                   key={el.value}
                   onPressColor={() => {
-                    setColor(el.value);
+                    //On attribut la value pour l'afficher dynamiquement au click
                     setActiveColor(el.color);
-
+                    //On enregistre dans la task l'objet
                     setTaskColor(el);
                   }}
                   active={el.color == activeColor ? true : false}
@@ -281,14 +291,25 @@ export default function TasksView({ navigation }) {
           </View>
 
           <View style={[styles.section, { alignSelf: "flex-end" }]}>
-            <Button
-              label={"Enregistrer"}
-              onPress={() => {
-                addNewTask();
-                navigation.goBack();
-              }}
-              containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
-            />
+            {route?.params?.task ? (
+              <Button
+                label={"Modifier"}
+                onPress={() => {
+                  // addNewTask();
+                  navigation.goBack();
+                }}
+                containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
+              />
+            ) : (
+              <Button
+                label={"Enregistrer"}
+                onPress={() => {
+                  addNewTask();
+                  navigation.goBack();
+                }}
+                containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
+              />
+            )}
           </View>
         </View>
       </ScrollView>

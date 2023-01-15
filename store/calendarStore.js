@@ -101,18 +101,21 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
 });
 
 /**
- * Action permettant de creer un nouveau tableau qui filtre by day
+ * Action permettant reset les valeur
  */
-// export const setDayFilteredList = action(
-//   calendarStore,
-//   "setDayFilteredList",
-//   async (store) => {
-//     //Recuperation des tasks
-//     const { tasksList } = store.get();
-
-//     const filteredList = tasksList.filter((task) => console.log(task));
-//   }
-// );
+export const resetValues = action(
+  calendarStore,
+  "resetValues",
+  async (store) => {
+    // Remise a l'état initial des valeurs du store
+    // store.setKey("tasksList", '')
+    store.setKey("title", "");
+    store.setKey("content", "");
+    store.setKey("taskColor", "");
+    // store.setKey("day", moment(new Date()).format("YYYY-MM-DD"));
+    store.setKey("time", "");
+  }
+);
 
 /**
  * Action permettant de changer le mois

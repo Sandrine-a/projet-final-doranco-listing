@@ -85,7 +85,7 @@ export default function DayView({ navigation }) {
           {tasksList.map((item, index) => {
             /* Permet de filtrer l'affichage de la liste selon la date du store des qu'elle est changee */
             if (item.day == day) {
-              return <DayBoard item={item} key={`${item.day}_${index}`} />;
+              return <DayBoard task={item} key={`${item.day}_${index}`} />;
             }
           })}
         </View>

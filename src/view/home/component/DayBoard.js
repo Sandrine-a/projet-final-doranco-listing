@@ -3,16 +3,10 @@ import React from "react";
 import { SIZES } from "../../../../theme";
 import CardDay from "../../../component/CardDay";
 
-export default function DayBoard({ item }) {
+export default function DayBoard({ task }) {
   return (
     <View style={styles.container}>
-      <CardDay
-        color={item.taskColor?.value}
-        title={item.title}
-        content={item.content}
-        day={item.day}
-        time={item.time}
-      />
+      <CardDay task={task} />
     </View>
   );
 }
