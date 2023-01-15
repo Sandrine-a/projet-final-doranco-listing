@@ -82,12 +82,20 @@ export default function DayView({ navigation }) {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
-          {tasksList.map((item, index) => {
-            /* Permet de filtrer l'affichage de la liste selon la date du store des qu'elle est changee */
-            if (item.day == day) {
-              return <DayBoard task={item} key={`${item.day}_${index}`} />;
-            }
-          })}
+          {tasksList
+            .sort((a, b) => {
+              if (a.time.hours && b.time.hours) {
+                return (
+                  a.time.hours - b.time.hours || a.time.minutes - b.time.minutes
+                );
+              }
+            })
+            .map((item, index) => {
+              /* Permet de filtrer l'affichage de la liste selon la date du store des qu'elle est changee */
+              if (item.day == day) {
+                return <DayBoard task={item} key={`${item.day}_${index}`} />;
+              }
+            })}
         </View>
       </ScrollView>
       <BottomTab />

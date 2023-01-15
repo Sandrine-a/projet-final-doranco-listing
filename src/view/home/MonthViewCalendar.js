@@ -46,7 +46,6 @@ export default function MonthView({ navigation }) {
 
   useEffect(() => {
     if (viewRef.current && scrollViewRef.current) {
-
       // /* Mesure et ramene au top de la View du jour viewRef */
       // viewRef.current.measure((x, y, width, height, pageX, pageY) => {
       //   console.log(
@@ -62,7 +61,7 @@ export default function MonthView({ navigation }) {
         (left, top, width, height) => {
           setIsMeasured(true);
           // console.log(left, top, width, height);
-          slowlyScrollDown(top)
+          slowlyScrollDown(top);
         }
       );
     }
@@ -146,7 +145,15 @@ export default function MonthView({ navigation }) {
       <ScrollView showsVerticalScrollIndicator={false} ref={scrollViewRef}>
         <View style={styles.cardsContainer}>
           {Object.keys(markedDay)
-            .sort((a, b) => new Date(a) - new Date(b))
+            .sort((a, b) => {
+              if (new Date(a) === new Date(b)) {
+                return (
+                  a.time.hours - b.time.hours || a.time.minutes - b.time.minutes
+                );
+              } else {
+                return new Date(a) - new Date(b);
+              }
+            })
             .map((key, index) => {
               if (moment(key).format("MM") === month) {
                 return (
@@ -169,10 +176,7 @@ export default function MonthView({ navigation }) {
                     </Text>
                     {markedDay[key].map((item, index) => {
                       return (
-                        <DayBoard
-                          task={item}
-                          key={`${item.day}_${index}`}
-                        />
+                        <DayBoard task={item} key={`${item.day}_${index}`} />
                       );
                     })}
                   </View>
