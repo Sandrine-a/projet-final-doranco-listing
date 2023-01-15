@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@nanostores/react";
@@ -36,6 +37,7 @@ import Button from "../../component/Button.js";
 import {
   addNewTask,
   calendarStore,
+  deletTask,
   resetValues,
   setContent,
   setDay,
@@ -48,7 +50,7 @@ export default function TasksView({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [activeColor, setActiveColor] = useState(null);
   const [timeModalVisible, setTimeModalVisible] = useState(false);
-  // const [currentTask, setCurrentTask] = useState(null);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
 
   // Pour récupérer tout l'etat du calendard
   const { title, content, day, time, taskColor } = useStore(calendarStore);
@@ -79,13 +81,13 @@ export default function TasksView({ route, navigation }) {
       setTaskColor(route?.params.task.taskColor);
       setDay(route?.params.task.day);
       setTime(route?.params.task.time);
-    } 
+      setCurrentTaskId(route?.params.task.taskId);
+    }
     // console.log(day);
     return () => {
       resetValues();
     };
   }, [visible, day, route?.params?.task]);
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,7 +105,10 @@ export default function TasksView({ route, navigation }) {
               // value={title}
               value={title}
               placeholder="Titre"
-              placeholderTextColor={taskColor ? taskColor.value : TEXT_COLOR.PRIMARY}
+              placeholderTextColor={
+                TEXT_COLOR.PRIMARY
+                // taskColor.value ? taskColor.value : TEXT_COLOR.PRIMARY
+              }
               style={{
                 fontWeight: "normal",
                 fontFamily: FONTS.londrinaSolid.regular,
@@ -290,8 +295,50 @@ export default function TasksView({ route, navigation }) {
             ) : null}
           </View>
 
-          <View style={[styles.section, { alignSelf: "flex-end" }]}>
-            {route?.params?.task ? (
+          {route?.params?.task ? (
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  // addNewTask();
+                  // navigation.goBack();
+
+                  Alert.alert("Supprimer cette tâche?", null, [
+                    {
+                      text: "Annuler",
+                      onPress: () => {},
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        console.log(
+                          "OK Pressed, suppression de la task id=",
+                          currentTaskId
+                        );
+                        deletTask(currentTaskId);
+                        navigation.goBack()
+                      },
+                    },
+                  ]);
+                }}
+              >
+                <Ionicons
+                  name="md-trash"
+                  size={27}
+                  color={TEXT_COLOR.SECONDARY}
+                />
+              </TouchableOpacity>
+              {/* <Button
+                label={"Supprimer"}
+                onPress={() => {
+                  // addNewTask();
+                  // navigation.goBack();
+                  console.log(taskId);
+                }}
+                containerStyle={{ backgroundColor: COLORS.SECONDARY }}
+              /> */}
               <Button
                 label={"Modifier"}
                 onPress={() => {
@@ -300,7 +347,9 @@ export default function TasksView({ route, navigation }) {
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
               />
-            ) : (
+            </View>
+          ) : (
+            <View style={[styles.section, { alignItems: "flex-end" }]}>
               <Button
                 label={"Enregistrer"}
                 onPress={() => {
@@ -309,8 +358,8 @@ export default function TasksView({ route, navigation }) {
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
               />
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </ScrollView>
 

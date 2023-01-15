@@ -22,7 +22,7 @@ export default function CardDay({ task }) {
         boxShadow,
       ]}
       onPress={() => {
-        console.log(task.taskId);
+        console.log("taskId =", task.taskId);
         navigation.navigate("TasksView", { task: task });
       }}
     >
@@ -41,14 +41,21 @@ export default function CardDay({ task }) {
       </Text>
 
       {/* Corps */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ fontFamily: FONTS.mukta.regular }}>{task.content}</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: SIZES.xs }}>
+        <Text
+          style={{ fontFamily: FONTS.mukta.regular, width: "80%" }}
+          numberOfLines={2}
+        >
+          {task.content}
+        </Text>
 
         {task.time ? (
-          <Text
+          <View
             style={{
               fontFamily: FONTS.mukta.regular,
-              alignContent: "flex-end",
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+              flexDirection: "row",
             }}
           >
             {/* {task.time.hours} : {task.time.minutes} */}
@@ -63,7 +70,7 @@ export default function CardDay({ task }) {
             ) : (
               <Text style={styles.text}> : {task.time.minutes}</Text>
             )}
-          </Text>
+          </View>
         ) : null}
       </View>
     </TouchableOpacity>

@@ -78,7 +78,7 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
 
   //Creation du new task
   const task = {
-    taskId: "1", // A CHANGER AVEC BACK //
+    taskId: Math.round(Math.random() * 1000), // A CHANGER AVEC BACK //
     title: title,
     content: content,
     taskColor: taskColor,
@@ -99,6 +99,37 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
   store.setKey("time", "");
   store.setKey("month", moment(new Date()).format("MM"));
 });
+
+/**
+ * Action permettant de supprimer tache de la liste
+ */
+export const deletTask = action(
+  calendarStore,
+  "deletTask",
+  async (store, currentTaskId) => {
+    //Recuperation des tasks
+    const { title, content, taskColor, day, time, tasksList, taskId } =
+      store.get();
+    console.log("pour", currentTaskId);
+    console.log(tasksList);
+
+    // ON créé un nouveau tableaux contenant les taches moins la tache
+    // à supprimer
+    const newTasksList = tasksList.filter(
+      (task) => task.taskId !== currentTaskId
+    );
+
+    // const newTasksList = tasksList.filter(
+    //   (task) => task.taskId !== currentTaskId
+    // );
+
+    console.log("newTasksList = ", newTasksList.length);
+
+    // On met à jour la liste en supprimant la tache
+    // avec la currentTaskId
+    store.setKey("tasksList", newTasksList);
+  }
+);
 
 /**
  * Action permettant reset les valeur
