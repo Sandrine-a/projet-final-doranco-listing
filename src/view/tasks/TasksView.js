@@ -30,27 +30,29 @@ import {
   FONTS,
   SIZES,
   TEXT_COLOR,
-} from "../../../theme";
+} from "../../theme";
 import ColorPreview from "./component/ColorPreview";
 import CalendarItem from "../home/component/CalendarItem";
 import Button from "../../component/Button.js";
 import {
   addNewTask,
   calendarStore,
-  deletTask,
+  deleteTask,
   resetValues,
   setContent,
   setDay,
   setTaskColor,
   setTime,
   setTitle,
-} from "../../../store/calendarStore";
+} from "../../store/calendarStore";
 
 export default function TasksView({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [activeColor, setActiveColor] = useState(null);
   const [timeModalVisible, setTimeModalVisible] = useState(false);
   const [currentTaskId, setCurrentTaskId] = useState(null);
+
+  const [value, onChangeText] = React.useState(route.params.title);
 
   // Pour récupérer tout l'etat du calendard
   const { title, content, day, time, taskColor } = useStore(calendarStore);
@@ -72,22 +74,54 @@ export default function TasksView({ route, navigation }) {
   );
 
   useEffect(() => {
+    navigation.setOptions({
+      title: value === '' ? 'Créer un rdv' : value,
+    });
+  }, [navigation, value]);
+
+  useEffect(() => {
     if (route?.params?.task) {
       // console.log("yes", route?.params.task.taskColor.value);
       // setCurrentTask(route?.params.task);
 
+      // console.log("day= ", moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
+
       setTitle(route?.params.task.title);
       setContent(route?.params.task.content);
       setTaskColor(route?.params.task.taskColor);
-      setDay(route?.params.task.day);
+      setDay(moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
       setTime(route?.params.task.time);
-      setCurrentTaskId(route?.params.task.taskId);
+      setCurrentTaskId(route?.params.task.id);
     }
-    // console.log(day);
+    console.log("taskview day=",day);
     return () => {
       resetValues();
     };
-  }, [visible, day, route?.params?.task]);
+  }, [visible, route?.params?.task]);
+
+  const taskColorTheme = (color) => {
+    let colorValue;
+    switch (color) {
+      case "GREEN":
+        return (colorValue = "#94C973");
+      case "PINK":
+        return (colorValue = "#BA4F6A");
+      case "BLUE":
+        return (colorValue = "#629DA3");
+      case "NUDE":
+        return (colorValue = "#C98345");
+      case "BROWN":
+        return (colorValue = "#8B440E");
+      case "YELLOW":
+        return (colorValue = "#D5AF10");
+      case "RED":
+        return (colorValue = "#BC3110");
+      case "PURPLE":
+        return (colorValue = "#603F8B");
+      default:
+        return (colorValue = TEXT_COLOR.PRIMARY);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -105,15 +139,12 @@ export default function TasksView({ route, navigation }) {
               // value={title}
               value={title}
               placeholder="Titre"
-              placeholderTextColor={
-                TEXT_COLOR.PRIMARY
-                // taskColor.value ? taskColor.value : TEXT_COLOR.PRIMARY
-              }
+              placeholderTextColor={TEXT_COLOR.PRIMARY}
               style={{
                 fontWeight: "normal",
                 fontFamily: FONTS.londrinaSolid.regular,
                 fontSize: SIZES.base + 1,
-                color: taskColor ? taskColor.value : TEXT_COLOR.PRIMARY,
+                color: taskColorTheme(taskColor),
               }}
             />
           </View>
@@ -183,9 +214,9 @@ export default function TasksView({ route, navigation }) {
                   key={el.value}
                   onPressColor={() => {
                     //On attribut la value pour l'afficher dynamiquement au click
-                    setActiveColor(el.color);
+                    setActiveColor(taskColorTheme(el.color));
                     //On enregistre dans la task l'objet
-                    setTaskColor(el);
+                    setTaskColor(el.color);
                   }}
                   active={el.color == activeColor ? true : false}
                 />
@@ -218,27 +249,14 @@ export default function TasksView({ route, navigation }) {
                   {moment(day).format("LL")}
                 </Text>
               }
-              {/* {!visible ? (
-                <Text
-                  style={{
-                    fontFamily: FONTS.mukta.bold,
-                    color: visible
-                      ? COLORS.PRIMARY_DARK
-                      : COLORS.SECONDARY_DARK,
-                    fontSize: SIZES.base,
-                  }}
-                >
-                  {moment(day).format("LL")}
-                </Text>
-              ) : null} */}
             </TouchableOpacity>
 
             {visible ? (
               <CalendarItem
-                onDayPress={(day) => {
-                  console.log(day);
-                  setDay(day.dateString);
-                }}
+                // onDayPress={(day) => {
+                //   console.log(day);
+                //   setDay(day.dateString);
+                // }}
                 day={day}
                 setDay={setDay}
                 coloredBackground={true}
@@ -253,28 +271,11 @@ export default function TasksView({ route, navigation }) {
               {!time ? (
                 <Text style={styles.text}>+ Ajouter une heure ? </Text>
               ) : null}
-              {/* {(time && (time.hours >= 0 && time.hours < 10 && time.minutes >= 0 && time.minutes < 10)) ? (
-                <Text>
-                  0{time.hours} : 0{time.minutes}
-                </Text>
-              ) : (time && time.hours >= 10 || time.minutes >= 10) ? (
-                <Text>
-                  {time.hours} : {time.minutes}
-                </Text>
-              ) : null } */}
-
               {time ? (
                 <View style={{ flexDirection: "row" }}>
-                  {time.hours >= 0 && time.hours < 10 ? (
-                    <Text style={styles.text}>0{time.hours}</Text>
-                  ) : (
-                    <Text style={styles.text}>{time.hours}</Text>
-                  )}
-                  {time.minutes >= 0 && time.minutes < 10 ? (
-                    <Text style={styles.text}> : 0{time.minutes}</Text>
-                  ) : (
-                    <Text style={styles.text}> : {time.minutes}</Text>
-                  )}
+                  <Text style={styles.text}>
+                    {moment(time, "HH:mm:ss").format("HH:mm")}
+                  </Text>
                 </View>
               ) : null}
             </TouchableOpacity>
@@ -317,8 +318,8 @@ export default function TasksView({ route, navigation }) {
                           "OK Pressed, suppression de la task id=",
                           currentTaskId
                         );
-                        deletTask(currentTaskId);
-                        navigation.goBack()
+                        deleteTask(currentTaskId);
+                        navigation.goBack();
                       },
                     },
                   ]);
@@ -343,6 +344,8 @@ export default function TasksView({ route, navigation }) {
                 label={"Modifier"}
                 onPress={() => {
                   // addNewTask();
+
+                  console.log("day is now", day );
                   navigation.goBack();
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { FONTS, SIZES, TEXT_COLOR } from '../../../../theme'
+import { FONTS, SIZES, TEXT_COLOR } from '../../../theme'
 
 export default function HeaderText() {
   return (

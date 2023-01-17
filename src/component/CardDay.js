@@ -1,11 +1,45 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { boxShadow, CARDS, FONTS, RADIUS, SIZES } from "../../theme";
+import moment from "moment";
+import {
+  boxShadow,
+  CARDS,
+  CARD_THEME,
+  COLORS,
+  FONTS,
+  RADIUS,
+  SIZES,
+  TEXT_COLOR,
+} from "../theme";
 import DotItem from "./DotItem";
 
 export default function CardDay({ task }) {
   const navigation = useNavigation();
+
+  const taskColorTheme = (color) => {
+    let colorValue;
+    switch (color) {
+      case "GREEN":
+        return (colorValue = "#94C973");
+      case "PINK":
+        return (colorValue = "#BA4F6A");
+      case "BLUE":
+        return (colorValue = "#629DA3");
+      case "NUDE":
+        return (colorValue = "#C98345");
+      case "BROWN":
+        return (colorValue = "#8B440E");
+      case "YELLOW":
+        return (colorValue = "#D5AF10");
+      case "RED":
+        return (colorValue = "#BC3110");
+      case "PURPLE":
+        return (colorValue = "#603F8B");
+      default:
+        return (colorValue = TEXT_COLOR.PRIMARY);
+    }
+  };
 
   return (
     <TouchableOpacity
@@ -22,8 +56,8 @@ export default function CardDay({ task }) {
         boxShadow,
       ]}
       onPress={() => {
-        console.log("taskId =", task.taskId);
-        navigation.navigate("TasksView", { task: task });
+        console.log("taskId =", task.id);
+        navigation.navigate("TasksView", { task: task, title: "Modifier un rdv" });
       }}
     >
       <View style={styles.dotContainer}>
@@ -33,7 +67,12 @@ export default function CardDay({ task }) {
 
       {/* Titre */}
       <Text
-        style={[styles.title, { color: task.taskColor.value }]}
+        style={[
+          styles.title,
+          {
+            color: taskColorTheme(task.taskColor),
+          },
+        ]}
         numberOfLines={1}
       >
         {" "}
@@ -41,7 +80,13 @@ export default function CardDay({ task }) {
       </Text>
 
       {/* Corps */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: SIZES.xs }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: SIZES.xs,
+        }}
+      >
         <Text
           style={{ fontFamily: FONTS.mukta.regular, width: "80%" }}
           numberOfLines={2}
@@ -58,9 +103,9 @@ export default function CardDay({ task }) {
               flexDirection: "row",
             }}
           >
-            {/* {task.time.hours} : {task.time.minutes} */}
+            {<Text style={styles.text}>{ moment(task.time, 'HH:mm:ss').format('HH:mm') }</Text>}
 
-            {task.time.hours >= 0 && task.time.hours < 10 ? (
+            {/* {task.time.hours >= 0 && task.time.hours < 10 ? (
               <Text style={styles.text}>0{task.time.hours}</Text>
             ) : (
               <Text style={styles.text}>{task.time.hours}</Text>
@@ -69,7 +114,7 @@ export default function CardDay({ task }) {
               <Text style={styles.text}> : 0{task.time.minutes}</Text>
             ) : (
               <Text style={styles.text}> : {task.time.minutes}</Text>
-            )}
+            )} */}
           </View>
         ) : null}
       </View>

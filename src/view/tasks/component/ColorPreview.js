@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { CARDS, RADIUS, TEXT_COLOR } from "../../../../theme";
+import { CARDS, RADIUS, TEXT_COLOR } from "../../../theme";
 
 export default function ColorPreview({ color, onPressColor, active }) {
   return (

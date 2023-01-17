@@ -28,7 +28,7 @@ import {
   LondrinaSolid_900Black,
 } from '@expo-google-fonts/londrina-solid';
 
-import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./theme.js";
+import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./src/theme.js";
 
 const BaseTheme = {
   ...DefaultTheme,

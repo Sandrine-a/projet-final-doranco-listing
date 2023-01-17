@@ -1,18 +1,23 @@
 import { action, map } from "nanostores";
 import moment from "moment";
 import "moment/locale/fr";
+import axios from "axios";
+import TasksProvider, { getAllTAsks } from "../providers/TasksProvier";
+import { TASKS_API_ENDPOINT } from "../settings";
 
 export const calendarStore = map({
-  taskId: "",
+  taskId: undefined,
   title: "",
   content: "",
   taskColor: {},
   day: moment(new Date()).format("YYYY-MM-DD"),
   time: "",
   tasksList: [],
-  dayFilteredList: [], // SI NON UTILISE A SUPPRIMER //
   month: moment(new Date()).format("MM"),
+  loading: false,
 });
+
+// const tasksProvider = new TasksProvider();
 
 // Nous pouvons récupérer le contenu du store :
 // const title = calendarStore.get().title;
@@ -65,7 +70,7 @@ export const setDay = action(calendarStore, "setDay", (store, day) => {
  * Action permettant de changer l'heure'
  */
 export const setTime = action(calendarStore, "setTime", (store, time) => {
-  // console.log("L'HEURE ==", time);
+  console.log("L'HEURE ==", time);
   store.setKey("time", time);
 });
 
@@ -78,7 +83,7 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
 
   //Creation du new task
   const task = {
-    taskId: Math.round(Math.random() * 1000), // A CHANGER AVEC BACK //
+    taskId: id,
     title: title,
     content: content,
     taskColor: taskColor,
@@ -103,7 +108,7 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
 /**
  * Action permettant de supprimer tache de la liste
  */
-export const deletTask = action(
+export const deleteTask = action(
   calendarStore,
   "deletTask",
   async (store, currentTaskId) => {
@@ -111,7 +116,7 @@ export const deletTask = action(
     const { title, content, taskColor, day, time, tasksList, taskId } =
       store.get();
     console.log("pour", currentTaskId);
-    console.log(tasksList);
+    // console.log(tasksList);
 
     // ON créé un nouveau tableaux contenant les taches moins la tache
     // à supprimer
@@ -154,3 +159,49 @@ export const resetValues = action(
 export const setMonth = action(calendarStore, "setMonth", (store, month) => {
   store.setKey("month", month);
 });
+
+/**
+ * Action lancé au démarrage du login permettant de récupérer
+ * un utilisateur si ce dernier est contenu dans le AsyncStorage
+ * de votre téléphone
+ */
+export const initHomePage = action(
+  calendarStore,
+  "initHomePage",
+  async (store) => {
+    // On fait charger le composant
+    store.setKey("loading", true);
+
+    // On se connécte à l'application en utilisant le async storage
+    // const user = await loginToFirebaseWithAsyncStorage()
+    // // On test l'éxistence d'un user
+    // if (!user) {
+    //   // On arréte le chargement
+    //   store.setKey('loading', false)
+
+    //   return
+    // }
+
+    // try {
+    //   const response = await tasksProvider.getAllTAsks();
+    //   if (response) {
+    //     // console.log("yesss", response.data);
+    //     store.setKey("tasksList", response.data);
+    //     return;
+    //   } else {
+    //     throw new Error("Failed to fetch tasks");
+    //   }
+    // } catch (e) {
+    //   console.log("error!!", e);
+    // }
+
+    const result = await getAllTAsks() 
+    if(result) {
+      console.log("yes data");
+      store.setKey("tasksList", result.data);
+    }
+    // On indique que l'utilisateur est connécté
+    store.setKey("loading", false);
+    // store.setKey('user', user)
+  }
+);

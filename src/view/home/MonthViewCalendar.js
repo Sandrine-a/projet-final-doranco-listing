@@ -16,15 +16,14 @@ import {
 import moment from "moment";
 
 import { useTheme } from "@react-navigation/native";
-import { COLORS, FONTS, SIZES } from "../../../theme";
+import { COLORS, FONTS, SIZES } from "../../theme";
 import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import DayView from "./DayView";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import Calendar from "./component/CalendarItem";
-import AgendaItem from "./component/AgendaItem";
-import { calendarStore, setDay } from "../../../store/calendarStore";
+import { calendarStore, setDay } from "../../store/calendarStore";
 import { useStore } from "@nanostores/react";
 import DayBoard from "./component/DayBoard";
 
@@ -39,8 +38,6 @@ export default function MonthView({ navigation }) {
   const [isMeasured, setIsMeasured] = useState(false);
 
   useEffect(() => {
-    // slowlyScrollDown();
-    // console.log("** DAY ==", day);
     return () => {};
   }, [tasksList, month]);
 
@@ -60,7 +57,6 @@ export default function MonthView({ navigation }) {
         scrollViewRef.current,
         (left, top, width, height) => {
           setIsMeasured(true);
-          // console.log(left, top, width, height);
           slowlyScrollDown(top);
         }
       );
@@ -69,14 +65,15 @@ export default function MonthView({ navigation }) {
   }, [isMeasured]);
 
   const slowlyScrollDown = (height) => {
-    console.log("go to", height);
     const y = height;
     scrollViewRef.current.scrollTo({ x: 0, y, animated: true });
     setOffset(y);
   };
 
   let markedDay = tasksList
-    .sort((a, b) => a.day - b.day)
+    .sort((a, b) => {
+      a.day - b.day;
+    })
     .reduce(function (acc, obj) {
       let key = obj.day;
       if (!acc[key]) {
@@ -147,32 +144,35 @@ export default function MonthView({ navigation }) {
           {Object.keys(markedDay)
             .sort((a, b) => {
               if (new Date(a) === new Date(b)) {
-                return (
-                  a.time.hours - b.time.hours || a.time.minutes - b.time.minutes
-                );
+                return a.time - b.time || a.time - b.time;
               } else {
                 return new Date(a) - new Date(b);
               }
             })
             .map((key, index) => {
-              if (moment(key).format("MM") === month) {
+              if (moment.utc(key).format("MM") === month) {
                 return (
                   <View
                     key={index}
-                    ref={key == day || key < day ? viewRef : null}
+                    ref={
+                      moment.utc(key).format("YYYY-MM-DD") == day ||
+                      moment.utc(key).format("YYYY-MM-DD") < day
+                        ? viewRef
+                        : null
+                    }
                   >
                     <Text
                       style={[
                         styles.day,
                         {
                           color:
-                            key == day
+                            moment.utc(key).format("YYYY-MM-DD") == day
                               ? COLORS.TERTIARY
                               : COLORS.SECONDARY_DARK,
                         },
                       ]}
                     >
-                      {moment(key).format("dddd D MMMM")}
+                      {moment.utc(key).format("dddd D MMMM")}
                     </Text>
                     {markedDay[key].map((item, index) => {
                       return (

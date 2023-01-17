@@ -1,29 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "../view/home/HomeScreen";
-// import MonthView from "../view/home/MonthView";
 import MonthView from "../view/home/MonthViewCalendar";
 import DayView from "../view/home/DayView";
 import TasksView from "../view/tasks/TasksView";
-import { FONTS } from "../../theme";
+import { FONTS } from "../theme";
 
 export default function RootNavigation() {
   const RootStack = createNativeStackNavigator();
-
-  const config = {
-    animation: "spring",
-    config: {
-      stiffness: 1000,
-      damping: 500,
-      mass: 3,
-      overshootClamping: true,
-      restDisplacementThreshold: 0.01,
-      restSpeedThreshold: 0.01,
-    },
-  };
-
   return (
     <RootStack.Navigator>
       <RootStack.Group screenOptions={{ headerShown: false }}>
@@ -42,15 +26,16 @@ export default function RootNavigation() {
         <RootStack.Screen
           name="TasksView"
           component={TasksView}
-          options={{
-            title: "Créer un rdv",
+          options={({ route }) =>({
+            // title: "Créer un rdv",
+            title: route.params.title,
             headerTitleStyle: {
               fontFamily: FONTS.oswald.bold
             },
             headerShadowVisible: false,
             animation: "slide_from_bottom",
             headerBackTitleVisible: false
-          }}
+          })}
         />
       </RootStack.Group>
     </RootStack.Navigator>

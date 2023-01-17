@@ -6,10 +6,10 @@ import {
   Agenda,
   LocaleConfig,
 } from "react-native-calendars";
-import { FONTS, TEXT_COLOR, COLORS } from "../../../../theme";
+import { FONTS, TEXT_COLOR, COLORS } from "../../../theme";
 import moment from "moment";
 import { useStore } from "@nanostores/react";
-import { calendarStore, setMonth } from "../../../../store/calendarStore";
+import { calendarStore, setMonth } from "../../../store/calendarStore";
 
 LocaleConfig.locales["fr"] = {
   monthNames: [
@@ -65,25 +65,16 @@ export default function CalendarItem({
 }) {
   const [selectedDay, setSelectedDay] = useState({});
 
-  // const [month, setMonth] = useState()
-
   const { tasksList, day, month } = useStore(calendarStore);
 
   const today = new Date();
 
-  // const getSelectDay  = async (day) => {}
-
   useEffect(() => {
-    // console.log("The day", selectedDay);
-
     /*  Si on met les dot on ne peu pas selectionner un jour */
     if (withDot) {
       let markedDay = {};
       tasksList.map((item) => {
-        markedDay[item.day] = {
-          // selected: true,
-          // selectedColor: "black",
-
+        markedDay[moment.utc(item.day).format("YYYY-MM-DD")] = {
           marked: true,
         };
       });
@@ -101,6 +92,7 @@ export default function CalendarItem({
       });
     }
 
+    console.log("month is:", month);
     return () => {};
   }, [
     tasksList,
@@ -212,41 +204,17 @@ export default function CalendarItem({
         if (!withDot) {
           onDaySelect(day);
         }
-        // let markedDay = {};
-        // markedDay[day.dateString] = {
-        //   /* marked: true, */
-        //   selected: true,
-        //   customStyles: {
-        //     container: {
-        //       borderRadius: 7,
-        //     },
-        //   },
-        // };
-        // setSelectedDay(markedDay);
         setDay(day.dateString);
+        // console.log(day);
       }}
       minDate={"2020-01-01"}
       markingType={"custom"}
-      // markingType={"multi-dot"}
       markedDates={
         selectedDay
-        // markedDay
-
-        // {
-        //   "2023-01-23": { marked: true },
-        //   "2023-01-31": { marked: true },
-        //   "2023-02-01": { marked: true },
-        // }
       }
       onMonthChange={(date) => {
-        // console.log("onMonthChange", date);
-        // console.log(moment(date.dateString).format("MM"));
 
         setMonth(moment(date.dateString).format("MM"));
-        // setMonth(moment(date.dateString).format("MM"))
-        // console.log(moment(date.dateString).month());
-        // console.log(moment(date.timestamp).month(1).format("YYYY-MM-DD"));
-        // console.log("Avoir le mois correct + 1", moment(date.timestamp).month() + 1);
       }}
     />
   );

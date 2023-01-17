@@ -16,7 +16,7 @@ import {
   RADIUS,
   SIZES,
   TEXT_COLOR,
-} from "../../theme";
+} from "../theme";
 import { useNavigation } from "@react-navigation/native";
 
 export default function BottomTab({ onlyCloseButton = false }) {
@@ -70,7 +70,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
           onPress={() =>
             onlyCloseButton
               ? navigation.goBack()
-              : navigation.navigate("TasksView")
+              : navigation.navigate("TasksView", { title: "Créer un rdv"})
           }
         >
           <FontAwesome

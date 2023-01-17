@@ -6,24 +6,29 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 import "moment/locale/fr";
 import { useStore } from "@nanostores/react";
 
-import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../../theme";
+import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../theme";
 import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import DayBoard from "./component/DayBoard";
 
-import { calendarStore, setDay } from "../../../store/calendarStore";
+import { calendarStore, initHomePage, setDay } from "../../store/calendarStore";
 
 export default function DayView({ navigation }) {
-  const { tasksList, day } = useStore(calendarStore);
+  const { tasksList, day, loading } = useStore(calendarStore);
+
+  useEffect(() => {
+    initHomePage();
+    return () => {};
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,20 +87,26 @@ export default function DayView({ navigation }) {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.cardsContainer}>
+        {/* {tasksList.map((item, index) => {
+              if (moment(item.day).format("YYYY-MM-DD") == day) {
+                console.log("yesssss");
+                return <DayBoard task={item} key={`${item.day}_${index}`} />;
+              }
+            })} */}
           {tasksList
             .sort((a, b) => {
-              if (a.time.hours && b.time.hours) {
-                return (
-                  a.time.hours - b.time.hours || a.time.minutes - b.time.minutes
-                );
+              if (a.time && b.time) {
+                const timeA = moment(a.time, 'HH:mm:ss').toDate();
+                const timeB = moment(b.time, 'HH:mm:ss').toDate();
+                return timeA - timeB;
               }
             })
             .map((item, index) => {
-              /* Permet de filtrer l'affichage de la liste selon la date du store des qu'elle est changee */
-              if (item.day == day) {
+              if (moment.utc(item.day).format("YYYY-MM-DD") == day) {
                 return <DayBoard task={item} key={`${item.day}_${index}`} />;
               }
             })}
+            
         </View>
       </ScrollView>
       <BottomTab />

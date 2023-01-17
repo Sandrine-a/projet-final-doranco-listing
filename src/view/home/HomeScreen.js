@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useTheme } from "@react-navigation/native";
-import { FONTS, SIZES } from "../../../theme";
+import { FONTS, SIZES } from "../../theme";
 import HeaderSvg from "../../component/HeaderSvg";
 import BottomTab from "../../component/BottomTab";
 import DayView from "./DayView";
