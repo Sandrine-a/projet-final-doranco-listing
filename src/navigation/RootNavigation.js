@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MonthView from "../view/home/MonthViewCalendar";
-import DayView from "../view/home/DayView";
-import TasksView from "../view/tasks/TasksView";
+import MonthView from "../views/home/MonthViewCalendar";
+import DayView from "../views/home/DayView";
+import TasksView from "../views/tasks/TasksView";
 import { FONTS } from "../theme";
 
 export default function RootNavigation() {

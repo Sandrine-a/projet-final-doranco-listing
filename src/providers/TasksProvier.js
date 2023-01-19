@@ -6,12 +6,13 @@ export const getAllTAsks = async (userId) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY3NDA5MTk1NCwiZXhwIjoxNjc0MTc4MzU0fQ.B_4Q5nfMl3MkEovIagBykxxX4OKXkZ-mmv6ztLyp4QA`
       },
     });
     // console.log(response.data);
     return response.data;
   } catch (error) {
-    return error.response.data;
+    return error;
   }
 };
 

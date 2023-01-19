@@ -19,17 +19,6 @@ export const calendarStore = map({
 
 // const tasksProvider = new TasksProvider();
 
-// Nous pouvons récupérer le contenu du store :
-// const title = calendarStore.get().title;
-// const content = calendarStore.get().content;
-// const color = calendarStore.get().color;
-// const calendarState = calendarStore.get(); // Je récupére tout l'objet
-
-// Pour modifier un élément de mon objet :
-// calendarStore.setKey("title", title);
-// calendarStore.setKey("content", content);
-// calendarStore.setKey("color", color);
-
 /**
  * Action permettant de changer le titre
  */
@@ -197,7 +186,7 @@ export const initHomePage = action(
 
     const result = await getAllTAsks() 
     if(result) {
-      console.log("yes data");
+      console.log("yes data", result);
       store.setKey("tasksList", result.data);
     }
     // On indique que l'utilisateur est connécté
