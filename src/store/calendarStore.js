@@ -1,7 +1,6 @@
 import { action, map } from "nanostores";
 import moment from "moment";
 import "moment/locale/fr";
-import axios from "axios";
 import TasksProvider, { getAllTAsks } from "../providers/TasksProvier";
 import { TASKS_API_ENDPOINT } from "../settings";
 

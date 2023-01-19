@@ -1,12 +1,12 @@
 import ApiManager from "./ApiManager";
 
-export const getAllTAsks = async (userId) => {
+export const getAllTAsks = async (token) => {
   try {
     const response = await ApiManager("/tasks", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY3NDA5MTk1NCwiZXhwIjoxNjc0MTc4MzU0fQ.B_4Q5nfMl3MkEovIagBykxxX4OKXkZ-mmv6ztLyp4QA`
+        "Authorization": `Bearer ${token}`
       },
     });
     // console.log(response.data);

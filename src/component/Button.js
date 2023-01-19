@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: RADIUS.rectangle,
     paddingHorizontal: SIZES.base,
-    paddingVertical: SIZES.small
+    paddingVertical: SIZES.small,
+    alignItems: "center"
   },
   label: {
     fontFamily: FONTS.oswald.semiBold,
