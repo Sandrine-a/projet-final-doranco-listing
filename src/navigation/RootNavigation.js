@@ -5,11 +5,19 @@ import MonthView from "../views/home/MonthViewCalendar";
 import DayView from "../views/home/DayView";
 import TasksView from "../views/tasks/TasksView";
 import { FONTS } from "../theme";
+import AuthView from "../views/authentication/AuthView";
 
 export default function RootNavigation() {
   const RootStack = createNativeStackNavigator();
   return (
     <RootStack.Navigator>
+      {/* <RootStack.Group screenOptions={{ headerShown: false }}>
+        <RootStack.Screen
+          name="AuthView"
+          component={AuthView}
+          options={{ animation: "fade" }}
+        />
+      </RootStack.Group> */}
       <RootStack.Group screenOptions={{ headerShown: false }}>
         <RootStack.Screen
           name="DayView"

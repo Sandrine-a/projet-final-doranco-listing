@@ -7,6 +7,7 @@ import {
   View,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@nanostores/react";
@@ -75,7 +76,7 @@ export default function TasksView({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      title: value === '' ? 'Créer un rdv' : value,
+      title: value === "" ? "Créer un rdv" : value,
     });
   }, [navigation, value]);
 
@@ -93,7 +94,7 @@ export default function TasksView({ route, navigation }) {
       setTime(route?.params.task.time);
       setCurrentTaskId(route?.params.task.id);
     }
-    console.log("taskview day=",day);
+    console.log("taskview day=", day);
     return () => {
       resetValues();
     };
@@ -132,40 +133,44 @@ export default function TasksView({ route, navigation }) {
             <DotItem size={"m"} />
           </View>
 
-          <View style={[styles.section, { marginTop: SIZES.small }]}>
-            <TextInput
-              multiline={true}
-              onChangeText={setTitle}
-              // value={title}
-              value={title}
-              placeholder="Titre"
-              placeholderTextColor={TEXT_COLOR.PRIMARY}
-              style={{
-                fontWeight: "normal",
-                fontFamily: FONTS.londrinaSolid.regular,
-                fontSize: SIZES.base + 1,
-                color: taskColorTheme(taskColor),
-              }}
-            />
-          </View>
-
-          <View style={styles.section}>
-            <TextInput
-              onChangeText={setContent}
-              value={content}
-              multiline={true}
-              placeholder="Ajouter une tâche..."
-              placeholderTextColor={TEXT_COLOR.PRIMARY}
-              style={{
-                fontFamily: FONTS.mukta.regular,
-                fontSize: SIZES.base,
-                color: TEXT_COLOR.PRIMARY,
-                borderWidth: 0,
-                paddingHorizontal: 0,
-                marginVertical: 0,
-              }}
-            />
-          </View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.keyboard}
+          >
+            <View style={[styles.section, { marginTop: SIZES.small }]}>
+              <TextInput
+                multiline={true}
+                onChangeText={setTitle}
+                // value={title}
+                value={title}
+                placeholder="Titre"
+                placeholderTextColor={TEXT_COLOR.PRIMARY}
+                style={{
+                  fontWeight: "normal",
+                  fontFamily: FONTS.londrinaSolid.regular,
+                  fontSize: SIZES.base + 1,
+                  color: taskColorTheme(taskColor),
+                }}
+              />
+            </View>
+            <View style={styles.section}>
+              <TextInput
+                onChangeText={setContent}
+                value={content}
+                multiline={true}
+                placeholder="Ajouter une tâche..."
+                placeholderTextColor={TEXT_COLOR.PRIMARY}
+                style={{
+                  fontFamily: FONTS.mukta.regular,
+                  fontSize: SIZES.base,
+                  color: TEXT_COLOR.PRIMARY,
+                  borderWidth: 0,
+                  paddingHorizontal: 0,
+                  marginVertical: 0,
+                }}
+              />
+            </View>
+          </KeyboardAvoidingView>
 
           {/* <View>
             <TextInput
@@ -345,7 +350,7 @@ export default function TasksView({ route, navigation }) {
                 onPress={() => {
                   // addNewTask();
 
-                  console.log("day is now", day );
+                  console.log("day is now", day);
                   navigation.goBack();
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
@@ -400,5 +405,12 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.mukta.regular,
     fontSize: SIZES.base,
     color: TEXT_COLOR.PRIMARY,
+  },
+  keyboard: {
+    flex: 1,
+    justifyContent: "center",
+    // paddingTop: Constants.statusBarHeight,
+    // backgroundColor: "#708090",
+    padding: 8,
   },
 });

@@ -26,6 +26,7 @@
     "moment": "^2.29.4",
     "nanostores": "^0.7.1",
     "react": "18.1.0",
+    "react-hook-form": "^7.42.1",
     "react-native": "0.70.5",
     "react-native-calendars": "^1.1293.0",
     "react-native-paper": "^5.1.2",
