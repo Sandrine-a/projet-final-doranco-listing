@@ -1,7 +1,7 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootNavigation from "./src/navigation/RootNavigation.js";
 
 import {
@@ -26,7 +26,7 @@ import {
   LondrinaSolid_300Light,
   LondrinaSolid_400Regular,
   LondrinaSolid_900Black,
-} from '@expo-google-fonts/londrina-solid';
+} from "@expo-google-fonts/londrina-solid";
 
 import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./src/theme.js";
 
@@ -40,7 +40,7 @@ const BaseTheme = {
     card: "white",
     text: TEXT_COLOR.PRIMARY,
     border: CARDS,
-    notification: 'rgb(255, 69, 58)',
+    notification: "rgb(255, 69, 58)",
   },
 };
 
@@ -79,4 +79,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-

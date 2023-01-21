@@ -1,7 +1,7 @@
 import { action, map } from "nanostores";
 import moment from "moment";
 import "moment/locale/fr";
-import TasksProvider, { getAllTAsks } from "../providers/TasksProvier";
+import TasksProvider, { getAllTasks } from "../providers/TasksProvider";
 import { TASKS_API_ENDPOINT } from "../settings";
 
 export const calendarStore = map({
@@ -171,7 +171,7 @@ export const initHomePage = action(
     // }
 
     // try {
-    //   const response = await tasksProvider.getAllTAsks();
+    //   const response = await tasksProvider.getAllTasks();
     //   if (response) {
     //     // console.log("yesss", response.data);
     //     store.setKey("tasksList", response.data);
@@ -183,7 +183,7 @@ export const initHomePage = action(
     //   console.log("error!!", e);
     // }
 
-    const result = await getAllTAsks() 
+    const result = await getAllTasks() 
     if(result) {
       console.log("yes data", result);
       store.setKey("tasksList", result.data);

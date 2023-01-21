@@ -93,7 +93,9 @@ export default function DayView({ navigation }) {
                 return <DayBoard task={item} key={`${item.day}_${index}`} />;
               }
             })} */}
-          {tasksList
+
+
+          {/* {tasksList
             .sort((a, b) => {
               if (a.time && b.time) {
                 const timeA = moment(a.time, 'HH:mm:ss').toDate();
@@ -106,7 +108,7 @@ export default function DayView({ navigation }) {
                 return <DayBoard task={item} key={`${item.day}_${index}`} />;
               }
             })}
-            
+             */}
         </View>
       </ScrollView>
       <BottomTab />

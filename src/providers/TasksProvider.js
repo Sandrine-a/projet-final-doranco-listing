@@ -1,8 +1,8 @@
-import ApiManager from "./ApiManager";
+import apiManager from "./apiManager";
 
-export const getAllTAsks = async (token) => {
+export const getAllTasks = async (token) => {
   try {
-    const response = await ApiManager("/tasks", {
+    const response = await apiManager("/tasks", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export const getAllTAsks = async (token) => {
 //     };
 //   }
 
-//   async getAllTAsks(userId) {
+//   async getAllTasks(userId) {
 //     // axios.get(
 //     //   `${this.apiUrl}/tasks`,
 //     //   {},

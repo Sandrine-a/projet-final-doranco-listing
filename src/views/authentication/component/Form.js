@@ -10,28 +10,40 @@ import {
 } from "react-native";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import { CARDS, FONTS, RADIUS, SIZES, TEXT_COLOR } from "../../../theme";
+import { Ionicons } from "@expo/vector-icons";
+import {
+  CARDS,
+  COLORS,
+  FONTS,
+  RADIUS,
+  SIZES,
+  TEXT_COLOR,
+} from "../../../theme";
+import {
+  authenticationStore,
+  setConfirmPasswordVisible,
+  setPasswordVisible,
+} from "../../../store/authenticationStore";
+import { useStore } from "@nanostores/react";
 
-export default function Form({ formContent }) {
-  const {
-    control,
-    handleSubmit,
-    setFocus,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
-
+export default function Form({
+  formContent,
+  control,
+  errors,
+  email,
+  username,
+  password,
+  confirmPassword,
+  getValues,
+  EMAIL_FIELD_PATTERN,
+}) {
+  const { passwordVisible, confirmPasswordVisible } =
+    useStore(authenticationStore);
   return (
     <View sylte={styles.container}>
       {formContent == "signup" ? (
         <View style={styles.section}>
-          <Text style={styles.label}>Username *</Text>
+          <Text style={styles.label}>Username</Text>
           <Controller
             control={control}
             rules={{
@@ -53,6 +65,8 @@ export default function Form({ formContent }) {
                 placeholder="Username"
                 style={styles.input}
                 maxLength={100}
+                placeholderTextColor={TEXT_COLOR.SECONDARY}
+                autoCapitalize="none"
               />
             )}
             name="username"
@@ -75,6 +89,10 @@ export default function Form({ formContent }) {
               value: 200,
               message: "Maximum de caractères",
             },
+            pattern: {
+              value: EMAIL_FIELD_PATTERN,
+              message: "Format: exemple@mail.com",
+            },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -85,6 +103,8 @@ export default function Form({ formContent }) {
               keyboardType="email-address"
               style={styles.input}
               maxLength={200}
+              autoCapitalize="none"
+              placeholderTextColor={TEXT_COLOR.SECONDARY}
             />
           )}
           name="email"
@@ -100,7 +120,7 @@ export default function Form({ formContent }) {
             required: "Ce champs est obligatoire",
             minLength: {
               value: 5,
-              message: "Min. 4 caractères",
+              message: "Min. 5 caractères",
             },
             maxLength: {
               value: 200,
@@ -108,22 +128,45 @@ export default function Form({ formContent }) {
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              placeholder="Mot de passe *"
-              keyboardType="visible-password"
-              style={styles.input}
-              maxLength={200}
-            />
+            <View
+              style={[
+                styles.input,
+                { flexDirection: "row", alignItems: "center" },
+              ]}
+            >
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                placeholder="Mot de passe *"
+                keyboardType="visible-password"
+                textContentType="password"
+                style={{
+                  width: "90%",
+                  fontFamily: FONTS.mukta.regular,
+                  alignItems: "center",
+                  marginRight: SIZES.xs,
+                }}
+                maxLength={200}
+                autoCapitalize="none"
+                secureTextEntry={passwordVisible ? false : true}
+                placeholderTextColor={TEXT_COLOR.SECONDARY}
+              />
+              <Ionicons
+                name={passwordVisible ? "eye-outline" : "eye-off-outline"}
+                size={24}
+                color={TEXT_COLOR.SECONDARY}
+                style={styles.inputIcon}
+                onPress={() => setPasswordVisible(!passwordVisible)}
+              />
+            </View>
           )}
           name="password"
         />
         <Text style={styles.error}>{errors.password?.message}</Text>
       </View>
 
-      {formContent == "signup" ? (
+      {/* {formContent == "signup" ? (
         <View style={styles.section}>
           <Text style={styles.label}>Confirmation du mot de passe</Text>
           <Controller
@@ -132,29 +175,67 @@ export default function Form({ formContent }) {
               required: "Ce champs est obligatoire",
               minLength: {
                 value: 5,
-                message: "Min. 4 caractères",
+                message: "Min. 5 caractères",
               },
               maxLength: {
                 value: 200,
                 message: "Maximum de caractères",
               },
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  console.log(value);
+                  const { password } = getValues();
+                  if (password) {
+                    return (
+                      password === value || "Ne correspond pas au mot de passe."
+                    );
+                  }
+                },
+              },
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Mot de passe, confirmation *"
-                keyboardType="visible-password"
-                style={styles.input}
-                maxLength={200}
-              />
+              <View
+                style={[
+                  styles.input,
+                  { flexDirection: "row", alignItems: "center" },
+                ]}
+              >
+                <TextInput
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Confirmation du mot de passe *"
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                  style={{
+                    width: "90%",
+                    fontFamily: FONTS.mukta.regular,
+                    alignItems: "center",
+                    marginRight: SIZES.xs,
+                  }}
+                  maxLength={200}
+                  autoCapitalize="none"
+                  secureTextEntry={confirmPasswordVisible ? false : true}
+                  placeholderTextColor={TEXT_COLOR.SECONDARY}
+                />
+                <Ionicons
+                  name={
+                    confirmPasswordVisible ? "eye-outline" : "eye-off-outline"
+                  }
+                  size={24}
+                  color={TEXT_COLOR.SECONDARY}
+                  style={styles.inputIcon}
+                  onPress={() =>
+                    setConfirmPasswordVisible(!confirmPasswordVisible)
+                  }
+                />
+              </View>
             )}
             name="confirmPassword"
           />
           <Text style={styles.error}>{errors.confirmPassword?.message}</Text>
         </View>
-      ) : null}
+      ) : null} */}
     </View>
   );
 }
@@ -185,5 +266,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.xs,
     fontFamily: FONTS.mukta.regular,
     // fontSize: SIZES.base
+  },
+  inputIcon: {
+    paddingRight: SIZES.xs,
   },
 });

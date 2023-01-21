@@ -1,10 +1,10 @@
 import axios from "axios";
-import { TASKS_API_ENDPOINT } from "../settings";
+import { API_ENDPOINT } from "../settings";
 
-const ApiManager = axios.create({
-  baseURL: TASKS_API_ENDPOINT,
-  responseType: "json",
+const apiManager = axios.create({
+  baseURL: API_ENDPOINT,
+  headers: { "Content-Type": "application/json" },
   // withCredentials: "true",
 });
 
-export default ApiManager;
+export default apiManager;
