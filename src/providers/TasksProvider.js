@@ -1,4 +1,4 @@
-import apiManager from "./apiManager";
+import apiManager from "./api";
 
 export const get_all_tasks = async (usertoken) => {
   try {
