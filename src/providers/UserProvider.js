@@ -1,4 +1,4 @@
-import apiManager from "./api";
+import apiManager from "./apiManager";
 
 export const signup = async (email, username, password) => {
   try {
