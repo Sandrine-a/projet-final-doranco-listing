@@ -11,7 +11,7 @@ export const get_all_tasks = async (usertoken) => {
     return response.data;
   } catch (error) {
     console.log("Error", error);
-    return error;
+    throw Error(error);
   }
 };
 
@@ -20,7 +20,6 @@ export const create_task = async (usertoken, task) => {
   try {
     const response = await apiManager.post("/tasks", task, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${usertoken}`,
       },
     });
@@ -32,7 +31,7 @@ export const create_task = async (usertoken, task) => {
     return response.data;
   } catch (error) {
     console.log("Error", error);
-    return error;
+    throw Error(error);
   }
 };
 
@@ -40,7 +39,6 @@ export const delete_task = async (userToken, id) => {
   try {
     const response = await apiManager.delete(`/tasks/${id}`, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userToken}`,
       },
     });
@@ -52,7 +50,26 @@ export const delete_task = async (userToken, id) => {
     return response;
   } catch (error) {
     console.log("Error", error);
-    return error;
+    throw Error(error);
+  }
+};
+
+export const update_task = async (userToken, id, newTask) => {
+  try {
+    const response = await apiManager.put(`/tasks/${id}`, newTask, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    console.log(
+      "response.data, response.status ==",
+      response.data,
+      response.status
+    );
+    return response;
+  } catch (error) {
+    console.log("Error", error);
+    throw Error(error);
   }
 };
 

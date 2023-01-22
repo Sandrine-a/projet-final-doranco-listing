@@ -14,6 +14,7 @@ import { useStore } from "@nanostores/react";
 import "intl";
 import "intl/locale-data/jsonp/fr-FR";
 import { TimePickerModal } from "react-native-paper-dates";
+import { useForm, useController, Controller } from "react-hook-form";
 
 import moment from "moment";
 import "moment/locale/fr";
@@ -43,20 +44,22 @@ import {
   setContent,
   setDay,
   setTaskColor,
+  setTaskId,
   setTime,
   setTitle,
+  updateTask,
 } from "../../store/calendarStore";
 
 export default function TasksView({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [activeColor, setActiveColor] = useState(null);
   const [timeModalVisible, setTimeModalVisible] = useState(false);
-  const [currentTaskId, setCurrentTaskId] = useState(null);
-
-  const [value, onChangeText] = React.useState(route.params.title);
+  // Pour changer dynamiquement le titre selon la route
+  const [value, onChangeText] = useState(route.params.title);
 
   // Pour récupérer tout l'etat du calendard
-  const { title, content, day, time, taskColor } = useStore(calendarStore);
+  const { title, content, day, time, taskColor, taskId, error, canBack } =
+    useStore(calendarStore);
 
   const showCalendar = () => {
     !visible ? setVisible(true) : setVisible(false);
@@ -69,7 +72,7 @@ export default function TasksView({ route, navigation }) {
   const onTimeConfirm = React.useCallback(
     ({ hours, minutes }) => {
       setTimeModalVisible(false);
-      setTime({ hours, minutes });
+      setTime(`${hours}:${minutes}`);
     },
     [setTimeModalVisible]
   );
@@ -82,21 +85,32 @@ export default function TasksView({ route, navigation }) {
 
   useEffect(() => {
     if (route?.params?.task) {
-      console.log(moment(route?.params.task.time, "HH:mm:ss").format("HH:mm"));
-      console.log("task time =", route?.params.task.time);
+      setTaskId(route?.params.task.id);
       setTitle(route?.params.task.title);
       setContent(route?.params.task.content);
       setTaskColor(route?.params.task.taskColor);
       setDay(moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
       // setTime(route?.params.task.time);
-      setTime(moment(route?.params.task.time, "HH:mm:ss").format("HH:mm"));
-      setCurrentTaskId(route?.params.task.id);
+      setTime(
+        route?.params.task.time
+          ? moment(route?.params.task.time, "HH:mm:ss").format("HH:mm")
+          : null
+      );
+      // setTime(route?.params.task.time ? route?.params.task.time : null);
     }
-    console.log("taskview day=", day);
+    // console.log("taskview day=", day);
     return () => {
       resetValues();
     };
   }, [visible, route?.params?.task]);
+
+  useEffect(() => {
+    console.log("canBack ?? ", canBack);
+    if (canBack) {
+      navigation.goBack();
+    }
+    return () => {};
+  }, [canBack]);
 
   const taskColorTheme = (color) => {
     let colorValue;
@@ -141,15 +155,18 @@ export default function TasksView({ route, navigation }) {
                 onChangeText={setTitle}
                 // value={title}
                 value={title}
-                placeholder="Titre"
-                placeholderTextColor={TEXT_COLOR.PRIMARY}
+                placeholder="Titre *"
+                placeholderTextColor={error?.title ? "red" : TEXT_COLOR.PRIMARY}
                 style={{
                   fontWeight: "normal",
                   fontFamily: FONTS.londrinaSolid.regular,
                   fontSize: SIZES.base + 1,
                   color: taskColorTheme(taskColor),
                 }}
+                maxLength={100}
+                autoCorrect={false}
               />
+              {/* {error?.title ? <Text> {error.title.value}</Text> : null} */}
             </View>
             <View style={styles.section}>
               <TextInput
@@ -166,47 +183,11 @@ export default function TasksView({ route, navigation }) {
                   paddingHorizontal: 0,
                   marginVertical: 0,
                 }}
+                maxLength={2000}
+                autoCorrect={false}
               />
             </View>
           </KeyboardAvoidingView>
-
-          {/* <View>
-            <TextInput
-              // onChangeText={onChangeTitle}
-              onChangeText={setTitle}
-              value={title}
-              placeholder="Titre"
-              contentStyle={{
-                fontFamily: FONTS.londrinaSolid.regular,
-                fontSize: SIZES.large,
-                color: color ? color : TEXT_COLOR.PRIMARY,
-                borderWidth: 0,
-                paddingLeft: 0,
-              }}
-              // underlineColor="transparent"
-              mode="outlined"
-              outlineStyle={{ borderWidth: 0, backgroundColor: "white" }}
-            />
-          </View>
-
-          <View>
-            <TextInput
-              onChangeText={setContent}
-              value={content}
-              multiline={true}
-              placeholder="Ajouter une tâche"
-              contentStyle={{
-                fontFamily: FONTS.mukta.regular,
-                color: TEXT_COLOR.PRIMARY,
-                borderWidth: 0,
-                paddingHorizontal: 0,
-                marginVertical: 0,
-              }}
-              //   underlineColor="transparent"
-              mode="outlined"
-              outlineStyle={{ borderWidth: 0, backgroundColor: "white",}}
-            />
-          </View> */}
 
           <View style={styles.section}>
             <Text style={styles.label}>Couleur:</Text>
@@ -273,6 +254,16 @@ export default function TasksView({ route, navigation }) {
             <TouchableOpacity onPress={() => setTimeModalVisible(true)}>
               {!time ? (
                 <Text style={styles.text}>+ Ajouter une heure ? </Text>
+              ) : (
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={styles.text}>
+                    {moment(time, "HH:mm:ss").format("HH:mm")}
+                  </Text>
+                </View>
+              )}
+
+              {/* {!time ? (
+                <Text style={styles.text}>+ Ajouter une heure ? </Text>
               ) : null}
               {time ? (
                 <View style={{ flexDirection: "row" }}>
@@ -280,7 +271,7 @@ export default function TasksView({ route, navigation }) {
                     {moment(time, "HH:mm:ss").format("HH:mm")}
                   </Text>
                 </View>
-              ) : null}
+              ) : null} */}
             </TouchableOpacity>
 
             {timeModalVisible ? (
@@ -305,9 +296,6 @@ export default function TasksView({ route, navigation }) {
             >
               <TouchableOpacity
                 onPress={() => {
-                  // addNewTask();
-                  // navigation.goBack();
-
                   Alert.alert("Supprimer cette tâche?", null, [
                     {
                       text: "Annuler",
@@ -319,9 +307,9 @@ export default function TasksView({ route, navigation }) {
                       onPress: () => {
                         console.log(
                           "OK Pressed, suppression de la task id=",
-                          currentTaskId
+                          taskId
                         );
-                        deleteTask(currentTaskId);
+                        deleteTask(taskId);
                         navigation.goBack();
                       },
                     },
@@ -337,10 +325,9 @@ export default function TasksView({ route, navigation }) {
               <Button
                 label={"Modifier"}
                 onPress={() => {
-                  // addNewTask();
-
-                  console.log("day is now", day);
-                  navigation.goBack();
+                  console.log(taskId);
+                  updateTask(taskId);
+                  // navigation.goBack();
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
               />
@@ -351,7 +338,7 @@ export default function TasksView({ route, navigation }) {
                 label={"Enregistrer"}
                 onPress={() => {
                   addNewTask();
-                  navigation.goBack();
+                  // navigation.goBack();
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
               />

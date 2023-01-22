@@ -6,6 +6,7 @@ import TasksProvider, {
   create_task,
   delete_task,
   get_all_tasks,
+  update_task,
 } from "../providers/TasksProvider";
 import { USER_TOKEN_KEY } from "../settings";
 
@@ -22,6 +23,14 @@ export const calendarStore = map({
   error: null,
   noTask: false,
   currentDay: [],
+  canBack: false,
+});
+
+/**
+ * Action permettant de changer la couleur
+ */
+export const setTaskId = action(calendarStore, "setTaskId", (store, taskId) => {
+  store.setKey("taskId", taskId);
 });
 
 /**
@@ -63,8 +72,11 @@ export const setDay = action(calendarStore, "setDay", (store, day) => {
 /**
  * Action permettant de changer l'heure'
  */
+// export const setTime = action(calendarStore, "setTime", (store, time) => {
+//   store.setKey("time", `${time.hours}:${time.minutes}`);
+// });
 export const setTime = action(calendarStore, "setTime", (store, time) => {
-  store.setKey("time", `${time.hours}:${time.minutes}`);
+  store.setKey("time", time);
 });
 
 /**
@@ -91,6 +103,17 @@ export const setloading = action(
 export const setError = action(calendarStore, "setError", (store, error) => {
   store.setKey("error", error);
 });
+
+/**
+ * Action permettant de signaler le ok pour faire le back
+ */
+export const setCanBack = action(
+  calendarStore,
+  "setCanBack",
+  (store, canBack) => {
+    store.setKey("canBack", canBack);
+  }
+);
 
 /**
  * Action lancé au démarrage du login permettant de récupérer
@@ -127,9 +150,9 @@ export const initHomePage = action(
       // On indique que l'utilisateur est connéctér
       store.setKey("loading", false);
       // store.setKey('user', user)
-    } catch (e) {
+    } catch (error) {
       // error reading value
-      throw Error(` ${e}`);
+      throw Error(error);
     }
   }
 );
@@ -138,40 +161,47 @@ export const initHomePage = action(
  * Action permettant d'ajouter à la liste
  */
 export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
-  //Recuperation des tasks
-  const { title, content, taskColor, day, time, tasksList } = store.get();
   try {
     //On affiche le loading
     setloading(true);
 
-    //Creation du new task
-    const task = {
-      title: title,
-      content: content,
-      taskColor: taskColor,
-      day: day,
-      time: time,
-    };
-    console.log(task);
+    //Recuperation des tasks
+    const { title, content, taskColor, day, time, tasksList } = store.get();
 
-    //Recuperation du token pour envoyer au provider
-    const userToken = await getStoreData(USER_TOKEN_KEY);
-
-    //Envoi de la requete au server
-    const result = await create_task(userToken, task);
-    if (result) {
-      console.log("Result dans store", result);
-
-      setloading(false);
+    //Controle du champ obligatoire title:
+    if (title.length < 1) {
+      setError({ title: { value: "Ce champs est obligatoire" } });
+      return;
     } else {
-      setloading(false);
-      console.log("NO datas");
-      //AJOUTER ERREUR
-      setError("Oppps error get_all_tasks");
+      //Creation du new task
+      const task = {
+        title: title,
+        content: content,
+        taskColor: taskColor,
+        day: day,
+        time: time,
+      };
+      console.log(task);
+
+      //Recuperation du token pour envoyer au provider
+      const userToken = await getStoreData(USER_TOKEN_KEY);
+
+      //Envoi de la requete au server
+      const result = await create_task(userToken, task);
+      if (result) {
+        initHomePage();
+        setloading(false);
+        setCanBack(true);
+      } else {
+        setloading(false);
+        console.log("NO datas");
+        //AJOUTER ERREUR
+        setError("Oppps error get_all_tasks");
+      }
     }
-  } catch (e) {
+  } catch (error) {
     // error reading value
-    throw Error(` ${e}`);
+    throw Error(error);
   }
 
   //Creation du nouveau tableau contenant la nouvelle task
@@ -191,7 +221,7 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
 });
 
 /**
- * Action permettant de supprimer tache de la liste
+ * Action permettant de supprimer une tache
  */
 export const deleteTask = action(
   calendarStore,
@@ -205,6 +235,7 @@ export const deleteTask = action(
 
       const response = await delete_task(userToken, taskId);
       if (response) {
+        initHomePage();
         setloading(false);
       } else {
         setloading(false);
@@ -216,7 +247,59 @@ export const deleteTask = action(
       setloading(false);
       setError("OOPSSS");
       // error reading value
-      throw Error(` ${e}`);
+      throw Error(error);
+    }
+  }
+);
+
+/**
+ * Action permettant de modifier une tache de
+ */
+export const updateTask = action(
+  calendarStore,
+  "deletTask",
+  async (store, taskId) => {
+    try {
+      //On affiche le loading
+      setloading(true);
+
+      //Recuperation des tasks
+      const { title, content, taskColor, day, time } = store.get();
+
+      //Controle du champ obligatoire title:
+      if (title.length < 1) {
+        setError({ title: { value: "Ce champs est obligatoire" } });
+        return;
+      }
+
+      //Recuperation du token pour envoyer au provider
+      const userToken = await getStoreData(USER_TOKEN_KEY);
+
+      //Creation du new task
+      const newTask = {
+        title: title,
+        content: content,
+        taskColor: taskColor,
+        day: day,
+        time: time,
+      };
+
+      const response = await update_task(userToken, taskId, newTask);
+      if (response) {
+        initHomePage();
+        setloading(false);
+        setCanBack(true);
+      } else {
+        setloading(false);
+        console.log("NO datas");
+        //AJOUTER ERREUR
+        setError("Oppps error get_all_tasks");
+      }
+    } catch (error) {
+      setloading(false);
+      setError("OOPSSS");
+      // error reading value
+      throw Error(error);
     }
   }
 );
@@ -230,11 +313,14 @@ export const resetValues = action(
   async (store) => {
     // Remise a l'état initial des valeurs du store
     // store.setKey("tasksList", '')
+    store.setKey("taskId", undefined);
     store.setKey("title", "");
     store.setKey("content", "");
     store.setKey("taskColor", "");
     // store.setKey("day", moment(new Date()).format("YYYY-MM-DD"));
     store.setKey("time", "");
+    store.setKey("error", null);
+    store.setKey("canBack", false);
   }
 );
 
@@ -244,7 +330,7 @@ export const resetValues = action(
 export const getStoreData = async (key) => {
   try {
     return await AsyncStorage.getItem(key);
-  } catch (e) {
+  } catch (err) {
     throw Error(`AsyncStorage Error: get value in key: ${key}`);
   }
 };

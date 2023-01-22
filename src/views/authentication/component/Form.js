@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Ionicons } from "@expo/vector-icons";
 import {
   CARDS,

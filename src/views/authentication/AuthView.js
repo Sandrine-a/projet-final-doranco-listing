@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../theme";
 import Form from "./component/Form";
 import Button from "../../component/Button";

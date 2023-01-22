@@ -56,9 +56,11 @@ export default function CardDay({ task }) {
         boxShadow,
       ]}
       onPress={() => {
-        console.log("taskId =", task.id);
         console.log(task);
-        navigation.navigate("TasksView", { task: task, title: "Modifier un rdv" });
+        navigation.navigate("TasksView", {
+          task: task,
+          title: "Modifier un rdv",
+        });
       }}
     >
       <View style={styles.dotContainer}>
@@ -104,18 +106,11 @@ export default function CardDay({ task }) {
               flexDirection: "row",
             }}
           >
-            {<Text style={styles.text}>{ moment(task.time, 'HH:mm:ss').format('HH:mm') }</Text>}
-
-            {/* {task.time.hours >= 0 && task.time.hours < 10 ? (
-              <Text style={styles.text}>0{task.time.hours}</Text>
-            ) : (
-              <Text style={styles.text}>{task.time.hours}</Text>
-            )}
-            {task.time.minutes >= 0 && task.time.minutes < 10 ? (
-              <Text style={styles.text}> : 0{task.time.minutes}</Text>
-            ) : (
-              <Text style={styles.text}> : {task.time.minutes}</Text>
-            )} */}
+            {
+              <Text style={styles.text}>
+                {moment(task.time, "HH:mm:ss").format("HH:mm")}
+              </Text>
+            }
           </View>
         ) : null}
       </View>
