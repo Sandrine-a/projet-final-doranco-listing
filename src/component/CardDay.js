@@ -57,6 +57,7 @@ export default function CardDay({ task }) {
       ]}
       onPress={() => {
         console.log("taskId =", task.id);
+        console.log(task);
         navigation.navigate("TasksView", { task: task, title: "Modifier un rdv" });
       }}
     >

@@ -4,7 +4,6 @@ import { USERNAME_KEY, USER_KEY, USER_TOKEN_KEY } from "../settings";
 import { get_token, get_user, login, signup } from "../providers/UserProvider";
 
 export const authenticationStore = map({
-  loading: false,
   formContent: "login",
   username: "",
   email: "",
@@ -51,7 +50,7 @@ export const setEmail = action(
 );
 
 /**
- * Action permettant de changer le password
+ * Action permettant de changer les password
  */
 export const setPassword = action(
   authenticationStore,
@@ -89,7 +88,7 @@ export const resetValues = action(
 );
 
 /**
- * Action permettant de changer le loading
+ * Action permettant de changer le User
  */
 export const setUser = action(authenticationStore, "setUser", (store, user) => {
   store.setKey("user", user);
@@ -107,7 +106,7 @@ export const setloading = action(
 );
 
 /**
- * Action permettant de changer le loading
+ * Action permettant de changer et afficher les erreurs
  */
 export const setError = action(
   authenticationStore,

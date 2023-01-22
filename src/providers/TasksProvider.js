@@ -1,17 +1,57 @@
 import apiManager from "./apiManager";
 
-export const getAllTasks = async (token) => {
+export const get_all_tasks = async (usertoken) => {
   try {
-    const response = await apiManager("/tasks", {
-      method: "GET",
+    const response = await apiManager.get("/tasks", {
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${usertoken}`,
       },
     });
-    // console.log(response.data);
+    // console.log("response.data, response.status ==", response.data, response.status);
     return response.data;
   } catch (error) {
+    console.log("Error", error);
+    return error;
+  }
+};
+
+export const create_task = async (usertoken, task) => {
+  console.log("create :::", task);
+  try {
+    const response = await apiManager.post("/tasks", task, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${usertoken}`,
+      },
+    });
+    console.log(
+      "response.data, response.status ==",
+      response.data,
+      response.status
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Error", error);
+    return error;
+  }
+};
+
+export const delete_task = async (userToken, id) => {
+  try {
+    const response = await apiManager.delete(`/tasks/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    console.log(
+      "response.data, response.status ==",
+      response.data,
+      response.status
+    );
+    return response;
+  } catch (error) {
+    console.log("Error", error);
     return error;
   }
 };
@@ -25,7 +65,7 @@ export const getAllTasks = async (token) => {
 //     };
 //   }
 
-//   async getAllTasks(userId) {
+//   async get_all_tasks(userId) {
 //     // axios.get(
 //     //   `${this.apiUrl}/tasks`,
 //     //   {},

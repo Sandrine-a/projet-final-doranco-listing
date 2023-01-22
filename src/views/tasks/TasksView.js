@@ -82,16 +82,14 @@ export default function TasksView({ route, navigation }) {
 
   useEffect(() => {
     if (route?.params?.task) {
-      // console.log("yes", route?.params.task.taskColor.value);
-      // setCurrentTask(route?.params.task);
-
-      // console.log("day= ", moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
-
+      console.log(moment(route?.params.task.time, "HH:mm:ss").format("HH:mm"));
+      console.log("task time =", route?.params.task.time);
       setTitle(route?.params.task.title);
       setContent(route?.params.task.content);
       setTaskColor(route?.params.task.taskColor);
       setDay(moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
-      setTime(route?.params.task.time);
+      // setTime(route?.params.task.time);
+      setTime(moment(route?.params.task.time, "HH:mm:ss").format("HH:mm"));
       setCurrentTaskId(route?.params.task.id);
     }
     console.log("taskview day=", day);
@@ -336,15 +334,6 @@ export default function TasksView({ route, navigation }) {
                   color={TEXT_COLOR.SECONDARY}
                 />
               </TouchableOpacity>
-              {/* <Button
-                label={"Supprimer"}
-                onPress={() => {
-                  // addNewTask();
-                  // navigation.goBack();
-                  console.log(taskId);
-                }}
-                containerStyle={{ backgroundColor: COLORS.SECONDARY }}
-              /> */}
               <Button
                 label={"Modifier"}
                 onPress={() => {

@@ -20,15 +20,39 @@ import HeaderText from "./component/HeaderText";
 import FilterButton from "./component/FilterButton";
 import DayBoard from "./component/DayBoard";
 
-import { calendarStore, initHomePage, setDay } from "../../store/calendarStore";
+import {
+  calendarStore,
+  initHomePage,
+  setDay,
+  setNoTask,
+} from "../../store/calendarStore";
+import Loader from "../../component/Loader";
 
 export default function DayView({ navigation }) {
-  const { tasksList, day, loading } = useStore(calendarStore);
+  const { tasksList, day, loading, noTask, currentDay } =
+    useStore(calendarStore);
 
   useEffect(() => {
     initHomePage();
     return () => {};
   }, []);
+
+  const NoTask = () => {
+    return (
+      <View
+        style={{
+          paddingHorizontal: SIZES.base,
+          marginTop: SIZES.large * 2,
+          alignItems: "center",
+        }}
+      >
+        <Text style={styles.noTaskText}>
+          Pas encore de note pour aujourd'hui.
+        </Text>
+        <Text style={styles.noTaskText}>Appuyez sur + pour en créer.</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -86,30 +110,37 @@ export default function DayView({ navigation }) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.cardsContainer}>
-        {/* {tasksList.map((item, index) => {
+        {!loading ? (
+          <View style={styles.cardsContainer}>
+            {/* {tasksList.map((item, index) => {
               if (moment(item.day).format("YYYY-MM-DD") == day) {
                 console.log("yesssss");
                 return <DayBoard task={item} key={`${item.day}_${index}`} />;
               }
             })} */}
 
-
-          {/* {tasksList
-            .sort((a, b) => {
-              if (a.time && b.time) {
-                const timeA = moment(a.time, 'HH:mm:ss').toDate();
-                const timeB = moment(b.time, 'HH:mm:ss').toDate();
-                return timeA - timeB;
-              }
-            })
-            .map((item, index) => {
-              if (moment.utc(item.day).format("YYYY-MM-DD") == day) {
-                return <DayBoard task={item} key={`${item.day}_${index}`} />;
-              }
-            })}
-             */}
-        </View>
+            {tasksList
+              .sort((a, b) => {
+                // console.log(a.time);
+                // console.log(b.time);
+                if (a.time && b.time) {
+                  const timeA = moment(a.time, "HH:mm:ss").toDate();
+                  const timeB = moment(b.time, "HH:mm:ss").toDate();
+                  // console.log(timeA);
+                  // console.log(timeB);
+                  return timeA - timeB;
+                }
+              })
+              .map((item, index) => {
+                if (moment.utc(item.day).format("YYYY-MM-DD") == day) {
+                  setNoTask(false);
+                  return <DayBoard task={item} key={`${item.day}_${index}`} />;
+                }
+              })}
+          </View>
+        ) : (
+          <Loader />
+        )}
       </ScrollView>
       <BottomTab />
     </SafeAreaView>
@@ -135,5 +166,14 @@ const styles = StyleSheet.create({
     fontSize: SIZES.base + 2,
     color: COLORS.TERTIARY,
     textTransform: "capitalize",
+  },
+  noTaskText: {
+    fontFamily: FONTS.oswald.regular,
+    fontSize: SIZES.large,
+    paddingTop: SIZES.base,
+    color: TEXT_COLOR.PRIMARY,
+    textShadowOffset: { height: 2, width: 3 },
+    textShadowColor: COLORS.PRIMARY,
+    textShadowRadius: 4,
   },
 });
