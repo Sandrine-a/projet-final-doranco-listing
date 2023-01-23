@@ -5,13 +5,13 @@ import { useStore } from "@nanostores/react";
 import { calendarStore } from "../../../store/calendarStore";
 import { authenticationStore } from "../../../store/authenticationStore";
 
-export default function HeaderText() {
+export default function HeaderText({ label }) {
   // const { username } = useStore(calendarStore);
   const { user } = useStore(authenticationStore);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Hello {user.username}</Text>
+      <Text style={styles.text}>{label}</Text>
     </View>
   );
 }

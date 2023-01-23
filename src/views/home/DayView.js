@@ -32,10 +32,12 @@ import {
   setOnlyCloseButton,
   setViewActive,
 } from "../../store/bottomTabNavStore";
+import { authenticationStore } from "../../store/authenticationStore";
 
 export default function DayView({ navigation }) {
   const { tasksList, day, loading, noTask, currentDay } =
     useStore(calendarStore);
+  const { user } = useStore(authenticationStore);
 
   useEffect(() => {
     initHomePage();
@@ -70,7 +72,7 @@ export default function DayView({ navigation }) {
         resizeMode="cover"
         style={{ height: 210 }}
       >
-        <HeaderText />
+        <HeaderText label={`Hello ${user.username}`} />
       </ImageBackground>
 
       <View

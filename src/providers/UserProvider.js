@@ -32,15 +32,30 @@ export const get_token = async (email, password) => {
 export const get_user = async (userToken) => {
   console.log("here");
   try {
-    const response = await apiManager.get(
-      "/users/me",
+    const response = await apiManager.get("/users/me", {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw Error(error);
+  }
+};
+
+export const update_user = async (userToken, id, newUser) => {
+  try {
+    const response = await apiManager.put(
+      `/users/${id}`,
+      { ...newUser },
       {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       }
     );
-    return response.data;
+    return response.status;
   } catch (error) {
     console.log(error);
     throw Error(error);

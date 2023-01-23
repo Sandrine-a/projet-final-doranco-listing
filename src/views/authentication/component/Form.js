@@ -49,8 +49,8 @@ export default function Form({
             rules={{
               required: "Ce champs est obligatoire",
               minLength: {
-                value: 1,
-                message: "Min. 4 caractères",
+                value: 2,
+                message: "Min. 2 caractères",
               },
               maxLength: {
                 value: 100,
@@ -139,7 +139,6 @@ export default function Form({
                 onChangeText={onChange}
                 value={value}
                 placeholder="Mot de passe *"
-                keyboardType="visible-password"
                 textContentType="password"
                 style={{
                   width: "90%",

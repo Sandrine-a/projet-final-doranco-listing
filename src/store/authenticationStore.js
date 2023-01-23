@@ -1,14 +1,24 @@
 import { action, map } from "nanostores";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { USERNAME_KEY, USER_KEY, USER_TOKEN_KEY } from "../settings";
-import { get_token, get_user, login, signup } from "../providers/UserProvider";
+import {
+  USERNAME_KEY,
+  USER_EMAIL_KEY,
+  USER_KEY,
+  USER_TOKEN_KEY,
+} from "../settings";
+import {
+  get_token,
+  get_user,
+  signup,
+  update_user,
+} from "../providers/UserProvider";
 
 /**
- * @module authentication Store - 
- * @description  Persistance des données d'authentification à travers l'app. 
- * Permet  de stocker et changer toutes les données 
+ * @module authentication Store -
+ * @description  Persistance des données d'authentification à travers l'app.
+ * Permet  de stocker et changer toutes les données
  * inherentes à l'etat de la navigation par la bottomTab
- * 
+ *
  */
 
 /**
@@ -89,7 +99,7 @@ export const resetValues = action(
   authenticationStore,
   "resetValues",
   (store) => {
-    store.setKey("username", "");
+    // store.setKey("username", "");
     store.setKey("email", "");
     store.setKey("password", "");
     store.setKey("confirmPassword", "");
@@ -163,7 +173,7 @@ export const logUser = action(
     const password = data.password;
 
     try {
-      console.log(" console.log(email, password )", email, password );
+      console.log(" console.log(email, password )", email, password);
       //Demande de token
       const data = await get_token(email, password);
       // Le provider ne renvoie la reponse que si Req du server a reussi
@@ -174,6 +184,8 @@ export const logUser = action(
         const user = await get_user(data.token);
         //On le met dans le store
         setUser(user);
+
+        // setUsername(user.username);
 
         console.log("user is =", user);
         resetValues();
@@ -248,6 +260,17 @@ export const getStoreData = async (key) => {
 };
 
 /**
+ * Action permettant devider dans async storage une valeur unique
+ */
+export const removeStoreData = async (key) => {
+  try {
+    return await AsyncStorage.removeItem(key);
+  } catch (e) {
+    throw Error(`AsyncStorage Error: get value in key: ${key}`);
+  }
+};
+
+/**
  * Action d'autoconnecter l'user
  */
 export const autoConnect = async () => {
@@ -263,7 +286,9 @@ export const autoConnect = async () => {
         const user = await get_user(userToken);
         if (user) {
           setUser(user);
+          setUsername(user.username);
           storeData(USER_KEY, user.username);
+          // storeData(USER_EMAIL_KEY, user.email);
         }
       } catch (e) {
         console.log("ERROR =", e);
@@ -288,4 +313,101 @@ export const autoConnect = async () => {
 /**
  * Action de logout
  */
-export const logout = async () => {}
+export const logout = async () => {
+  try {
+    //On affiche le loading
+    setloading(true);
+
+    //On supprime le token du storage
+    removeStoreData(USER_TOKEN_KEY);
+    //On supprime le user du state
+    setUser(null);
+    //On supprime l'affichage du loading
+    setloading(false);
+  } catch (error) {
+    console.log("ERROR", error);
+    //On supprime l'affichage du loading
+    setloading(false);
+    //On affiche l'erreur
+    setError("Oopss!");
+  }
+};
+
+/**
+ * Action permettant d'envoyer la request updateuser
+ */
+export const updateUser = action(
+  authenticationStore,
+  "updateUser",
+  async (store, data) => {
+    //On affiche le loading
+    // setloading(true);
+    console.log(data);
+
+    // const password = data.password;
+
+    //Recuperation de du user dans le
+    const { user } = store.get();
+
+    try {
+      let newUser = {};
+      //On affiche le loading
+      setloading(true);
+      const newUsername = data.username;
+
+      const id = user.userId;
+
+      //Recuperation du token
+      const userToken = await getStoreData(USER_TOKEN_KEY);
+
+      setloading(false);
+
+      //Le password ne peut qu'etre vide ou avec 5 caractères mini
+
+      if (data.password == "" && newUsername !== user.username) {
+        //S'il est vide, on cre la request avec uniquement le username
+        //Mais seulement si celui-ci est different du user.username stocker au login
+        console.log("yes null but username different");
+        newUser = { username: data.username };
+
+        //Le provider retourne la response.status
+        const response = await update_user(userToken, id, newUser);
+        if (response == 200) {
+          console.log("modifié");
+        } else {
+          setError({
+            api: {
+              value:
+                "Oopss! Erreur interne. Merci de retenter dans un instant.",
+            },
+          });
+        }
+      } else if (data.password && newUsername) {
+        console.log("password a modifir");
+        newUser = { username: data.username, password: data.password };
+        console.log("newUser is===", newUser);
+        const response = await update_user(userToken, id, newUser);
+        if (response == 200) {
+          console.log("modifié");
+          //On supprime le token
+          removeStoreData(USER_TOKEN_KEY);
+
+          logout();
+          logUser({ email: user.email, password: newUser.password });
+        } else {
+          setError({
+            api: {
+              value:
+                "Oopss! Erreur interne. Merci de retenter dans un instant.",
+            },
+          });
+        }
+      }
+    } catch (error) {
+      //On supprime l'affichage du loading
+      setloading(false);
+      //On affiche l'erreur
+      setError("Oopss!");
+    }
+  }
+);
