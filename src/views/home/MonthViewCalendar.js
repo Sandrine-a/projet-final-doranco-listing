@@ -26,6 +26,7 @@ import Calendar from "./component/CalendarItem";
 import { calendarStore, setDay } from "../../store/calendarStore";
 import { useStore } from "@nanostores/react";
 import DayBoard from "./component/DayBoard";
+import { setOnlyCloseButton, setViewActive } from "../../store/bottomTabNavStore";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
@@ -38,7 +39,11 @@ export default function MonthView({ navigation }) {
   const [isMeasured, setIsMeasured] = useState(false);
 
   useEffect(() => {
-    return () => {};
+    setOnlyCloseButton(false);
+    setViewActive({name: "dayView", active: true})
+    return () => {
+      setViewActive({name: "dayView", active: false})
+    };
   }, [tasksList, month]);
 
   useEffect(() => {

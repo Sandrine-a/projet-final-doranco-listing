@@ -49,6 +49,7 @@ import {
   setTitle,
   updateTask,
 } from "../../store/calendarStore";
+import { setOnlyCloseButton } from "../../store/bottomTabNavStore";
 
 export default function TasksView({ route, navigation }) {
   const [visible, setVisible] = useState(false);
@@ -81,6 +82,10 @@ export default function TasksView({ route, navigation }) {
     navigation.setOptions({
       title: value === "" ? "Créer un rdv" : value,
     });
+    setOnlyCloseButton(true);
+    return () => {
+      setOnlyCloseButton(false);
+    };
   }, [navigation, value]);
 
   useEffect(() => {
@@ -347,7 +352,7 @@ export default function TasksView({ route, navigation }) {
         </View>
       </ScrollView>
 
-      <BottomTab onlyCloseButton={true} />
+      <BottomTab /* onlyCloseButton={true} */ />
     </SafeAreaView>
   );
 }

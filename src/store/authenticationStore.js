@@ -3,6 +3,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { USERNAME_KEY, USER_KEY, USER_TOKEN_KEY } from "../settings";
 import { get_token, get_user, login, signup } from "../providers/UserProvider";
 
+/**
+ * @module authentication Store - 
+ * @description  Persistance des données d'authentification à travers l'app. 
+ * Permet  de stocker et changer toutes les données 
+ * inherentes à l'etat de la navigation par la bottomTab
+ * 
+ */
+
+/**
+ * Initialisation du store avec defauls values et formats
+ */
 export const authenticationStore = map({
   formContent: "login",
   username: "",
@@ -152,6 +163,7 @@ export const logUser = action(
     const password = data.password;
 
     try {
+      console.log(" console.log(email, password )", email, password );
       //Demande de token
       const data = await get_token(email, password);
       // Le provider ne renvoie la reponse que si Req du server a reussi
@@ -251,6 +263,7 @@ export const autoConnect = async () => {
         const user = await get_user(userToken);
         if (user) {
           setUser(user);
+          storeData(USER_KEY, user.username);
         }
       } catch (e) {
         console.log("ERROR =", e);
@@ -271,3 +284,8 @@ export const autoConnect = async () => {
     throw Error(`AsyncStorage Error: Can't value for USER_TOKEN: ${e}`);
   }
 };
+
+/**
+ * Action de logout
+ */
+export const logout = async () => {}

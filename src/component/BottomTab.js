@@ -39,7 +39,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
             },
           ]}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("DayView")}>
             <FontAwesome
               name="calendar"
               size={ICON_SIZES.base}
@@ -92,7 +92,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
             },
           ]}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("UserProfil")}>
             <FontAwesome5
               name="user"
               size={ICON_SIZES.base}

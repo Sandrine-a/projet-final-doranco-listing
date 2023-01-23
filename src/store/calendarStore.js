@@ -8,9 +8,21 @@ import TasksProvider, {
   get_all_tasks,
   update_task,
 } from "../providers/TasksProvider";
-import { USER_TOKEN_KEY } from "../settings";
+import { USER_KEY, USER_TOKEN_KEY } from "../settings";
 
+/**
+ * @module calendarStore - 
+ * @description  Persistance des données du claendrier à travers l'app. 
+ * Permet  de stocker etc changertoutes les données 
+ * inherentes au calendrier. 
+ * 
+ */
+
+/**
+ * Initialisation du store avec defauls values et formats
+ */
 export const calendarStore = map({
+  user:"",
   taskId: undefined,
   title: "",
   content: "",
@@ -24,6 +36,14 @@ export const calendarStore = map({
   noTask: false,
   currentDay: [],
   canBack: false,
+});
+
+
+/**
+ * Action permettant de modifier le user
+ */
+export const setUsername = action(calendarStore, "setUsername", (store, username) => {
+  store.setKey("username", username);
 });
 
 /**
@@ -132,9 +152,11 @@ export const initHomePage = action(
       console.log("INIT");
       const userToken = await getStoreData(USER_TOKEN_KEY);
 
+      const user = await getStoreData(USER_KEY);
+      setUsername(user)
+
       const result = await get_all_tasks(userToken);
       if (result) {
-        console.log("yes lenght =", result.data.length);
         // console.log("yes data", result.data);
 
         //On met toutes les tasks dans le store

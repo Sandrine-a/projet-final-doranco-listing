@@ -91,7 +91,7 @@ export default function CardDay({ task }) {
         }}
       >
         <Text
-          style={{ fontFamily: FONTS.mukta.regular, width: "80%" }}
+          style={styles.text}
           numberOfLines={2}
         >
           {task.content}
@@ -127,5 +127,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.londrinaSolid.regular,
     textTransform: "uppercase",
     fontSize: SIZES.base + 1,
+    paddingHorizontal: SIZES.xs
   },
+  text: {
+    fontFamily: FONTS.mukta.regular,
+    paddingHorizontal: SIZES.xs
+  }
 });

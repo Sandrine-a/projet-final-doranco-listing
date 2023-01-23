@@ -8,6 +8,7 @@ import { FONTS } from "../theme";
 import AuthView from "../views/authentication/AuthView";
 import { useStore } from "@nanostores/react";
 import { authenticationStore, autoConnect, isLoggedIn } from "../store/authenticationStore";
+import UserProfil from "../views/profil/UserProfil";
 
 export default function RootNavigation() {
   const RootStack = createNativeStackNavigator();
@@ -58,6 +59,9 @@ export default function RootNavigation() {
                 headerBackTitleVisible: false,
               })}
             />
+          </RootStack.Group>
+          <RootStack.Group>
+            <RootStack.Screen name="UserProfil" component={UserProfil} options={{ headerShown: false }} />
           </RootStack.Group>
         </>
       )}

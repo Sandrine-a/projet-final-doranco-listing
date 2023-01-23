@@ -27,6 +27,11 @@ import {
   setNoTask,
 } from "../../store/calendarStore";
 import Loader from "../../component/Loader";
+import {
+  setActive,
+  setOnlyCloseButton,
+  setViewActive,
+} from "../../store/bottomTabNavStore";
 
 export default function DayView({ navigation }) {
   const { tasksList, day, loading, noTask, currentDay } =
@@ -34,7 +39,11 @@ export default function DayView({ navigation }) {
 
   useEffect(() => {
     initHomePage();
-    return () => {};
+    setOnlyCloseButton(false);
+    setViewActive({ name: "dayView", active: true });
+    return () => {
+      setViewActive({ name: "dayView", active: false });
+    };
   }, []);
 
   const NoTask = () => {
