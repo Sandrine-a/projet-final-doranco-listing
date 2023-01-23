@@ -18,7 +18,7 @@ import { useStore } from "@nanostores/react";
 import { calendarStore } from "../../store/calendarStore";
 import { FontAwesome, Fontisto, Ionicons } from "@expo/vector-icons";
 
-import { setViewActive } from "../../store/bottomTabNavStore";
+import { setOnlyCloseButton, setViewActive } from "../../store/bottomTabNavStore";
 import HeaderText from "../home/component/HeaderText";
 import Button from "../../component/Button";
 import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../theme";
@@ -49,6 +49,7 @@ export default function UserProfil({ navigation }) {
   const [buttonVisible, setbuttonVisible] = useState(false);
 
   useEffect(() => {
+    setOnlyCloseButton(false);
     setViewActive({ name: "monthView", active: true });
     // console.log(user.email);
     // console.log(user.username);

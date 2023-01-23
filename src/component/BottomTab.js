@@ -18,11 +18,20 @@ import {
   TEXT_COLOR,
 } from "../theme";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function BottomTab({ onlyCloseButton = false }) {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
+  const [calendarViewActive, setCalendarViewActive] = useState(true);
+  const [userProfilViewActive, setUserProfilViewActive] = useState(false);
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    return () => {};
+  }, [calendarViewActive, userProfilViewActive]);
 
   return (
     <View
@@ -39,11 +48,19 @@ export default function BottomTab({ onlyCloseButton = false }) {
             },
           ]}
         >
-          <TouchableOpacity onPress={() => navigation.navigate("DayView")}>
+          <TouchableOpacity
+            onPress={() => {
+              setCalendarViewActive(true);
+              setUserProfilViewActive(false);
+              navigation.navigate("DayView");
+            }}
+          >
             <FontAwesome
               name="calendar"
               size={ICON_SIZES.base}
-              color={TEXT_COLOR.PRIMARY}
+              color={
+                calendarViewActive ? COLORS.SECONDARY_DARK : TEXT_COLOR.PRIMARY
+              }
             />
           </TouchableOpacity>
         </View>
@@ -70,7 +87,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
           onPress={() =>
             onlyCloseButton
               ? navigation.goBack()
-              : navigation.navigate("TasksView", { title: "Créer un rdv"})
+              : navigation.navigate("TasksView", { title: "Créer un rdv" })
           }
         >
           <FontAwesome
@@ -92,11 +109,21 @@ export default function BottomTab({ onlyCloseButton = false }) {
             },
           ]}
         >
-          <TouchableOpacity onPress={() => navigation.navigate("UserProfil")}>
+          <TouchableOpacity
+            onPress={() => {
+              setUserProfilViewActive(true);
+              setCalendarViewActive(false);
+              navigation.navigate("UserProfil");
+            }}
+          >
             <FontAwesome5
               name="user"
               size={ICON_SIZES.base}
-              color={TEXT_COLOR.PRIMARY}
+              color={
+                userProfilViewActive
+                  ? COLORS.SECONDARY_DARK
+                  : TEXT_COLOR.PRIMARY
+              }
             />
           </TouchableOpacity>
         </View>

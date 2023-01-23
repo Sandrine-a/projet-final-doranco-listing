@@ -29,7 +29,7 @@ import {
 } from "@expo-google-fonts/londrina-solid";
 
 import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./src/theme.js";
-import BottomTabNavigation from "./src/navigation/BottomTabNavigation.js";
+
 
 const BaseTheme = {
   ...DefaultTheme,
@@ -75,7 +75,6 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer theme={BaseTheme}>
         <RootNavigation />
-        {/* <BottomTabNavigation /> */}
         <StatusBar backgroundColor={COLORS.PRIMARY_DARK} />
       </NavigationContainer>
     </SafeAreaProvider>

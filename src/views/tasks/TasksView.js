@@ -352,7 +352,7 @@ export default function TasksView({ route, navigation }) {
         </View>
       </ScrollView>
 
-      <BottomTab /* onlyCloseButton={true} */ />
+      <BottomTab onlyCloseButton={true} />
     </SafeAreaView>
   );
 }
