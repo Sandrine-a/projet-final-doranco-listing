@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export default function BottomTab({ onlyCloseButton = false }) {
+export default function BottomTab({ onlyCloseButton = false, activeView = "dayView" }) {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
   const [calendarViewActive, setCalendarViewActive] = useState(true);
@@ -30,8 +30,20 @@ export default function BottomTab({ onlyCloseButton = false }) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    return () => {};
-  }, [calendarViewActive, userProfilViewActive]);
+    // console.log("calendarViewActive ==", calendarViewActive);
+    console.log("userProfilViewActive ==", userProfilViewActive);
+    return () => {
+      // setCalendarViewActive(true)
+      // setUserProfilViewActive(false)
+    };
+  }, [navigation]);
+
+  // useEffect(() => {
+  //   if(userProfilViewActive == true) {
+  //     setCalendarViewActive(false)
+  //   }
+  //   return () => {};
+  // }, [userProfilViewActive]);
 
   return (
     <View
@@ -50,8 +62,8 @@ export default function BottomTab({ onlyCloseButton = false }) {
         >
           <TouchableOpacity
             onPress={() => {
+              console.log("calendar presse");
               setCalendarViewActive(true);
-              setUserProfilViewActive(false);
               navigation.navigate("DayView");
             }}
           >
@@ -87,7 +99,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
           onPress={() =>
             onlyCloseButton
               ? navigation.goBack()
-              : navigation.navigate("TasksView", { title: "Créer un rdv" })
+              : navigation.navigate("TasksView", { title: "Créer une tâche" })
           }
         >
           <FontAwesome
@@ -111,8 +123,9 @@ export default function BottomTab({ onlyCloseButton = false }) {
         >
           <TouchableOpacity
             onPress={() => {
+              console.log("userpress presse");
               setUserProfilViewActive(true);
-              setCalendarViewActive(false);
+              // setCalendarViewActive(false);
               navigation.navigate("UserProfil");
             }}
           >

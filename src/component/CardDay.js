@@ -59,7 +59,7 @@ export default function CardDay({ task }) {
         console.log(task);
         navigation.navigate("TasksView", {
           task: task,
-          title: "Modifier un rdv",
+          title: "Modifier une tâche",
         });
       }}
     >

@@ -77,8 +77,7 @@ export default function DayView({ navigation }) {
 
       <View
         style={{
-          // marginTop: 98,
-          marginTop: 38,
+          marginTop: 45,
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",

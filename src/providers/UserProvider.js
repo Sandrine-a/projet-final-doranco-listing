@@ -10,8 +10,8 @@ export const signup = async (email, username, password) => {
 
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw Error(error);
+    console.log("Log userprovider =", error.response.data);
+    throw Error(error.response.data);
   }
 };
 

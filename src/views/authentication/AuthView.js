@@ -135,6 +135,8 @@ export default function AuthView() {
             </View>
           ) : null}
 
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+
           {!loading ? (
             <View style={styles.buttonContainer}>
               {formContent == "signup" ? (
@@ -225,5 +227,12 @@ const styles = StyleSheet.create({
     color: TEXT_COLOR.PRIMARY,
     fontFamily: FONTS.mukta.regular,
     fontSize: SIZES.base,
+  },
+  error: {
+    color: "red",
+    paddingHorizontal: SIZES.xs,
+    fontFamily: FONTS.mukta.regular,
+    textAlign: "center"
+    // fontSize: SIZES.base
   },
 });

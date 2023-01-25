@@ -105,6 +105,7 @@ export const resetValues = action(
     store.setKey("confirmPassword", "");
     store.setKey("passwordVisible", false);
     store.setKey("confirmPasswordVisible", false);
+    store.setKey("error", null)
   }
 );
 
@@ -232,7 +233,7 @@ export const onSubmitSignup = action(
       //On supprime l'affichage du loading
       setloading(false);
       //On affiche l'erreur
-      setError("Oopss!");
+      setError("Cet identifiant est déja enregistré. Connectez-vous.");
     }
   }
 );
@@ -280,7 +281,7 @@ export const autoConnect = async () => {
 
     const userToken = await getStoreData(USER_TOKEN_KEY);
 
-    console.log("usertoken found = ", userToken);
+    // console.log("usertoken found = ", userToken);
     if (userToken) {
       try {
         const user = await get_user(userToken);

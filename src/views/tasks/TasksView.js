@@ -80,7 +80,7 @@ export default function TasksView({ route, navigation }) {
 
   useEffect(() => {
     navigation.setOptions({
-      title: value === "" ? "Créer un rdv" : value,
+      title: value === "" ? "Créer une tâche" : value,
     });
     setOnlyCloseButton(true);
     return () => {

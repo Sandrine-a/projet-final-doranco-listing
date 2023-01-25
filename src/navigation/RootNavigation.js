@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MonthView from "../views/home/MonthViewCalendar";
 import DayView from "../views/home/DayView";
@@ -7,7 +7,7 @@ import TasksView from "../views/tasks/TasksView";
 import { FONTS } from "../theme";
 import AuthView from "../views/authentication/AuthView";
 import { useStore } from "@nanostores/react";
-import { authenticationStore, autoConnect, isLoggedIn } from "../store/authenticationStore";
+import { authenticationStore, autoConnect } from "../store/authenticationStore";
 import UserProfil from "../views/profil/UserProfil";
 
 export default function RootNavigation() {
@@ -15,11 +15,8 @@ export default function RootNavigation() {
   const { user } = useStore(authenticationStore);
 
   useEffect(() => {
-    // console.log("useEffect user is:", user);
-    // isLoggedIn()
-    autoConnect()
-
-  }, [])
+    autoConnect();
+  }, []);
   return (
     <RootStack.Navigator>
       {user == null ? (
@@ -61,7 +58,11 @@ export default function RootNavigation() {
             />
           </RootStack.Group>
           <RootStack.Group>
-            <RootStack.Screen name="UserProfil" component={UserProfil} options={{ headerShown: false }} />
+            <RootStack.Screen
+              name="UserProfil"
+              component={UserProfil}
+              options={{ headerShown: false, animation: "flip" }}
+            />
           </RootStack.Group>
         </>
       )}

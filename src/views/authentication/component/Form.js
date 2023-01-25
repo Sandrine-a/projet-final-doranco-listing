@@ -165,76 +165,7 @@ export default function Form({
         <Text style={styles.error}>{errors.password?.message}</Text>
       </View>
 
-      {/* {formContent == "signup" ? (
-        <View style={styles.section}>
-          <Text style={styles.label}>Confirmation du mot de passe</Text>
-          <Controller
-            control={control}
-            rules={{
-              required: "Ce champs est obligatoire",
-              minLength: {
-                value: 5,
-                message: "Min. 5 caractères",
-              },
-              maxLength: {
-                value: 200,
-                message: "Maximum de caractères",
-              },
-              validate: {
-                matchesPreviousPassword: (value) => {
-                  console.log(value);
-                  const { password } = getValues();
-                  if (password) {
-                    return (
-                      password === value || "Ne correspond pas au mot de passe."
-                    );
-                  }
-                },
-              },
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <View
-                style={[
-                  styles.input,
-                  { flexDirection: "row", alignItems: "center" },
-                ]}
-              >
-                <TextInput
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Confirmation du mot de passe *"
-                  blurOnSubmit={false}
-                  onSubmitEditing={() => Keyboard.dismiss()}
-                  style={{
-                    width: "90%",
-                    fontFamily: FONTS.mukta.regular,
-                    alignItems: "center",
-                    marginRight: SIZES.xs,
-                  }}
-                  maxLength={200}
-                  autoCapitalize="none"
-                  secureTextEntry={confirmPasswordVisible ? false : true}
-                  placeholderTextColor={TEXT_COLOR.SECONDARY}
-                />
-                <Ionicons
-                  name={
-                    confirmPasswordVisible ? "eye-outline" : "eye-off-outline"
-                  }
-                  size={24}
-                  color={TEXT_COLOR.SECONDARY}
-                  style={styles.inputIcon}
-                  onPress={() =>
-                    setConfirmPasswordVisible(!confirmPasswordVisible)
-                  }
-                />
-              </View>
-            )}
-            name="confirmPassword"
-          />
-          <Text style={styles.error}>{errors.confirmPassword?.message}</Text>
-        </View>
-      ) : null} */}
+    
     </View>
   );
 }
