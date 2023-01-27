@@ -50,8 +50,7 @@ export default function UserProfil({ navigation }) {
 
   useEffect(() => {
     setOnlyCloseButton(false);
-    return () => {
-    };
+    return () => {};
   }, [user]);
 
   const {
@@ -260,7 +259,6 @@ export default function UserProfil({ navigation }) {
             >
               <TouchableOpacity
                 onPress={() => {
-                  console.log("logout");
                   logout();
                 }}
                 style={{
@@ -286,6 +284,25 @@ export default function UserProfil({ navigation }) {
                 </Text>
               </TouchableOpacity>
             </View>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback>
+          <View
+            style={{ marginTop: SIZES.large * 2, marginHorizontal: SIZES.base }}
+          >
+            <TouchableOpacity onPress={() => console.log("suppprimer")}>
+              <Text
+                style={{
+                  fontFamily: FONTS.mukta.regular,
+                  alignItems: "center",
+                  marginRight: SIZES.xs,
+                  color: TEXT_COLOR.SECONDARY,
+                }}
+              >
+                Supprimer mon compte
+              </Text>
+            </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -319,6 +336,5 @@ const styles = StyleSheet.create({
     color: "red",
     paddingHorizontal: SIZES.xs,
     fontFamily: FONTS.mukta.regular,
-    // fontSize: SIZES.base
   },
 });

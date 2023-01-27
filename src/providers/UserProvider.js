@@ -16,7 +16,6 @@ export const signup = async (email, username, password) => {
 };
 
 export const get_token = async (email, password) => {
-  console.log("get_token :", email, password);
   try {
     const response = await apiManager.post("/users/token", {
       email: email,
@@ -24,8 +23,8 @@ export const get_token = async (email, password) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error.response.data);
-    throw Error(error);
+    console.log("err get_token", error.response.data);
+    throw Error(error.error.response.data);
   }
 };
 

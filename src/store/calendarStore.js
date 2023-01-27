@@ -156,14 +156,11 @@ export const initHomePage = action(
 
       const result = await get_all_tasks(userToken);
       if (result) {
-        // console.log("yes data", result.data);
-
         //On met toutes les tasks dans le store
         store.setKey("tasksList", result.data);
         createDayBoard(result.data);
       } else {
         setloading(false);
-        console.log("NO datas");
         //AJOUTER ERREUR
         setError("Oppps error get_all_tasks");
       }
@@ -202,7 +199,6 @@ export const addNewTask = action(calendarStore, "addNewTask", async (store) => {
         day: day,
         time: time,
       };
-      console.log(task);
 
       //Recuperation du token pour envoyer au provider
       const userToken = await getStoreData(USER_TOKEN_KEY);
@@ -312,7 +308,6 @@ export const updateTask = action(
         setCanBack(true);
       } else {
         setloading(false);
-        console.log("NO datas");
         //AJOUTER ERREUR
         setError("Oppps error get_all_tasks");
       }

@@ -174,7 +174,6 @@ export const logUser = action(
     const password = data.password;
 
     try {
-      console.log(" console.log(email, password )", email, password);
       //Demande de token
       const data = await get_token(email, password);
       // Le provider ne renvoie la reponse que si Req du server a reussi
@@ -186,9 +185,6 @@ export const logUser = action(
         //On le met dans le store
         setUser(user);
 
-        // setUsername(user.username);
-
-        console.log("user is =", user);
         resetValues();
         setloading(false);
       }
@@ -198,7 +194,7 @@ export const logUser = action(
       //On supprime l'affichage du loading
       setloading(false);
       //On affiche l'erreur
-      setError("Oopss!");
+      setError(`Oops! Erreurs d'identifcation!`);
     }
   }
 );
@@ -281,7 +277,6 @@ export const autoConnect = async () => {
 
     const userToken = await getStoreData(USER_TOKEN_KEY);
 
-    // console.log("usertoken found = ", userToken);
     if (userToken) {
       try {
         const user = await get_user(userToken);
@@ -343,8 +338,6 @@ export const updateUser = action(
   async (store, data) => {
     //On affiche le loading
     // setloading(true);
-    console.log(data);
-
     // const password = data.password;
 
     //Recuperation de du user dans le
@@ -368,7 +361,6 @@ export const updateUser = action(
       if (data.password == "" && newUsername !== user.username) {
         //S'il est vide, on cre la request avec uniquement le username
         //Mais seulement si celui-ci est different du user.username stocker au login
-        console.log("yes null but username different");
         newUser = { username: data.username };
 
         //Le provider retourne la response.status
@@ -384,12 +376,10 @@ export const updateUser = action(
           });
         }
       } else if (data.password && newUsername) {
-        console.log("password a modifir");
         newUser = { username: data.username, password: data.password };
-        console.log("newUser is===", newUser);
+
         const response = await update_user(userToken, id, newUser);
         if (response == 200) {
-          console.log("modifié");
           //On supprime le token
           removeStoreData(USER_TOKEN_KEY);
 

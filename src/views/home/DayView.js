@@ -132,8 +132,6 @@ export default function DayView({ navigation, active = true}) {
                 if (a.time && b.time) {
                   const timeA = moment(a.time, "HH:mm:ss").toDate();
                   const timeB = moment(b.time, "HH:mm:ss").toDate();
-                  // console.log(timeA);
-                  // console.log(timeB);
                   return timeA - timeB;
                 }
               })

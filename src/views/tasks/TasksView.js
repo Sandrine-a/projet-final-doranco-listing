@@ -95,15 +95,12 @@ export default function TasksView({ route, navigation }) {
       setContent(route?.params.task.content);
       setTaskColor(route?.params.task.taskColor);
       setDay(moment.utc(route?.params.task.day).format("YYYY-MM-DD"));
-      // setTime(route?.params.task.time);
       setTime(
         route?.params.task.time
           ? moment(route?.params.task.time, "HH:mm:ss").format("HH:mm")
           : null
       );
-      // setTime(route?.params.task.time ? route?.params.task.time : null);
     }
-    // console.log("taskview day=", day);
     return () => {
       resetValues();
     };
@@ -241,10 +238,6 @@ export default function TasksView({ route, navigation }) {
 
             {visible ? (
               <CalendarItem
-                // onDayPress={(day) => {
-                //   console.log(day);
-                //   setDay(day.dateString);
-                // }}
                 day={day}
                 setDay={setDay}
                 coloredBackground={true}
@@ -309,10 +302,6 @@ export default function TasksView({ route, navigation }) {
                     {
                       text: "OK",
                       onPress: () => {
-                        console.log(
-                          "OK Pressed, suppression de la task id=",
-                          taskId
-                        );
                         deleteTask(taskId);
                         navigation.goBack();
                       },
@@ -329,9 +318,7 @@ export default function TasksView({ route, navigation }) {
               <Button
                 label={"Modifier"}
                 onPress={() => {
-                  console.log(taskId);
                   updateTask(taskId);
-                  // navigation.goBack();
                 }}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
               />

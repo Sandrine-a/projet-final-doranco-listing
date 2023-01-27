@@ -46,7 +46,6 @@ export default function RootNavigation() {
               name="TasksView"
               component={TasksView}
               options={({ route }) => ({
-                // title: "Créer un rdv",
                 title: route.params.title,
                 headerTitleStyle: {
                   fontFamily: FONTS.oswald.bold,
@@ -61,7 +60,7 @@ export default function RootNavigation() {
             <RootStack.Screen
               name="UserProfil"
               component={UserProfil}
-              options={{ headerShown: false, animation: "flip" }}
+              options={{ headerShown: false, animation: "fade" }}
             />
           </RootStack.Group>
         </>

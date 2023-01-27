@@ -22,7 +22,7 @@ import {
   setOnlyCloseButton,
 } from "../../store/bottomTabNavStore";
 
-export default function MonthView({ navigation, active = false }) {
+export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
   const { tasksList, day, month } = useStore(calendarStore);
 

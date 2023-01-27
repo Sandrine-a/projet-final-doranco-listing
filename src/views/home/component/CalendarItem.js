@@ -195,7 +195,6 @@ export default function CalendarItem({
           onDaySelect(day);
         }
         setDay(day.dateString);
-        // console.log(day);
       }}
       minDate={"2020-01-01"}
       markingType={"custom"}
