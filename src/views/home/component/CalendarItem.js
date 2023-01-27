@@ -92,12 +92,9 @@ export default function CalendarItem({
       });
     }
 
-    console.log("month is:", month);
     return () => {};
   }, [
     tasksList,
-    // month,
-    /* selectedDay */
   ]);
 
   /* Marquage dynamique si selection */
@@ -120,11 +117,9 @@ export default function CalendarItem({
   return (
     <Calendar
       firstDay={1}
-      // showWeekNumbers={true}
       // Specify style for calendar container element.
       style={{
         backgroundColor: coloredBackground ? COLORS.PRIMARY : "transparent",
-        // height: 300,
       }}
       // Specify theme properties to override specific styles for calendar parts.
       theme={{
@@ -161,11 +156,6 @@ export default function CalendarItem({
             paddingBottom: 4,
             flexDirection: "row",
             justifyContent: "space-around",
-            // backgroundColor: "red",
-            // alignItems: "center",
-            // justifyContent: "center",
-
-            // flexDirection: 'column',
           },
         },
 

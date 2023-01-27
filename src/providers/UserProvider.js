@@ -30,7 +30,6 @@ export const get_token = async (email, password) => {
 };
 
 export const get_user = async (userToken) => {
-  console.log("here");
   try {
     const response = await apiManager.get("/users/me", {
       headers: {

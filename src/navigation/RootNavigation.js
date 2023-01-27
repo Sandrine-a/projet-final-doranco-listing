@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MonthView from "../views/home/MonthViewCalendar";
+import MonthView from "../views/home/MonthView";
 import DayView from "../views/home/DayView";
 import TasksView from "../views/tasks/TasksView";
 import { FONTS } from "../theme";
