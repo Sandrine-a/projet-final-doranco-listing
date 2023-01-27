@@ -7,6 +7,7 @@ import {
   USER_TOKEN_KEY,
 } from "../settings";
 import {
+  delete_user,
   get_token,
   get_user,
   signup,
@@ -35,6 +36,7 @@ export const authenticationStore = map({
   error: null,
   passwordVisible: false,
   confirmPasswordVisible: false,
+  message: null,
 });
 
 /**
@@ -105,7 +107,7 @@ export const resetValues = action(
     store.setKey("confirmPassword", "");
     store.setKey("passwordVisible", false);
     store.setKey("confirmPasswordVisible", false);
-    store.setKey("error", null)
+    store.setKey("error", null);
   }
 );
 
@@ -161,6 +163,17 @@ export const setConfirmPasswordVisible = action(
 );
 
 /**
+ * Action permettant de mettre un message
+ */
+export const setMessage = action(
+  authenticationStore,
+  "setMessage",
+  (store, message) => {
+    store.setKey("message", message);
+  }
+);
+
+/**
  * Action permettant d'envoyer la request login
  */
 export const logUser = action(
@@ -184,6 +197,7 @@ export const logUser = action(
         const user = await get_user(data.token);
         //On le met dans le store
         setUser(user);
+        setUsername(user.username);
 
         resetValues();
         setloading(false);
@@ -359,7 +373,7 @@ export const updateUser = action(
       //Le password ne peut qu'etre vide ou avec 5 caractères mini
 
       if (data.password == "" && newUsername !== user.username) {
-        //S'il est vide, on cre la request avec uniquement le username
+        //Si password est vide, on cre la request avec uniquement le username
         //Mais seulement si celui-ci est different du user.username stocker au login
         newUser = { username: data.username };
 
@@ -367,6 +381,14 @@ export const updateUser = action(
         const response = await update_user(userToken, id, newUser);
         if (response == 200) {
           console.log("modifié");
+          //On change le username dans le store
+          setUsername(data.username);
+          //On affiche le message de confirmation
+          setMessage("Username modifié avec succès!");
+          //On repasse la valeur du message à null avec 5s de retard
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
         } else {
           setError({
             api: {
@@ -393,6 +415,48 @@ export const updateUser = action(
             },
           });
         }
+      }
+    } catch (error) {
+      //On supprime l'affichage du loading
+      setloading(false);
+      //On affiche l'erreur
+      setError("Oopss!");
+    }
+  }
+);
+
+/**
+ * Action permettant d'envoyer la request updateuser
+ */
+export const deleteUser = action(
+  authenticationStore,
+  "deleteUser",
+  async (store) => {
+    try {
+      //On affiche le loading
+      setloading(true);
+      //Recuperation du user dans le
+      const { user } = store.get();
+
+      const id = user.userId;
+
+      //Recuperation du token
+      const userToken = await getStoreData(USER_TOKEN_KEY);
+      //Le provider retourne la response.status
+      const response = await delete_user(userToken, id);
+      if (response == 200) {
+        setloading(false);
+        logout()
+        //On supprime le token
+        removeStoreData(USER_TOKEN_KEY);
+        resetValues();
+      } else {
+        setloading(false);
+        setError({
+          api: {
+            value: "Oopss! Erreur interne. Merci de retenter dans un instant.",
+          },
+        });
       }
     } catch (error) {
       //On supprime l'affichage du loading

@@ -36,7 +36,7 @@ import { authenticationStore } from "../../store/authenticationStore";
 export default function DayView({ navigation, active = true}) {
   const { tasksList, day, loading, noTask, currentDay } =
     useStore(calendarStore);
-  const { user } = useStore(authenticationStore);
+  const { user, username } = useStore(authenticationStore);
 
   useEffect(() => {
     initHomePage();
@@ -70,7 +70,8 @@ export default function DayView({ navigation, active = true}) {
         resizeMode="cover"
         style={{ height: 210 }}
       >
-        <HeaderText label={`Hello ${user.username}`} />
+         <HeaderText label={`Hello ${username}`} />
+        {/* <HeaderText label={`Hello ${user.username}`} /> */}
       </ImageBackground>
 
       <View

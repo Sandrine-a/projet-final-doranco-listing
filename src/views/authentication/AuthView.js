@@ -127,13 +127,13 @@ export default function AuthView() {
             EMAIL_FIELD_PATTERN={EMAIL_FIELD_PATTERN}
           />
           {/* </View> */}
-          {formContent == "login" ? (
+          {/* {formContent == "login" ? (
             <View style={styles.linkContainer}>
               <TouchableOpacity onPress={() => console.log("MDP oublié")}>
                 <Text style={styles.text}>Mot de passe oublié</Text>
               </TouchableOpacity>
             </View>
-          ) : null}
+          ) : null} */}
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
 

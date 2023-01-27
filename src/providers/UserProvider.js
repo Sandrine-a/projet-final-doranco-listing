@@ -59,3 +59,18 @@ export const update_user = async (userToken, id, newUser) => {
     throw Error(error);
   }
 };
+
+export const delete_user = async (userToken, id) => {
+  try {
+    const response = await apiManager.delete(`/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    throw Error(error);
+  }
+};
+
