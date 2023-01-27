@@ -28,13 +28,12 @@ import {
 } from "../../store/calendarStore";
 import Loader from "../../component/Loader";
 import {
-  setActive,
   setOnlyCloseButton,
   setViewActive,
 } from "../../store/bottomTabNavStore";
 import { authenticationStore } from "../../store/authenticationStore";
 
-export default function DayView({ navigation }) {
+export default function DayView({ navigation, active = true}) {
   const { tasksList, day, loading, noTask, currentDay } =
     useStore(calendarStore);
   const { user } = useStore(authenticationStore);
@@ -42,9 +41,8 @@ export default function DayView({ navigation }) {
   useEffect(() => {
     initHomePage();
     setOnlyCloseButton(false);
-    setViewActive({ name: "dayView", active: true });
+    setViewActive("DayView")
     return () => {
-      setViewActive({ name: "dayView", active: false });
     };
   }, []);
 
@@ -131,8 +129,6 @@ export default function DayView({ navigation }) {
 
             {tasksList
               .sort((a, b) => {
-                // console.log(a.time);
-                // console.log(b.time);
                 if (a.time && b.time) {
                   const timeA = moment(a.time, "HH:mm:ss").toDate();
                   const timeB = moment(b.time, "HH:mm:ss").toDate();

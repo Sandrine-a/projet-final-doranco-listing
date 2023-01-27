@@ -9,11 +9,11 @@ import { action, map } from "nanostores";
  */
 
 /**
- * Initialisation du store avec defauls values et formats
+ * Initialisation du store avec formation par defaut et valeurs
  */
 export const bottomTabStore = map({
   active: false,
-  viewActive: { name: "dayView", active: true },
+  viewActive: "",
   onlyCloseButton: false,
   view: "",
 });
@@ -30,7 +30,7 @@ export const setViewActive = action(
 );
 
 /**
- * Action permettant de changer l'active
+ * Action permettant de changer l'active 
  */
 export const setActive = action(
   bottomTabStore,

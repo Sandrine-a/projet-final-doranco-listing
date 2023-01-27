@@ -24,7 +24,7 @@ export const get_token = async (email, password) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
     throw Error(error);
   }
 };

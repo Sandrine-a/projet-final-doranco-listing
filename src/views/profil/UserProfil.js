@@ -15,10 +15,10 @@ import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useStore } from "@nanostores/react";
-import { calendarStore } from "../../store/calendarStore";
 import { FontAwesome, Fontisto, Ionicons } from "@expo/vector-icons";
 
-import { setOnlyCloseButton, setViewActive } from "../../store/bottomTabNavStore";
+import { calendarStore } from "../../store/calendarStore";
+import { setOnlyCloseButton } from "../../store/bottomTabNavStore";
 import HeaderText from "../home/component/HeaderText";
 import Button from "../../component/Button";
 import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../theme";
@@ -50,12 +50,7 @@ export default function UserProfil({ navigation }) {
 
   useEffect(() => {
     setOnlyCloseButton(false);
-    setViewActive({ name: "monthView", active: true });
-    // console.log(user.email);
-    // console.log(user.username);
-
     return () => {
-      setViewActive({ name: "monthView", active: false });
     };
   }, [user]);
 

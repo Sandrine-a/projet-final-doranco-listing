@@ -110,7 +110,6 @@ export default function TasksView({ route, navigation }) {
   }, [visible, route?.params?.task]);
 
   useEffect(() => {
-    console.log("canBack ?? ", canBack);
     if (canBack) {
       navigation.goBack();
     }

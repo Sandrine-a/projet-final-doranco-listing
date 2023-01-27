@@ -20,10 +20,9 @@ import { useStore } from "@nanostores/react";
 import DayBoard from "./component/DayBoard";
 import {
   setOnlyCloseButton,
-  setViewActive,
 } from "../../store/bottomTabNavStore";
 
-export default function MonthView({ navigation }) {
+export default function MonthView({ navigation, active = false }) {
   const { width, height } = useWindowDimensions();
   const { tasksList, day, month } = useStore(calendarStore);
 
@@ -35,9 +34,7 @@ export default function MonthView({ navigation }) {
 
   useEffect(() => {
     setOnlyCloseButton(false);
-    setViewActive({ name: "dayView", active: true });
     return () => {
-      setViewActive({ name: "dayView", active: false });
     };
   }, [tasksList, month]);
 

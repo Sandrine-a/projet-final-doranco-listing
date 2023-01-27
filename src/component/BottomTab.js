@@ -5,8 +5,11 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useStore } from "@nanostores/react";
+
 
 import {
   boxShadow,
@@ -17,33 +20,19 @@ import {
   SIZES,
   TEXT_COLOR,
 } from "../theme";
-import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
-import { useEffect } from "react";
 
-export default function BottomTab({ onlyCloseButton = false, activeView = "dayView" }) {
+import { bottomTabStore, setViewActive } from "../store/bottomTabNavStore";
+
+export default function BottomTab({ onlyCloseButton = false }) {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
-  const [calendarViewActive, setCalendarViewActive] = useState(true);
-  const [userProfilViewActive, setUserProfilViewActive] = useState(false);
+  const { viewActive } = useStore(bottomTabStore);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    // console.log("calendarViewActive ==", calendarViewActive);
-    console.log("userProfilViewActive ==", userProfilViewActive);
-    return () => {
-      // setCalendarViewActive(true)
-      // setUserProfilViewActive(false)
-    };
-  }, [navigation]);
-
-  // useEffect(() => {
-  //   if(userProfilViewActive == true) {
-  //     setCalendarViewActive(false)
-  //   }
-  //   return () => {};
-  // }, [userProfilViewActive]);
+    return () => {};
+  }, []);
 
   return (
     <View
@@ -62,8 +51,7 @@ export default function BottomTab({ onlyCloseButton = false, activeView = "dayVi
         >
           <TouchableOpacity
             onPress={() => {
-              console.log("calendar presse");
-              setCalendarViewActive(true);
+              setViewActive("DayView");
               navigation.navigate("DayView");
             }}
           >
@@ -71,7 +59,9 @@ export default function BottomTab({ onlyCloseButton = false, activeView = "dayVi
               name="calendar"
               size={ICON_SIZES.base}
               color={
-                calendarViewActive ? COLORS.SECONDARY_DARK : TEXT_COLOR.PRIMARY
+                viewActive == "DayView" || viewActive == "MonthView"
+                  ? COLORS.SECONDARY_DARK
+                  : TEXT_COLOR.PRIMARY
               }
             />
           </TouchableOpacity>
@@ -123,9 +113,7 @@ export default function BottomTab({ onlyCloseButton = false, activeView = "dayVi
         >
           <TouchableOpacity
             onPress={() => {
-              console.log("userpress presse");
-              setUserProfilViewActive(true);
-              // setCalendarViewActive(false);
+              setViewActive("UserProfil");
               navigation.navigate("UserProfil");
             }}
           >
@@ -133,7 +121,7 @@ export default function BottomTab({ onlyCloseButton = false, activeView = "dayVi
               name="user"
               size={ICON_SIZES.base}
               color={
-                userProfilViewActive
+                viewActive == "UserProfil"
                   ? COLORS.SECONDARY_DARK
                   : TEXT_COLOR.PRIMARY
               }

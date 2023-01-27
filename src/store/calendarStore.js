@@ -149,7 +149,6 @@ export const initHomePage = action(
     try {
       //On affiche le loading
       setloading(true);
-      console.log("INIT");
       const userToken = await getStoreData(USER_TOKEN_KEY);
 
       const user = await getStoreData(USER_KEY);
