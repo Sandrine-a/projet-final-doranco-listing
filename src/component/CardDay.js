@@ -56,7 +56,6 @@ export default function CardDay({ task }) {
         boxShadow,
       ]}
       onPress={() => {
-        console.log(task);
         navigation.navigate("TasksView", {
           task: task,
           title: "Modifier une tâche",

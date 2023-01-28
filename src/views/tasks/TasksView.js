@@ -34,7 +34,7 @@ import {
   TEXT_COLOR,
 } from "../../theme";
 import ColorPreview from "./component/ColorPreview";
-import CalendarItem from "../home/component/CalendarItem";
+import CalendarItem from "../../component/CalendarItem";
 import Button from "../../component/Button.js";
 import {
   addNewTask,
@@ -102,7 +102,7 @@ export default function TasksView({ route, navigation }) {
       );
     }
     return () => {
-      resetValues();
+      // resetValues();
     };
   }, [visible, route?.params?.task]);
 
@@ -110,7 +110,9 @@ export default function TasksView({ route, navigation }) {
     if (canBack) {
       navigation.goBack();
     }
-    return () => {};
+    return () => {
+      resetValues();
+    };
   }, [canBack]);
 
   const taskColorTheme = (color) => {

@@ -6,10 +6,10 @@ import {
   Agenda,
   LocaleConfig,
 } from "react-native-calendars";
-import { FONTS, TEXT_COLOR, COLORS } from "../../../theme";
+import { FONTS, TEXT_COLOR, COLORS } from "../theme";
 import moment from "moment";
 import { useStore } from "@nanostores/react";
-import { calendarStore, setMonth } from "../../../store/calendarStore";
+import { calendarStore, setMonth } from "../store/calendarStore";
 
 LocaleConfig.locales["fr"] = {
   monthNames: [

@@ -7,20 +7,18 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import moment from "moment";
 
 import { COLORS, FONTS, SIZES } from "../../theme";
 import BottomTab from "../../component/BottomTab";
 import FilterButton from "./component/FilterButton";
-import Calendar from "./component/CalendarItem";
+import Calendar from "../../component/CalendarItem";
 import { calendarStore, setDay } from "../../store/calendarStore";
 import { useStore } from "@nanostores/react";
 import DayBoard from "./component/DayBoard";
-import {
-  setOnlyCloseButton,
-} from "../../store/bottomTabNavStore";
+import { setOnlyCloseButton } from "../../store/bottomTabNavStore";
 
 export default function MonthView({ navigation }) {
   const { width, height } = useWindowDimensions();
@@ -34,8 +32,7 @@ export default function MonthView({ navigation }) {
 
   useEffect(() => {
     setOnlyCloseButton(false);
-    return () => {
-    };
+    return () => {};
   }, [tasksList, month]);
 
   useEffect(() => {
