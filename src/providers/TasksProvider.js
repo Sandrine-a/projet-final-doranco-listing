@@ -16,18 +16,12 @@ export const get_all_tasks = async (usertoken) => {
 };
 
 export const create_task = async (usertoken, task) => {
-  console.log("create :::", task);
   try {
     const response = await apiManager.post("/tasks", task, {
       headers: {
         Authorization: `Bearer ${usertoken}`,
       },
     });
-    console.log(
-      "response.data, response.status ==",
-      response.data,
-      response.status
-    );
     return response.data;
   } catch (error) {
     console.log("Error", error);
@@ -42,11 +36,6 @@ export const delete_task = async (userToken, id) => {
         Authorization: `Bearer ${userToken}`,
       },
     });
-    console.log(
-      "response.data, response.status ==",
-      response.data,
-      response.status
-    );
     return response;
   } catch (error) {
     console.log("Error", error);
@@ -61,11 +50,6 @@ export const update_task = async (userToken, id, newTask) => {
         Authorization: `Bearer ${userToken}`,
       },
     });
-    console.log(
-      "response.data, response.status ==",
-      response.data,
-      response.status
-    );
     return response;
   } catch (error) {
     console.log("Error", error);
