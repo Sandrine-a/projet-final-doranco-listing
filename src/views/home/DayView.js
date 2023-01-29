@@ -33,7 +33,7 @@ import {
 } from "../../store/bottomTabNavStore";
 import { authenticationStore } from "../../store/authenticationStore";
 
-export default function DayView({ navigation, active = true}) {
+export default function DayView({ navigation, active = true }) {
   const { tasksList, day, loading, noTask, currentDay } =
     useStore(calendarStore);
   const { user, username } = useStore(authenticationStore);
@@ -41,9 +41,8 @@ export default function DayView({ navigation, active = true}) {
   useEffect(() => {
     initHomePage();
     setOnlyCloseButton(false);
-    setViewActive("DayView")
-    return () => {
-    };
+    setViewActive("DayView");
+    return () => {};
   }, []);
 
   const NoTask = () => {
@@ -70,13 +69,45 @@ export default function DayView({ navigation, active = true}) {
         resizeMode="cover"
         style={{ height: 210 }}
       >
-         <HeaderText label={`Hello ${username}`} />
+        <HeaderText label={`Hello ${username}`} />
         {/* <HeaderText label={`Hello ${user.username}`} /> */}
+
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            zIndex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: FONTS.londrinaSolid.regular,
+              fontSize: SIZES.large,
+              color: TEXT_COLOR.PRIMARY
+            }}
+          >
+            Que faire ce jour ?
+          </Text>
+        </View>
       </ImageBackground>
 
       <View
         style={{
-          marginTop: 45,
+          justifyContent: "center",
+          alignItems: "center",
+          height: 50,
+        }}
+      >
+        <Text style={{ fontFamily: FONTS.oswald.medium, fontSize: SIZES.base, color: COLORS.SECONDARY_DARK }}>
+          Cliquer sur + pour ajouter une tâche.
+        </Text>
+      </View>
+
+      <View
+        style={{
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",

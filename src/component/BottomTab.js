@@ -51,7 +51,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
         >
           <TouchableOpacity
             onPress={() => {
-              // setViewActive("DayView");
+              setViewActive("DayView");
               navigation.navigate("DayView");
             }}
           >
@@ -113,7 +113,7 @@ export default function BottomTab({ onlyCloseButton = false }) {
         >
           <TouchableOpacity
             onPress={() => {
-              // setViewActive("UserProfil");
+              setViewActive("UserProfil");
               navigation.navigate("UserProfil");
             }}
           >

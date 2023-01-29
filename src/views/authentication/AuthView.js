@@ -98,7 +98,7 @@ export default function AuthView() {
             >
               {formContent == "signup"
                 ? "Bienvenue sur"
-                : "Content de vous revoir sur"}
+                : "Content de vous voir sur"}
             </Text>
             <Text
               style={{

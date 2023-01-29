@@ -19,7 +19,7 @@ import { calendarStore, setDay } from "../../store/calendarStore";
 import { useStore } from "@nanostores/react";
 import DayBoard from "./component/DayBoard";
 import {
-  setOnlyCloseButton,
+  setOnlyCloseButton, setViewActive,
 } from "../../store/bottomTabNavStore";
 
 export default function MonthView({ navigation }) {
@@ -34,6 +34,7 @@ export default function MonthView({ navigation }) {
 
   useEffect(() => {
     setOnlyCloseButton(false);
+    setViewActive("MonthView")
     return () => {
     };
   }, [tasksList, month]);
@@ -97,7 +98,7 @@ export default function MonthView({ navigation }) {
 
       <View
         style={{
-          marginTop: 45,
+          marginTop: 50,
           marginBottom: SIZES.large,
           paddingHorizontal: SIZES.small,
           flexDirection: "row",
