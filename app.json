@@ -2,7 +2,7 @@
   "expo": {
     "owner": "sandrine_a971",
     "name": "Listing",
-    "slug": "listing",
+    "slug": "Listing",
     "version": "1.0.0",
     "description": "Application for task management.",
     "orientation": "portrait",
@@ -28,7 +28,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
