@@ -19,7 +19,7 @@ import { USER_KEY, USER_TOKEN_KEY } from "../settings";
  */
 
 /**
- * Initialisation du store avec defauls values et formats
+ * Initialisation du store avec defaults values et formats
  */
 export const calendarStore = map({
   user:"",

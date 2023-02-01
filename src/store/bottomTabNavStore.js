@@ -9,7 +9,7 @@ import { action, map } from "nanostores";
  */
 
 /**
- * Initialisation du store avec formation par defaut et valeurs
+ * Initialisation du store avec initialisation par defauts et valeurs
  */
 export const bottomTabStore = map({
   active: false,

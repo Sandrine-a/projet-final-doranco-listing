@@ -2,8 +2,8 @@
   "expo": {
     "owner": "sandrine_a971",
     "name": "Listing",
-    "slug": "Listing",
-    "version": "1.0.1",
+    "slug": "listing",
+    "version": "1.0.0",
     "description": "Application for task management.",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,11 +23,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.listing.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.sandrine_a971.Listing"
     },
     "web": {
       "favicon": "./assets/favicon.png"

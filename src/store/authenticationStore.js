@@ -40,7 +40,7 @@ export const authenticationStore = map({
 });
 
 /**
- * Action permettant le contenu du formulaire et des boutons
+ * Action permettant le changement du contenu du formulaire et des boutons
  */
 export const setFormContent = action(
   authenticationStore,
@@ -51,7 +51,7 @@ export const setFormContent = action(
 );
 
 /**
- * Action permettant l'username
+ * Action permettant le changelent du username
  */
 export const setUsername = action(
   authenticationStore,
@@ -298,7 +298,6 @@ export const autoConnect = async () => {
           setUser(user);
           setUsername(user.username);
           storeData(USER_KEY, user.username);
-          // storeData(USER_EMAIL_KEY, user.email);
         }
       } catch (e) {
         console.log("ERROR =", e);
@@ -313,7 +312,6 @@ export const autoConnect = async () => {
       return;
     }
 
-    //On recupère le token
   } catch (e) {
     // error reading value
     throw Error(`AsyncStorage Error: Can't value for USER_TOKEN: ${e}`);
