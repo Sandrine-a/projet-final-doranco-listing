@@ -11,3 +11,5 @@ export const USERNAME_KEY = "username";
 export const USER_EMAIL_KEY = "email";
 
 export const USER_TOKEN_KEY = "token";
+
+export const PRIVACY_POLICY = "https://www.privacypolicies.com/live/805608e8-efbb-46d9-afae-5e9163a79cb5"

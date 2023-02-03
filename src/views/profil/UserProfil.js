@@ -17,6 +17,7 @@ import { useForm, Controller } from "react-hook-form";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useStore } from "@nanostores/react";
 import { FontAwesome, Fontisto, Ionicons } from "@expo/vector-icons";
+import * as WebBrowser from "expo-web-browser";
 
 import { calendarStore } from "../../store/calendarStore";
 import { setOnlyCloseButton } from "../../store/bottomTabNavStore";
@@ -35,6 +36,7 @@ import {
 import { useState } from "react";
 import { setActive } from "../../store/bottomTabNavStore";
 import { setViewActive } from "../../store/bottomTabNavStore";
+import { PRIVACY_POLICY } from "../../settings";
 
 export default function UserProfil({ navigation }) {
   const {
@@ -52,6 +54,7 @@ export default function UserProfil({ navigation }) {
   const [usernameInputVisible, setUsernameInputVisible] = useState(false);
   const [passwordInputVisible, setPasswordInputVisible] = useState(false);
   const [buttonVisible, setbuttonVisible] = useState(false);
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
     setOnlyCloseButton(false);
@@ -72,6 +75,13 @@ export default function UserProfil({ navigation }) {
       password: password,
     },
   });
+
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync(PRIVACY_POLICY, {
+      toolbarColor: COLORS.PRIMARY_DARK,
+    });
+    setResult(result);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -310,42 +320,63 @@ export default function UserProfil({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(
-                "ATTENTION SUPPRESSION DÉFINTIVE",
-                "Si vous confirmez la suppression, toutes vos tâches et votre compte seront supprimés",
-                [
-                  {
-                    text: "Annuler",
-                    onPress: () => {},
-                    style: "cancel",
-                  },
-                  {
-                    text: "OK",
-                    onPress: () => {
-                      deleteUser();
-                    },
-                  },
-                ]
-              );
-            }}
-            style={{
-              marginTop: SIZES.large,
-              alignSelf: "flex-end",
-              width: 150,
-            }}
-          >
-            <Text
+          <View style={{}}>
+            <TouchableOpacity
               style={{
-                fontFamily: FONTS.mukta.regular,
-                marginRight: SIZES.xs,
-                color: TEXT_COLOR.SECONDARY,
+                marginTop: SIZES.large,
+                alignSelf: "flex-end",
+                // width: 150,
+              }}
+              onPress={_handlePressButtonAsync}
+            >
+              <Text
+                style={{
+                  fontFamily: FONTS.mukta.regular,
+                  marginRight: SIZES.xs,
+                  color: TEXT_COLOR.SECONDARY,
+                }}
+              >
+                Politique de confidentialité
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "ATTENTION SUPPRESSION DÉFINTIVE",
+                  "Si vous confirmez la suppression, toutes vos tâches et votre compte seront supprimés",
+                  [
+                    {
+                      text: "Annuler",
+                      onPress: () => {},
+                      style: "cancel",
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        deleteUser();
+                      },
+                    },
+                  ]
+                );
+              }}
+              style={{
+                marginTop: SIZES.large,
+                alignSelf: "flex-end",
+                // width: 150,
               }}
             >
-              Supprimer mon compte
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontFamily: FONTS.mukta.regular,
+                  marginRight: SIZES.xs,
+                  color: TEXT_COLOR.SECONDARY,
+                }}
+              >
+                Supprimer mon compte
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <BottomTab />
