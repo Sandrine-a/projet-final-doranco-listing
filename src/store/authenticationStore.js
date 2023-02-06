@@ -10,6 +10,8 @@ import {
   delete_user,
   get_token,
   get_user,
+  reset_password,
+  send_forgot,
   signup,
   update_user,
 } from "../providers/UserProvider";
@@ -37,6 +39,8 @@ export const authenticationStore = map({
   passwordVisible: false,
   confirmPasswordVisible: false,
   message: null,
+  canGoBack: false,
+  urlData: null,
 });
 
 /**
@@ -170,6 +174,17 @@ export const setMessage = action(
   "setMessage",
   (store, message) => {
     store.setKey("message", message);
+  }
+);
+
+/**
+ * Action permettant de l'url pour deepLinkin
+ */
+export const setUrlData = action(
+  authenticationStore,
+  "setUrlData",
+  (store, urlData) => {
+    store.setKey("urlData", urlData);
   }
 );
 
@@ -311,7 +326,6 @@ export const autoConnect = async () => {
 
       return;
     }
-
   } catch (e) {
     // error reading value
     throw Error(`AsyncStorage Error: Can't value for USER_TOKEN: ${e}`);
@@ -444,7 +458,7 @@ export const deleteUser = action(
       const response = await delete_user(userToken, id);
       if (response == 200) {
         setloading(false);
-        logout()
+        logout();
         //On supprime le token
         removeStoreData(USER_TOKEN_KEY);
         resetValues();
@@ -461,6 +475,87 @@ export const deleteUser = action(
       setloading(false);
       //On affiche l'erreur
       setError("Oopss!");
+    }
+  }
+);
+
+/**
+ * Action permettant d'envoyer l'email pour reset password
+ */
+export const sendForgotEmail = action(
+  authenticationStore,
+  "sendForgotEmail",
+  async (store, data) => {
+    try {
+      //On affiche le loading
+      setloading(true);
+
+      //On met l'email dans le store
+      setEmail(data.email);
+
+      const { email } = store.get();
+
+      const response = await send_forgot(email);
+
+      if (response == 200) {
+        store.setKey("canGoBack", true);
+        store.setKey("canGoBack", false);
+        setloading(false);
+      } else {
+        setloading(false);
+      }
+      //Remise à Default value email
+      setEmail("");
+    } catch (error) {
+      setloading(false);
+      //On affiche l'erreur
+      setError(`Oops! Erreur: identiant inconnu.`);
+    }
+  }
+);
+
+/**
+ * Action permettant d'envoyer l'email pour reset password
+ */
+export const resetPassword = action(
+  authenticationStore,
+  "resetPassword",
+  async (store, data) => {
+    try {
+      //On affiche le loading
+      setloading(true);
+      //On récupère l'id et le token dans l'urlData du store
+      const { urlData } = store.get();
+
+      const id = urlData.queryParams.id;
+      const token = urlData.queryParams.token;
+      const password = data.password;
+
+      //Le provider retourne la response.status
+      const response = await reset_password(id, token, password);
+      if (response == 200) {
+        console.log("OK MODIF Done");
+        setloading(false);
+
+        setMessage("Mot de passe modifié avec success, vous pouvez vous connecter.")
+
+        setUrlData(null);
+        resetValues();
+      } else {
+        setloading(false);
+        setUrlData(null);
+        setError("Oops!")
+        // setError({
+        //   api: {
+        //     value: "Oopss! Erreur interne. Merci de retenter dans un instant.",
+        //   },
+        // });
+      }
+    } catch (error) {
+      //On supprime l'affichage du loading
+      setloading(false);
+      //On affiche l'erreur
+      setError("Oopss!  Erreur lors de la modification du mot de passe");
     }
   }
 );

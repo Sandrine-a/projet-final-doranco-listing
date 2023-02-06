@@ -9,9 +9,12 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm } from "react-hook-form";
+// import * as Linking from "expo-linking";
+import { useRoute } from "@react-navigation/native";
+
 import { COLORS, FONTS, SIZES, TEXT_COLOR } from "../../theme";
 import Form from "./component/Form";
 import Button from "../../component/Button";
@@ -23,8 +26,9 @@ import {
   resetValues,
   setFormContent,
 } from "../../store/authenticationStore";
+import { EMAIL_FIELD_PATTERN } from "../../settings";
 
-export default function AuthView() {
+export default function AuthView({ navigation }) {
   const { width, height } = useWindowDimensions();
   const {
     formContent,
@@ -52,13 +56,39 @@ export default function AuthView() {
     },
   });
 
+
+  // const [urlData, setUrlData] = useState(null);
+
+  // const url = Linking.useURL();
+
+  // const handleDeepLink = (event) => {
+  //   let data = Linking.parse(event.url);
+
+  //   console.log("data ==", data);
+  //   setUrlData(data);
+  // };
+
+  // useEffect(() => {
+  //   const getInitialURL = async () => {
+  //     const initialUrl = await Linking.getInitialURL();
+  //     if (initialUrl) setUrlData(Linking.parse(initialUrl));
+  //   };
+
+  //   const urlListener = Linking.addEventListener("url", handleDeepLink);
+  //   if (!urlData) {
+  //     getInitialURL();
+  //   }
+
+  //   return () => {
+  //     urlListener.remove();
+  //   };
+  // }, []);
+
   useEffect(() => {
     return () => {
       reset();
     };
   }, []);
-
-  const EMAIL_FIELD_PATTERN = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,6 +141,10 @@ export default function AuthView() {
             </Text>
           </View>
 
+          {/* <Text>
+            {urlData ? JSON.stringify(urlData) : "APP NOT OPEN WITH DEEPLINK"}
+          </Text> */}
+
           {/* <View style={styles.centerContainer}> */}
           <Form
             formContent={formContent}
@@ -127,13 +161,20 @@ export default function AuthView() {
             EMAIL_FIELD_PATTERN={EMAIL_FIELD_PATTERN}
           />
           {/* </View> */}
-          {/* {formContent == "login" ? (
+          {formContent == "login" ? (
             <View style={styles.linkContainer}>
-              <TouchableOpacity onPress={() => console.log("MDP oublié")}>
+              <TouchableOpacity
+                onPress={() => {
+                  //On ouvre la modale
+                  navigation.navigate("ForgotPasswordView", {
+                    email: email,
+                  });
+                }}
+              >
                 <Text style={styles.text}>Mot de passe oublié</Text>
               </TouchableOpacity>
             </View>
-          ) : null} */}
+          ) : null}
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
 
@@ -232,7 +273,7 @@ const styles = StyleSheet.create({
     color: "red",
     paddingHorizontal: SIZES.xs,
     fontFamily: FONTS.mukta.regular,
-    textAlign: "center"
+    textAlign: "center",
     // fontSize: SIZES.base
   },
 });

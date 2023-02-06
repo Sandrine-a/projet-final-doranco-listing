@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootNavigation from "./src/navigation/RootNavigation.js";
+import * as Linking from "expo-linking";
 
 import {
   useFonts as useOswald,
@@ -30,7 +31,6 @@ import {
 
 import { CARDS, COLORS, PRIMARY_COLOR_DARK, TEXT_COLOR } from "./src/theme.js";
 
-
 const BaseTheme = {
   ...DefaultTheme,
   dark: false,
@@ -44,6 +44,8 @@ const BaseTheme = {
     notification: "rgb(255, 69, 58)",
   },
 };
+
+const prefix = Linking.createURL("/api/v1/users/");
 
 export default function App() {
   //Je charge la police Lobser
@@ -71,9 +73,23 @@ export default function App() {
     return;
   }
 
+
+  // const linking = {
+  //   prefixes: [Linking.createURL('/'), 'https://app.example.com'],
+  // };
+
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        Reset: "reset_password"
+      }
+    }
+  };
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer theme={BaseTheme}>
+      <NavigationContainer theme={BaseTheme} linking={linking}>
         <RootNavigation />
         <StatusBar backgroundColor={COLORS.PRIMARY_DARK} />
       </NavigationContainer>

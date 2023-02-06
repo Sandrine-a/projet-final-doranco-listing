@@ -74,3 +74,29 @@ export const delete_user = async (userToken, id) => {
   }
 };
 
+export const send_forgot = async (email) => {
+  try {
+    const response = await apiManager.post("/users/forgot_password", {
+      email: email,
+    });
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    throw Error(error);
+  }
+};
+
+export const reset_password = async (id, token, password) => {
+  try {
+    const response = await apiManager.put(
+      `/users/reset_password/?id=${id}&token=${token}`,
+      {
+        password: password,
+      }
+    );
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    throw Error(error);
+  }
+};
