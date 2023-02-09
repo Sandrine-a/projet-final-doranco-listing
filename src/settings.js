@@ -1,9 +1,8 @@
-export const API_ENDPOINT_IOS ="http://localhost:3000/api/v1";
+// export const API_ENDPOINT_IOS ="http://localhost:3000/api/v1";
 // export const API_ENDPOINT_ANDROID ="http://10.0.2.2:3000/api/v1";
-export const API_ENDPOINT_ANDROID ="http://192.168.1.19:3000/api/v1";
 
-// export const API_ENDPOINT_IOS ="https://listing-db.herokuapp.com/api/v1";
-// export const API_ENDPOINT_ANDROID ="https://listing-db.herokuapp.com/api/v1";
+export const API_ENDPOINT_IOS ="https://listing-db.herokuapp.com/api/v1";
+export const API_ENDPOINT_ANDROID ="https://listing-db.herokuapp.com/api/v1";
 
 export const USER_KEY = "user";
 
