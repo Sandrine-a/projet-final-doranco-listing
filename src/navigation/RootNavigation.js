@@ -17,6 +17,7 @@ import {
 } from "../store/authenticationStore";
 import UserProfil from "../views/profil/UserProfil";
 import ForgotPasswordView from "../views/authentication/ForgotPasswordView";
+import ResetPasswordView from "../views/authentication/ResetPasswordView";
 
 export default function RootNavigation() {
   // const RootStack = createNativeStackNavigator();
@@ -68,7 +69,7 @@ export default function RootNavigation() {
           />
           <RootStack.Screen
             name="Reset"
-            component={ForgotPasswordView}
+            component={ResetPasswordView}
             options={{ presentation: "transparentModal", animation: "fade" }}
           />
         </RootStack.Group>

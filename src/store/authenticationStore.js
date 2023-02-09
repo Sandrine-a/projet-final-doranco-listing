@@ -105,13 +105,13 @@ export const resetValues = action(
   authenticationStore,
   "resetValues",
   (store) => {
-    // store.setKey("username", "");
     store.setKey("email", "");
     store.setKey("password", "");
     store.setKey("confirmPassword", "");
     store.setKey("passwordVisible", false);
     store.setKey("confirmPasswordVisible", false);
     store.setKey("error", null);
+    store.setKey("canGoBack", false);
   }
 );
 
@@ -174,6 +174,17 @@ export const setMessage = action(
   "setMessage",
   (store, message) => {
     store.setKey("message", message);
+  }
+);
+
+/**
+ * Action permettant de mettre le go back
+ */
+export const setCanGoBack = action(
+  authenticationStore,
+  "setCanGoBack",
+  (store, canGoBacK) => {
+    store.setKey("canGoBack", canGoBacK);
   }
 );
 
@@ -490,22 +501,22 @@ export const sendForgotEmail = action(
       //On affiche le loading
       setloading(true);
 
-      //On met l'email dans le store
-      setEmail(data.email);
+      //On met l'email dans le store en lowercase
+      setEmail(data.email.toLowerCase());
 
       const { email } = store.get();
 
       const response = await send_forgot(email);
 
       if (response == 200) {
-        store.setKey("canGoBack", true);
-        store.setKey("canGoBack", false);
+        setCanGoBack(true);
         setloading(false);
+        // resetValues();
       } else {
         setloading(false);
       }
       //Remise à Default value email
-      setEmail("");
+      // setEmail("");
     } catch (error) {
       setloading(false);
       //On affiche l'erreur
@@ -534,28 +545,24 @@ export const resetPassword = action(
       //Le provider retourne la response.status
       const response = await reset_password(id, token, password);
       if (response == 200) {
-        console.log("OK MODIF Done");
         setloading(false);
+        setMessage(
+          "Mot de passe modifié avec success, vous pouvez vous connecter."
+        );
 
-        setMessage("Mot de passe modifié avec success, vous pouvez vous connecter.")
-
+        //Remise des valeurs à défault
         setUrlData(null);
         resetValues();
-      } else {
-        setloading(false);
-        setUrlData(null);
-        setError("Oops!")
-        // setError({
-        //   api: {
-        //     value: "Oopss! Erreur interne. Merci de retenter dans un instant.",
-        //   },
-        // });
       }
     } catch (error) {
+      setUrlData(null);
       //On supprime l'affichage du loading
       setloading(false);
       //On affiche l'erreur
-      setError("Oopss!  Erreur lors de la modification du mot de passe");
+      // setError("Oopss!  Erreur lors de la modification du mot de passe!!");
+      setError(
+        "Oops! Le lien semble avoir expiré, merci de recommencer la procédure."
+      );
     }
   }
 );

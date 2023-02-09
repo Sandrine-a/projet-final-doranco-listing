@@ -56,37 +56,10 @@ export default function AuthView({ navigation }) {
     },
   });
 
-
-  // const [urlData, setUrlData] = useState(null);
-
-  // const url = Linking.useURL();
-
-  // const handleDeepLink = (event) => {
-  //   let data = Linking.parse(event.url);
-
-  //   console.log("data ==", data);
-  //   setUrlData(data);
-  // };
-
-  // useEffect(() => {
-  //   const getInitialURL = async () => {
-  //     const initialUrl = await Linking.getInitialURL();
-  //     if (initialUrl) setUrlData(Linking.parse(initialUrl));
-  //   };
-
-  //   const urlListener = Linking.addEventListener("url", handleDeepLink);
-  //   if (!urlData) {
-  //     getInitialURL();
-  //   }
-
-  //   return () => {
-  //     urlListener.remove();
-  //   };
-  // }, []);
-
   useEffect(() => {
     return () => {
       reset();
+      resetValues()
     };
   }, []);
 
@@ -166,9 +139,7 @@ export default function AuthView({ navigation }) {
               <TouchableOpacity
                 onPress={() => {
                   //On ouvre la modale
-                  navigation.navigate("ForgotPasswordView", {
-                    email: email,
-                  });
+                  navigation.navigate("ForgotPasswordView");
                 }}
               >
                 <Text style={styles.text}>Mot de passe oublié</Text>

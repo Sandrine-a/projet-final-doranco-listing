@@ -10,7 +10,7 @@ export const signup = async (email, username, password) => {
 
     return response.data;
   } catch (error) {
-    console.log("Log error userprovider =", error.response.data);
+    console.log(error.response.data);
     throw Error(error.response.data);
   }
 };
@@ -37,7 +37,7 @@ export const get_user = async (userToken) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
     throw Error(error);
   }
 };
@@ -56,6 +56,7 @@ export const update_user = async (userToken, id, newUser) => {
     return response.status;
   } catch (error) {
     console.log(error);
+    console.log(error.response.data);
     throw Error(error);
   }
 };
@@ -81,7 +82,7 @@ export const send_forgot = async (email) => {
     });
     return response.status;
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
     throw Error(error);
   }
 };
@@ -96,7 +97,7 @@ export const reset_password = async (id, token, password) => {
     );
     return response.status;
   } catch (error) {
-    console.log(error);
-    throw Error(error);
+    console.log(error.response.data);
+    throw Error(error.response.data);
   }
 };

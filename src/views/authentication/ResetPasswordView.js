@@ -1,5 +1,6 @@
 import {
   Animated,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -23,13 +24,14 @@ import {
   setEmail,
   setMessage,
   setPasswordVisible,
+  setUrlData,
 } from "../../store/authenticationStore";
 import Form from "./component/Form";
 import { EMAIL_FIELD_PATTERN } from "../../settings";
 import Button from "../../component/Button";
 import { useEffect } from "react";
 
-export default function ForgotPasswordView({ navigation, route }) {
+export default function ResetPasswordView({ navigation, route }) {
   const { current } = useCardAnimation();
   // const { email, password } = route?.params;
   const {
@@ -39,7 +41,6 @@ export default function ForgotPasswordView({ navigation, route }) {
     urlData,
     error,
     message,
-    email,
     password,
   } = useStore(authenticationStore);
   const routeName = route.name;
@@ -51,20 +52,18 @@ export default function ForgotPasswordView({ navigation, route }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: email,
+      password: password,
     },
   });
 
   useEffect(() => {
-      setCanGoBack(false);
-      setEmail("");
-
-      return () => {
-        reset();
-        setEmail("");
-      };
-    },
-    []);
+    setMessage(null);
+    return () => {
+      reset();
+      setUrlData(null);
+      resetValues();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -72,12 +71,12 @@ export default function ForgotPasswordView({ navigation, route }) {
         style={[
           StyleSheet.absoluteFill,
           {
-            backgroundColor: "rgba(153, 153, 153, 0.9)",
+            backgroundColor: "rgba(153, 153, 153, 1)",
           },
         ]}
         onPress={() => {
-          resetValues();
-          navigation.goBack();
+          // resetValues();
+          navigation.navigate("AuthView");
         }}
       />
 
@@ -99,80 +98,111 @@ export default function ForgotPasswordView({ navigation, route }) {
           ],
         }}
       >
+        <View style={[styles.logoContainer, styles.section, { height: 80 }]}>
+          <Image
+            style={styles.logo}
+            source={require("../../../assets/logo.png")}
+            resizeMode={"contain"}
+          />
+        </View>
+
         <View style={styles.section}>
-          {!canGoBack ? (
-            <Text
-              style={{
-                fontFamily: FONTS.mukta.regular,
-                color: TEXT_COLOR.PRIMARY,
-              }}
-            >
-              Entrez votre adresse email et nous vous enverrons un lien pour
-              réinitialiser votre mot de passe.
-            </Text>
-          ) : (
-            <Text style={styles.label}>
-              Le mail de réinitialisation a bien été envoyé sur : {email}.
-            </Text>
-          )}
+          <Text
+            style={{
+              fontFamily: FONTS.oswald.bold,
+              fontSize: SIZES.large * 1.5,
+              color: COLORS.PRIMARY_DARK,
+              textAlign: "center",
+            }}
+          >
+            Listing
+          </Text>
         </View>
         <View style={styles.section}>
-          {canGoBack ? (
-            <Text
-              style={{
-                fontFamily: FONTS.mukta.semiBold,
-                color: COLORS.SECONDARY_DARK,
-                paddingHorizontal: SIZES.xs,
-              }}
-            >
-              Merci de consulter votre boîte mail afin de modifier votre mot de
-              passe dans le délai imparti.
-            </Text>
-          ) : (
-            <View>
-              <Text style={styles.label}>Identifiant</Text>
+          <Text
+            style={{
+              fontFamily: FONTS.mukta.regular,
+              color: TEXT_COLOR.PRIMARY,
+            }}
+          >
+            Nouveau mot de passe
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          {!message ? (
+            <View style={styles.section}>
+              <Text style={styles.label}>Mot de passe</Text>
               <Controller
                 control={control}
                 rules={{
                   required: "Ce champs est obligatoire",
                   minLength: {
-                    value: 3,
-                    message: "Min. 3 caractères",
+                    value: 5,
+                    message: "Min. 5 caractères",
                   },
                   maxLength: {
                     value: 200,
                     message: "Maximum de caractères",
                   },
-                  pattern: {
-                    value: EMAIL_FIELD_PATTERN,
-                    message: "Format: exemple@mail.com",
-                  },
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    placeholder="Email: exemple@mail.com *"
-                    keyboardType="email-address"
-                    style={styles.input}
-                    maxLength={200}
-                    autoCapitalize="none"
-                    placeholderTextColor={TEXT_COLOR.SECONDARY}
-                  />
+                  <View
+                    style={[
+                      styles.input,
+                      { flexDirection: "row", alignItems: "center" },
+                    ]}
+                  >
+                    <TextInput
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Mot de passe *"
+                      textContentType="password"
+                      style={{
+                        width: "90%",
+                        fontFamily: FONTS.mukta.regular,
+                        alignItems: "center",
+                        marginRight: SIZES.xs,
+                      }}
+                      maxLength={200}
+                      autoCapitalize="none"
+                      secureTextEntry={passwordVisible ? false : true}
+                      placeholderTextColor={TEXT_COLOR.SECONDARY}
+                    />
+                    <Ionicons
+                      name={passwordVisible ? "eye-outline" : "eye-off-outline"}
+                      size={24}
+                      color={TEXT_COLOR.SECONDARY}
+                      style={styles.inputIcon}
+                      onPress={() => setPasswordVisible(!passwordVisible)}
+                    />
+                  </View>
                 )}
-                name="email"
+                name="password"
               />
+              <Text style={styles.error}>{errors.password?.message}</Text>
+            </View>
+          ) : (
+            <View style={styles.section}>
+              <Text
+                style={{
+                  fontFamily: FONTS.mukta.medium,
+                  color: COLORS.SECONDARY_DARK,
+                  fontSize: SIZES.base,
+                }}
+              >
+                {message}
+              </Text>
             </View>
           )}
-          <Text style={styles.error}>{errors.email?.message}</Text>
         </View>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        {!loading ? (
+        {!loading && !message ? (
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.navigate("AuthView")}>
               {!canGoBack ? (
                 <Text
                   style={{
@@ -195,13 +225,13 @@ export default function ForgotPasswordView({ navigation, route }) {
             </TouchableOpacity>
             {!canGoBack ? (
               <Button
-                label={"Envoyer un email"}
+                label={"Changer"}
                 containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
-                onPress={handleSubmit(sendForgotEmail)}
+                onPress={handleSubmit(resetPassword)}
               />
             ) : null}
           </View>
-        ) : (
+        ) : loading && !message ? (
           <Text
             style={{
               textAlign: "center",
@@ -213,6 +243,18 @@ export default function ForgotPasswordView({ navigation, route }) {
           >
             Chargement en cours...
           </Text>
+        ) : (
+          <View>
+            <Button
+              label={"Retour"}
+              containerStyle={{ backgroundColor: COLORS.PRIMARY_DARK }}
+              onPress={() => {
+                setMessage(null);
+                reset();
+                navigation.navigate("AuthView");
+              }}
+            />
+          </View>
         )}
       </Animated.View>
     </View>
@@ -248,5 +290,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  logoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "red"
+  },
+  logo: {
+    width: 100,
   },
 });

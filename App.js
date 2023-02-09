@@ -73,11 +73,6 @@ export default function App() {
     return;
   }
 
-
-  // const linking = {
-  //   prefixes: [Linking.createURL('/'), 'https://app.example.com'],
-  // };
-
   const linking = {
     prefixes: [prefix],
     config: {
